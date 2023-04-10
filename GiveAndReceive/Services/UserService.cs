@@ -19,10 +19,11 @@ namespace GiveAndReceive.Services
             string query = "select u.* from [user] u join [user_token] ut on u.UserId = ut.UserId where ut.Token = @Token";
             return this._connection.Query<User>(query, new { Token }, transaction).FirstOrDefault();
         }
-        
-        public User GetUserById(string userId, IDbTransaction transaction = null) {
+
+        public User GetUserById(string userId, IDbTransaction transaction = null)
+        {
             string query = "select top 1 * from [user] where UserId=@userId";
-            return this._connection.Query<User>(query, new { userId}, transaction).FirstOrDefault();
+            return this._connection.Query<User>(query, new { userId }, transaction).FirstOrDefault();
         }
 
         public void UpdateUserPoint(string userId, decimal point, IDbTransaction transaction = null)
@@ -38,9 +39,10 @@ namespace GiveAndReceive.Services
             return this._connection.Query<UserWallet>(query, new { userId }, transaction).FirstOrDefault();
         }
 
-        public void InsertUserTransaction(UserTransaction model, IDbTransaction transaction = null) {
+        public void InsertUserTransaction(UserTransaction model, IDbTransaction transaction = null)
+        {
             string query = "INSERT INTO [dbo].[user_transaction] ([UserTransactionId],[UserId],[Amount],[Note],[CreateTime]) VALUES (@UserTransactionId,@UserId,@Amount,@Note,@CreateTime)";
-            int status = this._connection.Execute(query,model, transaction);
+            int status = this._connection.Execute(query, model, transaction);
             if (status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
         }
         
@@ -70,6 +72,24 @@ namespace GiveAndReceive.Services
             string query = "select count(*) where Email=email and Email <> ''";
             int count = this._connection.Query<int>(query, new {email}, transaction).FirstOrDefault();
             if (count > 0) throw new Exception("Email đã tồn tại.");
+        }
+        public bool CheckPhoneExist(string phone, IDbTransaction transaction = null)
+        {
+            string query = "select count(*) from [user] where Phone = @phone and Phone <> '' ";
+            int count = this._connection.Query<int>(query, new { phone }, transaction).FirstOrDefault();
+            return count > 0;
+        }
+        public void InsertUser(User user, IDbTransaction transaction = null)
+        {
+            string query = "INSERT INTO [dbo].[user] ([UserId],[Name],[Avatar],[Account],[Email],[Phone],[Password],[ShareCode],[ParentCode],[CreateTime])" +
+                " VALUES (@UserId, @Name, @Avatar, @Account, @Email, @Phone, @Password, @ShareCode, @ParentCode, @CreateTime)";
+            int status = this._connection.Execute(query, user, transaction);
+            if (status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
+        }
+        public User GetUserByShareCode(string code, IDbTransaction transaction = null)
+        {
+            string query = "select TOP(1)* from [user] where ShareCode = @code";
+            return this._connection.Query<User>(query, new { code }, transaction).FirstOrDefault();
         }
     }
 }
