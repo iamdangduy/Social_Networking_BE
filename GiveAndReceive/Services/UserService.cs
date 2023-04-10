@@ -29,13 +29,6 @@ namespace GiveAndReceive.Services
             string query = "select u.* from [user] u join [user_token] ut on u.UserId = ut.UserId where ut.Token = @Token";
             return this._connection.Query<User>(query, new { Token }, transaction).FirstOrDefault();
         }
-
-        public User GetUserById(string userId, IDbTransaction transaction = null)
-        {
-            string query = "select top 1 * from [user] where UserId=@userId";
-            return this._connection.Query<User>(query, new { userId }, transaction).FirstOrDefault();
-        }
-
         public void UpdateUserPoint(string userId, decimal point, IDbTransaction transaction = null)
         {
             string query = "update [user_wallet] set Point=Point+@point where UserId=@userId";
