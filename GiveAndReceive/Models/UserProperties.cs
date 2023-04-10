@@ -15,5 +15,11 @@ namespace GiveAndReceive.Models
         public bool IdentificationApprove { get; set; }
         public long TotalAmountGive { get; set; }
         public long TotalAmountReceive { get; set; }
+
+        public class EnumIdentificationApprove
+        {
+            public const bool SYSTEM_DECLINE = false;
+            public const bool SYSTEM_ACCEPT = true;
+        }
     }
 }
