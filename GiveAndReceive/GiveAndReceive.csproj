@@ -3669,7 +3669,11 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
+    <Compile Include="Areas\Admin\ApiControllers\AdminProductController.cs" />
+    <Compile Include="Areas\Admin\ApiControllers\AdminUserPropertiesController.cs" />
     <Compile Include="Areas\Admin\Controllers\HomeController.cs" />
+    <Compile Include="Areas\Admin\Services\AdminProductService.cs" />
+    <Compile Include="Areas\Admin\Services\AdminUserPropertiesService.cs" />
     <Compile Include="Areas\Admin\Services\AdminUserService.cs" />
     <Compile Include="Controllers\ConnectMemberController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminUserController.cs" />
@@ -3695,6 +3699,7 @@
     <Compile Include="Models\SystemTransaction.cs" />
     <Compile Include="Models\SystemWallet.cs" />
     <Compile Include="Models\User.cs" />
+    <Compile Include="Models\UserAdmin.cs" />
     <Compile Include="Models\UserBankInfo.cs" />
     <Compile Include="Models\UserPinTransfer.cs" />
     <Compile Include="Models\UserProperties.cs" />
@@ -3714,6 +3719,7 @@
     <Compile Include="Services\BaseService.cs" />
     <Compile Include="Services\CodeConfirmService.cs" />
     <Compile Include="Services\SystemWalletService.cs" />
+    <Compile Include="Services\UserAdminService.cs" />
     <Compile Include="Services\UserPropertiesService.cs" />
     <Compile Include="Services\UserService.cs" />
     <Compile Include="Services\UserWithdrawOrderService.cs" />
