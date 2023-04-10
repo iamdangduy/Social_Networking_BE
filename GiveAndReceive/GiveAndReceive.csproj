@@ -1634,6 +1634,8 @@
     <Content Include="Content\assets\vendors\sweetalert2\sweetalert2.min.css" />
     <Content Include="Content\assets\vendors\toastify\toastify.css" />
     <Content Include="Content\assets\vendors\toastify\toastify.js" />
+    <Content Include="Content\css\gr-admin-desktop.css" />
+    <Content Include="Content\css\gr-admin-mobile.css" />
     <Content Include="Content\css\gr-desktop.css" />
     <Content Include="Content\css\gr-mobile.css" />
     <Content Include="Content\css\Site.css" />
@@ -3656,6 +3658,7 @@
     <Content Include="Content\fontawesome\svgs\solid\yin-yang.svg" />
     <Content Include="Content\fontawesome\svgs\solid\z.svg" />
     <Content Include="Content\js\jquery-3.6.0.min.js" />
+    <Content Include="Content\Site.css" />
     <Content Include="Global.asax" />
     <Content Include="Web.config" />
   </ItemGroup>
@@ -3666,6 +3669,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
+    <Compile Include="Areas\Admin\Controllers\HomeController.cs" />
     <Compile Include="Controllers\ConnectMemberController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminUserController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -3827,6 +3831,11 @@
     <Content Include="Content\fontawesome\webfonts\fa-v4compatibility.ttf" />
     <Content Include="Content\fontawesome\webfonts\fa-v4compatibility.woff2" />
     <Content Include="Areas\Admin\Views\web.config" />
+    <Content Include="Areas\Admin\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\Admin\Views\Home\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_LayoutAuth.cshtml" />
+    <Content Include="Areas\Admin\Views\Home\Login.cshtml" />
     <None Include="packages.config" />
     <Content Include="Views\Home\Login.cshtml" />
     <Content Include="Views\Home\Register.cshtml" />
@@ -3847,10 +3856,13 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+
     <Folder Include="Areas\Admin\Controllers\" />
+
+    <Folder Include="Areas\Admin\ApiControllers\" />
+
     <Folder Include="Areas\Admin\Data\" />
     <Folder Include="Areas\Admin\Services\" />
-    <Folder Include="Areas\Admin\Views\Shared\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />

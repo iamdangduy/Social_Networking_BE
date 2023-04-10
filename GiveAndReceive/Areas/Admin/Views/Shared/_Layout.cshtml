@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title</title>
+    <title>@ViewBag.Title - Admin</title>
 
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
@@ -11,8 +11,8 @@
     <link href="/Content/fontawesome/css/all.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="/Content/assets/vendors/perfect-scrollbar/perfect-scrollbar.css">
     <link href="/Content/assets/css/app.css" rel="stylesheet" />
-    <link href="/Content/css/gr-mobile.css" rel="stylesheet" media="screen and (max-width:767px)" />
-    <link href="/Content/css/gr-desktop.css" rel="stylesheet" media="screen and (min-width:768px)" />
+    <link href="/Content/css/gr-admin-mobile.css" rel="stylesheet" media="screen and (max-width:767px)" />
+    <link href="/Content/css/gr-admin-desktop.css" rel="stylesheet" media="screen and (min-width:768px)" />
     <style>
         .burger-btn {
             width: 30px;
@@ -29,65 +29,22 @@
         <div id="sidebar" class="active">
             <div class="sidebar-wrapper active" style="display: flex; flex-direction: column;">
                 <div class="sidebar-header">
-                    
+
                     <div class="d-flex justify-content-between">
                         <div class="logo">
                             <a href="index.html"><img src="/Content/assets/images/logo/logo.png" /></a>
                         </div>
                         <div class="toggler">
-                            <a href="#" class="sidebar-hide d-xl-none d-block"><i class="fa-solid fa-xmark fa-xs" ></i></a>
+                            <a href="#" class="sidebar-hide d-xl-none d-block"><i class="fa-solid fa-xmark fa-xs"></i></a>
                         </div>
                     </div>
                 </div>
                 <div class="sidebar-menu" style="flex: 1;">
                     <ul class="menu" style="flex:1;">
                         <li class="sidebar-item  @(ViewBag.Menu == "dashboard" ? "active":"")">
-                            <a href="/" class='sidebar-link'>
+                            <a href="/admin" class='sidebar-link'>
                                 <i class="fa-solid fa-cubes"></i>
                                 <span>Tổng quan</span>
-                            </a>
-                        </li>
-
-                        <li class="sidebar-item @(ViewBag.Menu == "user" ? "active":"") has-sub">
-                            <a href="#" class='sidebar-link'>
-                                <i class="fa-solid fa-arrow-right-arrow-left"></i>
-                                <span>Giao dịch</span>
-                            </a>
-                            <ul class="submenu @(ViewBag.Menu == "user" ? "active":"")">
-                                <li class="submenu-item @(ViewBag.SubMenu == "wallet" ? "active":"")">
-                                    <a href="/nguoi-dung/vi">Ví</a>
-                                </li>
-                                <li class="submenu-item @(ViewBag.SubMenu == "transaction-history" ? "active":"")">
-                                    <a href="/nguoi-dung/lich-su-giao-dich">Lịch sử giao dịch</a>
-                                </li>
-                            </ul>
-                        </li>
-
-                        <li class="sidebar-item @(ViewBag.Menu == "connect-member" ? "active":"")">
-                            <a href="/ketnoi" class='sidebar-link'>
-                                <i class="fa-solid fa-link"></i>
-                                <span>Kết nối thành viên</span>
-                            </a>
-                        </li>
-
-                        <li class="sidebar-item @(ViewBag.Menu == "notification" ? "active":"")">
-                            <a href="/thong-bao" class='sidebar-link'>
-                                <i class="fa-solid fa-bell"></i>
-                                <span>Thông báo</span>
-                            </a>
-                        </li>
-
-                        <li class="sidebar-item @(ViewBag.Menu == "user-quest" ? "active":"")">
-                            <a href="/nguoi-dung/nhiem-vu" class='sidebar-link'>
-                                <i class="fa-solid fa-clipboard-question"></i>
-                                <span>Nhiệm vụ</span>
-                            </a>
-                        </li>
-
-                        <li class="sidebar-item @(ViewBag.Menu == "user-info" ? "active":"")">
-                            <a href="/nguoi-dung/thong-tin" class='sidebar-link'>
-                                <i class="fa-solid fa-user-gear"></i>
-                                <span>Tài khoản</span>
                             </a>
                         </li>
 
@@ -101,7 +58,7 @@
                     </ul>
 
                 </div>
-               
+
                 <button class="sidebar-toggler btn x"><i data-feather="x"></i></button>
             </div>
         </div>
@@ -119,7 +76,7 @@
                             <span class="navbar-toggler-icon"></span>
                         </button>
                         <div class="collapse navbar-collapse" id="navbarSupportedContent" style=" width: auto;">
-                          
+
                             <div class="dropdown">
                                 <a href="#" data-bs-toggle="dropdown" aria-expanded="false">
                                     <div class="user-menu d-flex">
@@ -134,7 +91,7 @@
                                         </div>
                                     </div>
                                 </a>
-                                
+
                             </div>
                         </div>
                     </div>
@@ -143,7 +100,7 @@
 
             <div id="main-content">
 
-             
+
                 <div class="page-content">
                     @RenderBody()
                 </div>
