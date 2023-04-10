@@ -65,6 +65,48 @@ namespace GiveAndReceive.ApiControllers
             }
         }
 
+
+        [HttpGet]
+        [AllowAnonymous]
+        public JsonResult GetVerifyCode(string phone)
+        {
+
+            if (string.IsNullOrEmpty(phone)) return Error("Số điện thoại không được để trống.");
+
+            try
+            {
+                using (var connect = BaseService.Connect())
+                {
+                    connect.Open();
+                    using (var transaction = connect.BeginTransaction())
+                    {
+                        UserService userService = new UserService(connect);
+                        CodeConfirmService codeConfirmService = new CodeConfirmService(connect);
+                        User user = userService.GetUserByPhone(phone, transaction);
+                        if (user != null) return Error("Số điện thoại đã tồn tại trên hệ thống.");
+
+
+                        int codeConfirmCheck = codeConfirmService.CountCodeConfirmOfEOPIn24Hours(phone, transaction);
+                        if (codeConfirmCheck >= 3) return Error("Bạn đã dùng hết 3 lượt lấy OTP bằng điện thoại. Vui lòng thử lại sau 24 giờ.");
+
+                        Random rnd = new Random();
+                        int code = rnd.Next(100000, 999999);
+                        CodeConfirm codeConfirm = new CodeConfirm();
+                        codeConfirm.CodeConfirmId = Guid.NewGuid().ToString();
+                        codeConfirm.Phone = phone;
+                        codeConfirm.Code = code.ToString();
+                        if (!codeConfirmService.InsertCodeConfirm(codeConfirm, transaction)) return Error();
+                        if (!SMSProvider.SendOTPViaPhone(phone, codeConfirm.Code)) return Error("Quá trình gửi gặp lỗi. Vui lòng thử lại sau");
+                        transaction.Commit();
+                        return Success();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return Error();
+            }
+        }
         [HttpPost]
         [AllowAnonymous]
         public JsonResult Register(User userRequest)

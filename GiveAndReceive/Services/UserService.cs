@@ -14,6 +14,16 @@ namespace GiveAndReceive.Services
     {
         public UserService() : base() { }
         public UserService(IDbConnection db) : base(db) { }
+        public User GetUserById(string id, IDbTransaction transaction = null)
+        {
+            string query = "select * from [user] where UserId = @id";
+            return this._connection.Query<User>(query, new { id }, transaction).FirstOrDefault();
+        }
+        public User GetUserByPhone(string phone, IDbTransaction transaction = null)
+        {
+            string query = "select * from [user] where Phone = @Phone";
+            return this._connection.Query<User>(query, new { Phone = phone }, transaction).FirstOrDefault();
+        }
         public User GetUserByToken(string Token, IDbTransaction transaction = null)
         {
             string query = "select u.* from [user] u join [user_token] ut on u.UserId = ut.UserId where ut.Token = @Token";
