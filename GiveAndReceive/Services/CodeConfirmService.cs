@@ -12,11 +12,11 @@ namespace GiveAndReceive.Services
     {
         public CodeConfirmService() : base() { }
         public CodeConfirmService(IDbConnection db) : base(db) { }
-        public bool InsertCodeConfirm(CodeConfirm codeConfirm, IDbTransaction transaction = null)
+        public void InsertCodeConfirm(CodeConfirm codeConfirm, IDbTransaction transaction = null)
         {
             string insert = "INSERT INTO [dbo].[code_confirm] ([CodeConfirmId],[Phone],[Email],[Code],[ExpiryTime],[CreateTime]) VALUES (@CodeConfirmId,@Phone,@Email,@Code,DATEADD(mi,5,GETDATE()),GETDATE())";
             int status = this._connection.Execute(insert, codeConfirm, transaction);
-            return status > 0;
+            if (status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
         }
         public CodeConfirm GetCodeConfirmByPhone(string Phone, IDbTransaction transaction = null)
         {

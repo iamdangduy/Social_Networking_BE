@@ -73,7 +73,7 @@ namespace GiveAndReceive.Services
 
         public void CheckEmailExist(string email, IDbTransaction transaction = null)
         {
-            string query = "select count(*) where Email=email and Email <> ''";
+            string query = "select count(*) where Email=@email and Email <> ''";
             int count = this._connection.Query<int>(query, new {email}, transaction).FirstOrDefault();
             if (count > 0) throw new Exception("Email đã tồn tại.");
         }
@@ -94,6 +94,21 @@ namespace GiveAndReceive.Services
         {
             string query = "select TOP(1)* from [user] where ShareCode = @code";
             return this._connection.Query<User>(query, new { code }, transaction).FirstOrDefault();
+        }
+        public User GetUserByEmailOrPhoneOrAccount(string account, IDbTransaction transaction = null)
+        {
+
+            string phone = "";
+
+            if (account.Length > 9) phone = "+84 " + account.Substring(account.Length - 9, 9);
+            string query = "select top 1 * from [user] where Phone = @phone or Account=@account";
+            return this._connection.Query<User>(query, new { account, phone }, transaction).FirstOrDefault();
+        }
+        public void UpdateUserToken(string userId, string token, IDbTransaction transaction = null)
+        {
+            string query = "update [user] set Token=@token where UserId=@userId";
+            int status = this._connection.Execute(query, new { token = token, userId = userId }, transaction);
+            if (status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
         }
     }
 }

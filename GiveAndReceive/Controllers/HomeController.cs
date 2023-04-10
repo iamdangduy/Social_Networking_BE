@@ -19,9 +19,10 @@ namespace GiveAndReceive.Controllers
             return View();
         }
 
-        [Route("dang-ky")]
-        public ActionResult Register()
+        [Route("dang-ky/{shareCode?}")]
+        public ActionResult Register(string shareCode)
         {
+            ViewBag.ShareCode = shareCode;
             return View();
         }
         [Route("quen-mat-khau")]
