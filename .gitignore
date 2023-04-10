@@ -1,3 +1,6 @@
 **.vs
 **/Debug
 *.user
+GiveAndReceive/bin/GiveAndReceive.dll
+GiveAndReceive/bin/GiveAndReceive.pdb
+**bin
