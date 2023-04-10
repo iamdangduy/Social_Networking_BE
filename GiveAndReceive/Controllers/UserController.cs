@@ -28,5 +28,10 @@ namespace GiveAndReceive.Controllers
         public ActionResult UserTransaction() {
             return View();
         }
+        [Route("nguoi-dung/xac-thuc-tai-khoan")]
+        public ActionResult AccountVerification()
+        {
+            return View();
+        }
     }
 }

@@ -112,6 +112,7 @@
     <Content Include="Content\assets\css\pages\error.css" />
     <Content Include="Content\assets\css\widgets\chat.css" />
     <Content Include="Content\assets\css\widgets\todo.css" />
+    <Content Include="Content\assets\datepicker.min.css" />
     <Content Include="Content\assets\images\bg\4853433.jpg" />
     <Content Include="Content\assets\images\faces\1.jpg" />
     <Content Include="Content\assets\images\faces\2.jpg" />
@@ -3657,6 +3658,7 @@
     <Content Include="Content\fontawesome\svgs\solid\yen-sign.svg" />
     <Content Include="Content\fontawesome\svgs\solid\yin-yang.svg" />
     <Content Include="Content\fontawesome\svgs\solid\z.svg" />
+    <Content Include="Content\js\datepicker.min.js" />
     <Content Include="Content\js\jquery-3.6.0.min.js" />
     <Content Include="Content\Site.css" />
     <Content Include="Global.asax" />
@@ -3853,6 +3855,7 @@
     <Content Include="Views\User\UserTransaction.cshtml" />
     <Content Include="Views\UserQuest\Index.cshtml" />
     <Content Include="Views\ConnectMember\Index.cshtml" />
+    <Content Include="Views\User\AccountVerification.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
