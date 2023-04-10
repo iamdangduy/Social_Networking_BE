@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Data;
 using System.Diagnostics.Eventing.Reader;
 using System.Linq;
@@ -47,14 +48,28 @@ namespace GiveAndReceive.Services
         {
             string query = "UPDATE [dbo].[user] SET [Name]=@Name,[Avatar]=@Avatar,[Account]=@Account,[Phone]=@Phone,[Email]=@Email WHERE [UserId]=@UserId";
             int status = this._connection.Execute(query, model, transaction);
-            if (status > 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
+            if (status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
         }
 
         public void ChangePassword(string userId, string newPassword, IDbTransaction transaction = null)
         {
             string query = "UPDATE [dbo].[user] SET [Password]=@newPassword WHERE [UserId]=@userId";
             int status = this._connection.Execute(query, new {userId, newPassword}, transaction);
-            if(status > 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
+            if(status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
+        }
+
+        public void CheckAccountExist(string account, IDbTransaction transaction = null)
+        {
+            string query = "select count(*) where Account=@account and Account <> ''";
+            int count = this._connection.Query<int>(query, new { account }, transaction).FirstOrDefault();
+            if(count > 0) throw new Exception("Account đã tồn tại.");
+        }
+
+        public void CheckEmailExist(string email, IDbTransaction transaction = null)
+        {
+            string query = "select count(*) where Email=email and Email <> ''";
+            int count = this._connection.Query<int>(query, new {email}, transaction).FirstOrDefault();
+            if (count > 0) throw new Exception("Email đã tồn tại.");
         }
     }
 }
