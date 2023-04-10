@@ -122,9 +122,8 @@ namespace GiveAndReceive.ApiControllers
                         User user = userService.GetUserByPhone(phone, transaction);
                         if (user != null) return Error("Số điện thoại đã tồn tại trên hệ thống.");
 
-
-                        int codeConfirmCheck = codeConfirmService.CountCodeConfirmOfEOPIn24Hours(phone, transaction);
-                        if (codeConfirmCheck >= 3) return Error("Bạn đã dùng hết 3 lượt lấy OTP bằng điện thoại. Vui lòng thử lại sau 24 giờ.");
+                      //  int codeConfirmCheck = codeConfirmService.CountCodeConfirmOfEOPIn24Hours(phone, transaction);
+                      //  if (codeConfirmCheck >= 3) return Error("Bạn đã dùng hết 3 lượt lấy OTP bằng điện thoại. Vui lòng thử lại sau 24 giờ.");
 
                         Random rnd = new Random();
                         int code = rnd.Next(100000, 999999);
@@ -132,7 +131,7 @@ namespace GiveAndReceive.ApiControllers
                         codeConfirm.CodeConfirmId = Guid.NewGuid().ToString();
                         codeConfirm.Phone = phone;
                         codeConfirm.Code = code.ToString();
-                        if (!codeConfirmService.InsertCodeConfirm(codeConfirm, transaction)) return Error();
+                        codeConfirmService.InsertCodeConfirm(codeConfirm, transaction);
                         if (!SMSProvider.SendOTPViaPhone(phone, codeConfirm.Code)) return Error("Quá trình gửi gặp lỗi. Vui lòng thử lại sau");
                         transaction.Commit();
                         return Success();
@@ -141,9 +140,40 @@ namespace GiveAndReceive.ApiControllers
             }
             catch (Exception ex)
             {
-                return Error();
+                return Error(ex.Message);
             }
         }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public JsonResult ConfirmCode(string phone, string code)
+        {
+            if (string.IsNullOrEmpty(code)) return Error("Mã xác nhận không được để trống!");
+            if (string.IsNullOrEmpty(phone)) return Error("Số điện thoại không được để trống!");
+            try
+            {
+                using (var connect = BaseService.Connect())
+                {
+                    connect.Open();
+                    using (var transaction = connect.BeginTransaction())
+                    {
+                        UserService userService = new UserService(connect);
+                        CodeConfirmService codeConfirmService = new CodeConfirmService(connect);
+                        CodeConfirm codeConfirm = codeConfirmService.GetCodeConfirmByPhone(phone, transaction);
+                        if (codeConfirm == null) return Error("Mã xác nhận không chính xác.");
+                        if (!codeConfirm.Code.Equals(code)) return Error("Mã xác nhận không chính xác.");
+                        if (codeConfirm.ExpiryTime < DateTime.Now) return Error("Mã xác nhận đã hết hạn.");
+                        transaction.Commit();
+                        return Success();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return Error(ex.Message);
+            }
+        }
+
         [HttpPost]
         [AllowAnonymous]
         public JsonResult Register(User userRequest)
@@ -197,6 +227,38 @@ namespace GiveAndReceive.ApiControllers
             }
         }
 
-        
+        [HttpPost]
+        public JsonResult Login(UserLoginPost model)
+        {
+            try
+            {
+                using (var connect = BaseService.Connect())
+                {
+                    connect.Open();
+                    using (var transaction = connect.BeginTransaction())
+                    {
+                        if (string.IsNullOrEmpty(model.Account) || string.IsNullOrEmpty(model.Password)) return Error(JsonResult.Message.LOGIN_ACCOUNT_OR_PASSWORD_EMPTY);
+                        UserService userService = new UserService(connect);
+
+                        User userLogin = userService.GetUserByEmailOrPhoneOrAccount(model.Account, transaction);
+                        if (userLogin == null) throw new Exception(JsonResult.Message.LOGIN_ACCOUNT_OR_PASSWORD_INCORRECT);
+
+                        string password = SecurityProvider.EncodePassword(userLogin.UserId, model.Password);
+                        if (!userLogin.Password.Equals(password)) return Error(JsonResult.Message.LOGIN_ACCOUNT_OR_PASSWORD_INCORRECT);
+
+                        string deviceId = Guid.NewGuid().ToString().ToLower();
+                        string token = SecurityProvider.CreateToken(userLogin.UserId, userLogin.Password, deviceId);
+
+                        userService.UpdateUserToken(userLogin.UserId, token, transaction);
+                        transaction.Commit();
+                        return Success(new { token, deviceId });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return Error(ex.Message);
+            }
+        }
     }
 }

@@ -13,7 +13,11 @@ namespace GiveAndReceive.Models
         public string ShareCode { get; set; }
         public string ParentCode { get; set; }
     }
-
+    public class UserLoginPost
+    {
+        public string Account { get; set; }
+        public string Password { get; set; }
+    }
     public class UserRequest
     {
         public string Password { get; set; }

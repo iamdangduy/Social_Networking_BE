@@ -5,24 +5,93 @@
 <h1 class="auth-title">Đăng nhập.</h1>
 <p class="auth-subtitle mb-5">Đăng nhập bằng thông tin bạn đã đăng ký để có thể sử dụng phần mềm.</p>
 
-<form action="index.html">
+<div>
     <div class="form-group position-relative has-icon-left mb-4">
-        <input type="text" class="form-control form-control-xl" placeholder="Tài khoản">
+        <input type="text" id="userName" class="form-control form-control-xl" placeholder="Tài khoản">
         <div class="form-control-icon">
             <i class="fa-regular fa-user fa-xs"></i>
         </div>
     </div>
     <div class="form-group position-relative has-icon-left mb-4">
-        <input type="password" class="form-control form-control-xl" placeholder="Mật khẩu">
+        <input type="password" id="password" class="form-control form-control-xl" placeholder="Mật khẩu">
         <div class="form-control-icon">
             <i class="fa-solid fa-lock fa-xs"></i>
         </div>
+        <i class="fa-eye fa-regular" id="togglePassword" style="cursor: pointer; z-index: 10; position: absolute; right: 0; top: 50%; transform: translateY(-50%);font-size:18px; margin-right: 10px; "></i>
+
     </div>
-    <button class="btn btn-primary btn-block btn-lg shadow-lg mt-5">Đăng nhập</button>
-</form>
-<div class="text-center mt-5 text-lg fs-4">
-    <p class="text-gray-600">
+    <button class="btn btn-primary btn-block btn-lg shadow-lg mt-5" onclick="Login();">Đăng nhập</button>
+</div>
+<div class="text-center mt-5 text-lg fs-6">
+    <p class="text-gray-500">
         Chưa có tài khoản? <a href="/dang-ky" class="font-bold">Đăng ký</a>.
     </p>
     <p><a class="font-bold" href="/quen-mat-khau">Quên mật khẩu?</a>.</p>
 </div>
+
+@section scripts{
+    <script>
+        $(function () {
+            $("#togglePassword").click(function () {
+                $(this).toggleClass("fa-eye-slash fa-eye");
+                var type = $(this).hasClass("fa-eye-slash") ? "text" : "password";
+                $("#password").attr("type", type);
+            });
+        });
+        const EnterLogin = function (e) {
+            if (e.key === 'Enter' || e.charCode === 13) {
+                Login();
+            }
+        }
+
+        if (userToken !== '' && userToken !== null && typeof userToken !== 'undefined') {
+            window.location.href = '/';
+        }
+
+        const Login = async function () {
+
+            let model = {
+                Account: $('#userName').val(),
+                Password: $('#password').val()
+            }
+
+            if (GetObjectProperty(model, 'Account') === '') {
+                Swal.fire({
+                    icon: "error",
+                    title: "Tài khoản không được để trống",
+                })
+                return;
+            }
+            if (GetObjectProperty(model, 'Password') === '') {
+                Swal.fire({
+                    icon: "error",
+                    title: "Mật khẩu không được để trống",
+                })
+                return;
+            }
+
+            model.Password = MD5(base64.encode(model.Password))
+
+            let rq = await fetch('/api/user/login', {
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(model)
+            });
+
+            let rs = await rq.json();
+            if (CheckErrorResponse(rs) === false) return;
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                SetCookie('UserToken', GetObjectProperty(rs.data, 'token'));
+                Swal.fire({
+                    icon: "success",
+                    title: "Đăng nhập thành công",
+                 ///   preConfirm: function () { window.location.href = '/'; },
+                })
+             ///   window.location.href = '/';
+            }
+
+        }
+    </script>
+}
