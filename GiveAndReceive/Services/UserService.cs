@@ -24,6 +24,7 @@ namespace GiveAndReceive.Services
             string query = "select * from [user] where Phone = @Phone";
             return this._connection.Query<User>(query, new { Phone = phone }, transaction).FirstOrDefault();
         }
+
         public User GetUserByToken(string Token, IDbTransaction transaction = null)
         {
             string query = "select u.* from [user] u join [user_token] ut on u.UserId = ut.UserId where ut.Token = @Token";

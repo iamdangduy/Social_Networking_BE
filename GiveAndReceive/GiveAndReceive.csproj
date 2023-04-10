@@ -3671,6 +3671,7 @@
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Admin\Controllers\HomeController.cs" />
     <Compile Include="Controllers\ConnectMemberController.cs" />
+    <Compile Include="Areas\Admin\ApiControllers\AdminUserController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\NotificationController.cs" />
     <Compile Include="Controllers\UserController.cs" />
@@ -3709,6 +3710,7 @@
     <Compile Include="Providers\SMSProvider.cs" />
     <Compile Include="Providers\SystemProvider.cs" />
     <Compile Include="Providers\UserProvider.cs" />
+    <Compile Include="Services\AdminUserService.cs" />
     <Compile Include="Services\BaseService.cs" />
     <Compile Include="Services\CodeConfirmService.cs" />
     <Compile Include="Services\SystemWalletService.cs" />
@@ -3854,7 +3856,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+
+    <Folder Include="Areas\Admin\Controllers\" />
+
     <Folder Include="Areas\Admin\ApiControllers\" />
+
     <Folder Include="Areas\Admin\Data\" />
     <Folder Include="Areas\Admin\Services\" />
   </ItemGroup>
