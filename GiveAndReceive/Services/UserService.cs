@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Web;
 using Dapper;
@@ -42,5 +43,18 @@ namespace GiveAndReceive.Services
             if (status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
         }
         
+        public bool UpdateUser(User model, IDbTransaction transaction = null)
+        {
+            string query = "UPDATE [dbo].[user] SET [Name]=@Name,[Avatar]=@Avatar,[Account]=@Account,[Phone]=@Phone,[Email]=@Email WHERE [UserId]=@UserId";
+            int status = this._connection.Execute(query, model, transaction);
+            return status > 0;
+        }
+
+        public bool ChangePassword(string userId, string newPassword, IDbTransaction transaction = null)
+        {
+            string query = "UPDATE [dbo].[user] SET [Password]=@newPassword WHERE [UserId]=@userId";
+            int status = this._connection.Execute(query, new {userId, newPassword}, transaction);   
+            return status > 0;
+        }
     }
 }
