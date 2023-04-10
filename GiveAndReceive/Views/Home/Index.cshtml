@@ -5,47 +5,87 @@
 }
 @section styles {
     <style>
-        .general-parameter-box {
+        section{
+            flex-direction:column;
         }
     </style>
 }
-<section>
+<section class="home-page">
+    <div class="section-header">Tổng quan</div>
+    <div class="system-general-parameter">
+        <div class="general-parameter-box">
+            <div class="parameter-icon">
+                <i class="fa-solid fa-dollar-sign"></i>
+            </div>
+            <div class="parameter-info">
+                <div class="parameter-description">Số dư</div>
+                <div class="parameter-value">112.000</div>
+            </div>
+        </div>
+        <div class="general-parameter-box">
+            <div class="parameter-icon">
+                <i class="iconly-boldShow"></i>
+            </div>
+            <div class="parameter-info">
+                <div class="parameter-description">Nhiệm vụ chưa hoàn thành</div>
+                <div class="parameter-value">3</div>
+            </div>
+        </div>
+        <div class="general-parameter-box">
+            <div class="parameter-icon">
+                <i class="iconly-boldShow"></i>
+            </div>
+            <div class="parameter-info">
+                <div class="parameter-description">Tổng đã cho</div>
+                <div class="parameter-value">112.000</div>
+            </div>
+        </div>
+        <div class="general-parameter-box">
+            <div class="parameter-icon">
+                <i class="iconly-boldShow"></i>
+            </div>
+            <div class="parameter-info">
+                <div class="parameter-description">Tổng đã nhận</div>
+                <div class="parameter-value">112.000</div>
+            </div>
+        </div>
+    </div>
+    <div class="current-mission">
+        <div class="mission-label"> Nhiệm vụ hiện tại </div>
+        <div class="mission-detail">
+            <div class="name">Nguyễn Đăng Duy</div>
+            <div class="status"><span class="badge bg-warning">Đang chờ</span></div>
+            <div class="button"><button class="btn btn-sm btn-primary"> Đã chuyển </button></div>
+        </div>
 
-    <div class="general-parameter-box">
-        <div class="parameter-icon">
-            <i class="fa-solid fa-dollar-sign"></i>
-        </div>
-        <div class="parameter-info">
-            <div class="parameter-description">Số dư</div>
-            <div class="parameter-value">112.000</div>
+        <div class="mission-detail">
+            <div class="name">Nguyễn Đăng Duy</div>
+            <div class="status"><span class="badge bg-success">Đang chuyển</span></div>
+            <div class="button"><button class="btn btn-sm btn-primary" style="display:none"></button></div>
         </div>
     </div>
-    <div class="general-parameter-box">
-        <div class="parameter-icon">
-            <i class="iconly-boldShow"></i>
+
+    <div class="recent-transactions">
+        <div class="transactions-label"> Giao dịch gần đây </div>
+        <div class="transactions-detail">
+            <div class="content">
+                <div class="content-detail">Bạn đã nhận 1,000,000 VNĐ từ Nguyễn Triệu Phú</div>
+                <div class="content-time">10/04/2023 12:30:22</div>
+            </div>
+            <div class="money">
+                1,000,000 VNĐ
+            </div>
         </div>
-        <div class="parameter-info">
-            <div class="parameter-description">Đã nhận</div>
-            <div class="parameter-value">112.000</div>
+        <div class="transactions-detail">
+            <div class="content">
+                <div class="content-detail">Bạn đã nhận 1,000,000 VNĐ từ Nguyễn Triệu Phú</div>
+                <div class="content-time">10/04/2023 12:30:22</div>
+            </div>
+            <div class="money">
+                1,000,000 VNĐ
+            </div>
         </div>
-    </div>
-    <div class="general-parameter-box">
-        <div class="parameter-icon">
-            <i class="iconly-boldShow"></i>
-        </div>
-        <div class="parameter-info">
-            <div class="parameter-description">Đã gửi</div>
-            <div class="parameter-value">112.000</div>
-        </div>
-    </div>
-    <div class="general-parameter-box">
-        <div class="parameter-icon">
-            <i class="iconly-boldShow"></i>
-        </div>
-        <div class="parameter-info">
-            <div class="parameter-description">Thành viên nhóm</div>
-            <div class="parameter-value">112.000</div>
-        </div>
+        <div class="more"> <a href="#">Xem thêm</a></div>
     </div>
 </section>
 

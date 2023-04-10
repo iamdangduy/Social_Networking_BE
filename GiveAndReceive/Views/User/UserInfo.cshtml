@@ -4,5 +4,21 @@
     ViewBag.Menu = "user-info";
 }
 
-<h2>UserInfo</h2>
+@section styles{
+    <style>
+        section{
+            flex-direction:column;
+        }
+    </style>
+}
 
+<section class="account-page">
+    <div class="section-header">Tài khoản</div>
+
+    <div class="user-info">
+        <div class="user-avatar">
+            <div class="user-avt"></div>
+        </div>
+        <div class="info"></div>
+    </div>
+</section>
