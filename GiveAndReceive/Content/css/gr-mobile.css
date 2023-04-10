@@ -21,14 +21,15 @@ a {
     cursor: pointer !important;
 }
 
-/*HomePage*/
-.home-page .section-header {
+.section-header {
     font-size: 20px;
     padding: 0 0 30px;
     text-align: center;
     text-transform: uppercase;
     font-weight: bold;
+    color:black;
 }
+/*HomePage*/
 
 .home-page .system-general-parameter {
     display: flex;
@@ -91,10 +92,14 @@ a {
         }
 
         .home-page .current-mission .mission-detail .status {
-            flex: 1;
-            font-size: 14px;
+            width: 80px;
+            display: flex;
+            justify-content: center;
         }
-
+        .home-page .current-mission .mission-detail .status span{
+            font-size:10px;
+            border-radius:20px;
+        }
         .home-page .current-mission .mission-detail .button {
             flex: 1;
             text-align: right;
@@ -142,6 +147,7 @@ a {
         .home-page .recent-transactions .transactions-detail .money {
             flex: 1;
             font-size: 14px;
+            color:black;
         }
 
 .home-page .more {
@@ -152,35 +158,31 @@ a {
 /*End HomePage*/
 
 /*ConnectPage*/
-.connect-page .section-header {
-    font-size: 20px;
-    padding: 0 0 30px;
-    text-align: center;
-    text-transform: uppercase;
-    font-weight: bold;
+
+.connect-page .connect-code {
+    background-color: white;
+    padding: 10px 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
 }
 
-.connect-page .connect-code{
-    background-color:white;
-    padding:10px 20px;
-    border-radius:10px;
-}
-
-.connect-page .connect-code .connect-btn {
-    display: flex;
-    justify-content: end;
-    margin-top: 10px;
-}
+    .connect-page .connect-code .connect-btn {
+        display: flex;
+        justify-content: end;
+        margin-top: 10px;
+    }
 
 .connect-page .list-member {
     background-color: white;
     padding: 10px 10px;
     border-radius: 10px;
 }
+
     .connect-page .list-member .member-label {
         font-weight: bold;
         padding: 10px 0 20px;
     }
+
     .connect-page .list-member .member-detail {
         display: flex;
         gap: 10px;
@@ -207,18 +209,159 @@ a {
             flex: 1;
             display: flex;
             align-items: center;
-            font-size:14px;
+            font-size: 14px;
         }
 
 /*End connectPage*/
 
 /*AccountPage*/
-.account-page .section-header {
-    font-size: 20px;
-    padding: 0 0 30px;
-    text-align: center;
-    text-transform: uppercase;
-    font-weight: bold;
+
+.account-page .user-info {
+    background-color: white;
+    padding: 20px 20px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
 }
 
+    .account-page .user-info .user-avatar {
+        display: flex;
+        margin: auto;
+        width: 120px;
+    }
+
+        .account-page .user-info .user-avatar .user-avt {
+            height: 0;
+            width: 100%;
+            padding-bottom: 100%;
+            border-radius: 100%;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            border: .5px solid #d7d7d7;
+        }
+
+    .account-page .user-info .info-detail {
+        margin-top: 20px;
+    }
+
+.account-page .user-password {
+    background-color: white;
+    padding: 20px 20px;
+    border-radius: 10px;
+    margin-top: 20px;
+}
 /*EndAccountPage*/
+
+/*NotiPage*/
+.notification-page .list-noti {
+    padding: 20px 10px;
+    background-color: white;
+    border-radius: 10px;
+}
+
+    .notification-page .list-noti .noti-detail {
+        display: flex;
+        padding: 10px 2px 5px;
+        border-bottom: solid 0.5px #d4d3d3;
+    }
+
+        .notification-page .list-noti .noti-detail .unread {
+            width: 25px;
+            align-items: center;
+            display: flex;
+        }
+
+        .notification-page .list-noti .noti-detail .content {
+            flex: 1;
+        }
+
+            .notification-page .list-noti .noti-detail .content .message {
+                padding: 5px 0;
+            }
+
+            .notification-page .list-noti .noti-detail .content .time {
+                font-size: 12px;
+                text-align: right;
+                color: #9e9e9e;
+            }
+/*EndNotiPage*/
+
+
+/*WalletPage*/
+.wallet-page .card .nav-link {
+    font-size: 14px;
+}
+
+.wallet-page .card .balance-header {
+    padding: 20px 5px 10px;
+    border-bottom: solid 2px #d4d3d3;
+}
+
+    .wallet-page .card .balance-header .wallet-balance {
+        text-align: right;
+        padding: 10px;
+        background-color: aliceblue;
+        color: black;
+    }
+
+    .wallet-page .card .balance-header .withdraw-button {
+        margin-top: 5px;
+    }
+
+.wallet-page .card .withdraw {
+    padding: 10px 5px 10px;
+    border-bottom: solid 2px #d4d3d3;
+}
+
+    .wallet-page .card .withdraw .withdraw-label {
+        font-weight: bold;
+        padding: 10px 0;
+    }
+
+    .wallet-page .card .withdraw .withdraw-detail {
+        display: flex;
+        gap: 20px;
+        justify-content: space-between;
+    }
+
+        .wallet-page .card .withdraw .withdraw-detail .detail-left {
+            font-size: 14px;
+        }
+
+            .wallet-page .card .withdraw .withdraw-detail .detail-left .withdraw-time {
+                font-size: 12px;
+                color: #9e9e9e;
+            }
+
+        .wallet-page .card .withdraw .withdraw-detail .detail-right {
+            display: flex;
+            align-items: center;
+        }
+
+.wallet-page .card .history {
+    padding: 10px 5px 10px;
+    
+}
+    .wallet-page .card .history .history-detail {
+        padding: 10px 0;
+        border-bottom: solid 0.5px #d4d3d3;
+    }    
+    .wallet-page .card .history .history-detail .content {
+        font-size: 14px;
+    }
+
+    .wallet-page .card .history .history-detail .time {
+        font-size: 12px;
+        color: #9e9e9e;
+        text-align: right;
+    }
+/*EndWalletPage*/
+
+/*VerificationPage*/
+.verification-page .verification-info {
+    padding: 20px 20px;
+    background-color: white;
+    border-radius: 10px;
+}
+/*EndVerificationPage*/

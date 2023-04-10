@@ -1,0 +1,94 @@
+﻿
+@{
+    ViewBag.Title = "Xác thực tài khoản";
+}
+
+@section styles {
+    <style>
+        section {
+            flex-direction: column;
+        }
+        .form-group .preview {
+            width: 100%;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: contain;
+            height: 110px;
+            border-radius: 10px;
+            border: .5px solid #d7d7d7;
+            cursor: pointer;
+        }
+    </style>
+}
+
+<section class="verification-page">
+    <div class="section-header">Xác thực tài khoản</div>
+    <div class="verification-info">
+        <div class="form-group">
+            <label for="userName">Họ và tên</label>
+            <input type="text" style="font-size:14px;" class="form-control" id="userName" placeholder="Họ và tên">
+        </div>
+        <div class="form-group">
+            <label for="identityId">Số CCCD</label>
+            <input type="text" style="font-size:14px;" class="form-control" id="identityId" placeholder="Số CCCD">
+        </div>
+        <div class="row">
+            <div class="form-group" style="width:50%">
+                <label for="place">Nơi cấp</label>
+                <input type="text" style="font-size:14px;" class="form-control" id="place" placeholder="Nơi cấp">
+            </div>
+            <div class="form-group" style="width:50%">
+                <label for="date">Ngày cấp</label>
+                <input type="text" style="font-size:14px;" class="form-control" id="date" placeholder="Ngày cấp">
+            </div>
+        </div>
+        <div class="Địa chỉ">
+            <label for="userAddress">Địa chỉ</label>
+            <input type="text" style="font-size:14px;" class="form-control" id="userAddress" placeholder="Địa chỉ">
+        </div>
+
+        <div class="form-group" style="margin-top:20px;">
+            <label class="font-weight-semibold" for="name">Mặt trước căn cước</label>
+            <div class="preview" onclick="ChooseThumbnail(this);"></div>
+            <input type="file" style="display:none;" onchange="ChooseThumbnail_OnChange(this);" />
+            <input type="hidden" id="Thumbnail1" />
+        </div>
+
+        <div class="form-group">
+            <label class="font-weight-semibold" for="name">Mặt sau căn cước</label>
+            <div class="preview" onclick="ChooseThumbnail(this);"></div>
+            <input type="file" style="display:none;" onchange="ChooseThumbnail_OnChange(this);" />
+            <input type="hidden" id="Thumbnail2" />
+        </div>
+
+        <div class="form-group">
+            <label class="font-weight-semibold" for="name">Ảnh chân dung</label>
+            <div class="preview" onclick="ChooseThumbnail(this);"></div>
+            <input type="file" style="display:none;" onchange="ChooseThumbnail_OnChange(this);" />
+            <input type="hidden" id="Thumbnail3" />
+        </div>
+        <div style="text-align:right; margin-top:10px;">
+            <button class="btn btn-sm btn-primary"> Lưu </button>
+        </div>
+    </div>
+</section>
+
+@section scripts{
+    <script>
+        $('#date').datepicker({
+            format: 'dd-mm-yyyy',
+            autoHide: true,
+        });
+
+        var ChooseThumbnail = function (el) { $(el).siblings('input[type=file]').click(); }
+        var ChooseThumbnail_OnChange = function (el) {
+            let reader = new FileReader();
+            reader.onloadend = function (e) {
+                $(el).siblings('input[type=hidden]').val(e.currentTarget.result.substring(e.currentTarget.result.indexOf(',') + 1, e.currentTarget.result.length));
+                $(el).siblings('.preview').css('background-image', `url(${e.currentTarget.result})`);
+            }
+            reader.readAsDataURL(el.files[0])
+        }
+    </script>
+    
+}

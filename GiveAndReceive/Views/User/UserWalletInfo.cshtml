@@ -5,5 +5,85 @@
     ViewBag.SubMenu = "wallet";
 }
 
-<h2>UserWalletInfo</h2>
+@section styles {
+    <style>
+        section {
+            flex-direction: column;
+        }
+        .wallet-page ul li{
+            width:50%;
+            text-align:center;
+        }
+        .card .card-body{
+            padding:1rem;
+        }
+    </style>
+}
 
+<section class="wallet-page">
+    <div class="section-header">Ví</div>
+    <div class="card">
+        <div class="card-body">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link active" id="balance-tab" data-bs-toggle="tab" href="#balance"
+                       role="tab" aria-controls="balance" aria-selected="true">Số dư</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" id="pin-tab" data-bs-toggle="tab" href="#pin"
+                       role="tab" aria-controls="profile" aria-selected="false">Pin</a>
+                </li>
+            </ul>
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="balance" role="tabpanel"
+                     aria-labelledby="balance-tab">
+                    <div class="balance-header">
+                        <div class="wallet-balance"> 12,000,000 VNĐ</div>
+                        <div class="withdraw-button" style="text-align:right">
+                            <button class="btn btn-sm rounded-pill btn-primary" style="padding:3px 15px;"> Rút </button>
+                        </div>
+                    </div>
+                    <div class="withdraw">
+                        <div class="withdraw-label"> Lệnh rút </div>
+                        <div class="withdraw-detail">
+                            <div class="detail-left">
+                                <div class="withdraw-code">[A15TD12]</div>
+                                <div class="withdraw-content">Bạn đã đặt lệnh rút 3,500,000 VNĐ</div>
+                                <div class="withdraw-time"> 10/04/2023 16:22:00 </div>
+                            </div>
+                            <div class="detail-right">
+                                <button class="btn btn-sm rounded-pill btn-danger">Huỷ</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="history">
+                        <div class="history-detail">
+                            <div class="content">Bạn vừa nhận 1,000,000 VNĐ từ Nguyễn Đăng Duy</div>
+                            <div class="time"> 10/04/2023 16:22:00 </div>
+                        </div>
+                        <div class="history-detail">
+                            <div class="content">Bạn vừa nhận 1,000,000 VNĐ từ Nguyễn Đăng Duy</div>
+                            <div class="time"> 10/04/2023 16:22:00 </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="pin" role="tabpanel"
+                     aria-labelledby="pin-tab">
+                    <div class="balance-header">
+                        <div class="wallet-balance"> 3 PIN</div>
+                    </div>
+                    <div class="history">
+                        <div class="history-detail">
+                            <div class="content">Bạn đã dùng 01 PIN để vào hàng chờ cho</div>
+                            <div class="time"> 10/04/2023 16:22:00 </div>
+                        </div>
+                        <div class="history-detail">
+                            <div class="content">Bạn nhận được 03 PIN</div>
+                            <div class="time"> 10/04/2023 16:22:00 </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

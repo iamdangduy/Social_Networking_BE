@@ -4,4 +4,30 @@
     ViewBag.Menu = "notification";
 }
 
+@section styles {
+    <style>
+        section {
+            flex-direction: column;
+        }
+    </style>
+}
 
+<section class="notification-page">
+    <div class="section-header">Thông báo</div>
+    <div class="list-noti">
+        <div class="noti-detail">
+            <div class="unread"><i class="fa-solid fa-circle" style="color: #5896ff;font-size:10px"></i></div>
+            <div class="content">
+                <div class="message" style="color:black">Bạn vừa thăng cấp tài khoản lên hạng <span style="color:lawngreen">S1</span></div>
+                <div class="time">10/04/2023 15:22:22</div>
+            </div>
+        </div>
+        <div class="noti-detail">
+            <div class="unread"><i class="fa-solid fa-circle" style="color: #5896ff;font-size:10px;display:none"></i></div>
+            <div class="content">
+                <div class="message">Bạn vừa thăng cấp tài khoản lên hạng <span style="color:lawngreen">S1</span></div>
+                <div class="time">10/04/2023 15:22:22</div>
+            </div>
+        </div>
+    </div>
+</section>
