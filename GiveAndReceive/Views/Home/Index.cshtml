@@ -1,0 +1,66 @@
+﻿
+@{
+    ViewBag.Title = "Tổng quan";
+    ViewBag.Menu = "dashboard";
+}
+@section styles {
+    <style>
+        .general-parameter-box {
+        }
+    </style>
+}
+<section>
+
+    <div class="general-parameter-box">
+        <div class="parameter-icon">
+            <i class="fa-solid fa-dollar-sign"></i>
+        </div>
+        <div class="parameter-info">
+            <div class="parameter-description">Số dư</div>
+            <div class="parameter-value">112.000</div>
+        </div>
+    </div>
+    <div class="general-parameter-box">
+        <div class="parameter-icon">
+            <i class="iconly-boldShow"></i>
+        </div>
+        <div class="parameter-info">
+            <div class="parameter-description">Đã nhận</div>
+            <div class="parameter-value">112.000</div>
+        </div>
+    </div>
+    <div class="general-parameter-box">
+        <div class="parameter-icon">
+            <i class="iconly-boldShow"></i>
+        </div>
+        <div class="parameter-info">
+            <div class="parameter-description">Đã gửi</div>
+            <div class="parameter-value">112.000</div>
+        </div>
+    </div>
+    <div class="general-parameter-box">
+        <div class="parameter-icon">
+            <i class="iconly-boldShow"></i>
+        </div>
+        <div class="parameter-info">
+            <div class="parameter-description">Thành viên nhóm</div>
+            <div class="parameter-value">112.000</div>
+        </div>
+    </div>
+</section>
+
+
+
+@section scripts{
+    <script>
+        const TransferMoney = async function (el) {
+
+            $(el).prop('disabled', true);
+            try {
+                let rq = await fetch(`/api/home/transfermoney?userGiveId=&userReceiverId=`)
+            }
+            catch (ex) { }
+            $(el).prop('disabled', false);
+        }
+    </script>
+}
