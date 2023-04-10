@@ -1,1 +1,224 @@
-﻿
+﻿section {
+    display: flex;
+}
+
+.mobile {
+    display: flex !important;
+}
+
+.desktop {
+    display: none !important;
+}
+
+ul {
+    list-style: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+a {
+    text-decoration: none !important;
+    cursor: pointer !important;
+}
+
+/*HomePage*/
+.home-page .section-header {
+    font-size: 20px;
+    padding: 0 0 30px;
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.home-page .system-general-parameter {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+    .home-page .system-general-parameter .general-parameter-box {
+        display: flex;
+        padding: 10px;
+        background-color: white;
+        border: 0.5px solid #eee;
+        width: 48%;
+        border-radius: 10px;
+    }
+
+        .home-page .system-general-parameter .general-parameter-box .parameter-icon {
+            display: none;
+        }
+
+        .home-page .system-general-parameter .general-parameter-box .parameter-info {
+            font-size: 14px;
+            text-align: center;
+            width: 100%;
+        }
+
+            .home-page .system-general-parameter .general-parameter-box .parameter-info .parameter-description {
+                font-weight: bold;
+                display: flex;
+                height: 42px;
+                justify-content: center;
+                align-items: center;
+            }
+
+.home-page .current-mission {
+    margin-top: 20px;
+    padding: 10px 10px 20px;
+    border-radius: 10px;
+    border: 0.5px solid #eee;
+    background-color: white;
+}
+
+    .home-page .current-mission .mission-label {
+        font-weight: bold;
+        padding: 10px 0 20px;
+    }
+
+    .home-page .current-mission .mission-detail {
+        display: flex;
+        gap: 5px;
+        align-items: center;
+        padding: 10px 2px;
+    }
+
+        .home-page .current-mission .mission-detail .name {
+            flex: 2;
+            font-size: 14px;
+        }
+
+        .home-page .current-mission .mission-detail .status {
+            flex: 1;
+            font-size: 14px;
+        }
+
+        .home-page .current-mission .mission-detail .button {
+            flex: 1;
+            text-align: right;
+        }
+
+            .home-page .current-mission .mission-detail .button button {
+                font-size: 10px;
+            }
+
+.home-page .recent-transactions {
+    margin-top: 20px;
+    padding: 10px 10px 10px;
+    border-radius: 10px;
+    border: 0.5px solid #eee;
+    background-color: white;
+}
+
+    .home-page .recent-transactions .transactions-label {
+        font-weight: bold;
+        padding: 10px 0 20px;
+    }
+
+    .home-page .recent-transactions .transactions-detail {
+        display: flex;
+        gap: 5px;
+        align-items: center;
+        padding: 10px 2px;
+    }
+
+        .home-page .recent-transactions .transactions-detail .content {
+            flex: 3;
+            display: flex;
+            flex-direction: column;
+        }
+
+            .home-page .recent-transactions .transactions-detail .content .content-detail {
+                font-size: 14px;
+            }
+
+            .home-page .recent-transactions .transactions-detail .content .content-time {
+                font-size: 12px;
+                font-style: italic;
+            }
+
+        .home-page .recent-transactions .transactions-detail .money {
+            flex: 1;
+            font-size: 14px;
+        }
+
+.home-page .more {
+    font-size: 14px;
+    padding-top: 30px;
+    text-align: center;
+}
+/*End HomePage*/
+
+/*ConnectPage*/
+.connect-page .section-header {
+    font-size: 20px;
+    padding: 0 0 30px;
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.connect-page .connect-code{
+    background-color:white;
+    padding:10px 20px;
+    border-radius:10px;
+}
+
+.connect-page .connect-code .connect-btn {
+    display: flex;
+    justify-content: end;
+    margin-top: 10px;
+}
+
+.connect-page .list-member {
+    background-color: white;
+    padding: 10px 10px;
+    border-radius: 10px;
+}
+    .connect-page .list-member .member-label {
+        font-weight: bold;
+        padding: 10px 0 20px;
+    }
+    .connect-page .list-member .member-detail {
+        display: flex;
+        gap: 10px;
+        padding: 5px 10px;
+    }
+
+        .connect-page .list-member .member-detail .member-avatar {
+            width: 30px;
+            height: 30px;
+        }
+
+            .connect-page .list-member .member-detail .member-avatar .avt-img {
+                height: 0;
+                width: 100%;
+                padding-bottom: 100%;
+                border-radius: 100%;
+                background-position: center;
+                background-repeat: no-repeat;
+                background-size: cover;
+                border: .5px solid #d7d7d7;
+            }
+
+        .connect-page .list-member .member-detail .member-name {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            font-size:14px;
+        }
+
+/*End connectPage*/
+
+/*AccountPage*/
+.account-page .section-header {
+    font-size: 20px;
+    padding: 0 0 30px;
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+/*EndAccountPage*/

@@ -1,0 +1,47 @@
+﻿
+@{
+    ViewBag.Title = "Kết nối thành viên";
+    ViewBag.Menu = "connect-member";
+}
+
+@section styles{
+    <style>
+        section{
+            flex-direction:column;
+        }
+    </style>
+}
+
+<section class="connect-page">
+    <div class="section-header">Kết nối thành viên</div>
+    <div class="connect-code">
+        <div class="form-group">
+            <label for="connectCode">Mã giới thiệu</label>
+            <input type="text" style="font-size:14px;" class="form-control" id="connectCode" placeholder="Nhập mã giới thiệu">
+        </div>
+        <div class="connect-btn"><button class="btn btn-sm btn-info">Kết nối</button></div>
+    </div>
+
+    <div class="list-member">
+        <div class="member-label">Danh sách thành viên</div>
+        <div class="member-detail">
+            <div class="member-avatar">
+                <div class="avt-img"></div>
+            </div>
+            <div class="member-name"> Nguyễn Đăng Duy </div>
+        </div>
+        <div class="member-detail">
+            <div class="member-avatar">
+                <div class="avt-img"></div>
+            </div>
+            <div class="member-name"> Nguyễn Triệu Phú </div>
+        </div>
+        <div class="member-detail">
+            <div class="member-avatar">
+                <div class="avt-img"></div>
+            </div>
+            <div class="member-name"> Nguyễn Phương Anh </div>
+        </div>
+    </div>
+</section>
+

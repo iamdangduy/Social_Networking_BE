@@ -3666,6 +3666,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
+    <Compile Include="Controllers\ConnectMemberController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\NotificationController.cs" />
     <Compile Include="Controllers\UserController.cs" />
@@ -3831,6 +3832,7 @@
     <Content Include="Views\User\UserInfo.cshtml" />
     <Content Include="Views\User\UserTransaction.cshtml" />
     <Content Include="Views\UserQuest\Index.cshtml" />
+    <Content Include="Views\ConnectMember\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
