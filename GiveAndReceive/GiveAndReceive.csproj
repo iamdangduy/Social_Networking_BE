@@ -3858,6 +3858,7 @@
     <Content Include="Views\UserQuest\Index.cshtml" />
     <Content Include="Views\ConnectMember\Index.cshtml" />
     <Content Include="Views\User\AccountVerification.cshtml" />
+    <Content Include="Views\User\ChangePassword.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

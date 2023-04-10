@@ -19,6 +19,11 @@ namespace GiveAndReceive.Controllers
             return View();
         }
 
+        public ActionResult ChangePassword()
+        {
+            return View();
+        }
+
         [Route("nguoi-dung/vi")]
         public ActionResult UserWalletInfo() {
             return View();
