@@ -20,9 +20,6 @@
         <div class="row h-100">
             <div class="col-lg-5 col-12">
                 <div id="auth-left">
-                    <div class="auth-logo">
-                        <a href="/"><img src="/Content/assets/images/logo/logo.png" alt="Logo"></a>
-                    </div>
                     @RenderBody()
                 </div>
             </div>
@@ -34,7 +31,10 @@
         </div>
     </div>
     <script src="/Content/js/jquery-3.6.0.min.js"></script>
-    @RenderSection("scripts",false)
+    <script src="/Content/js/base64.js"></script>
+    <script src="/Content/js/helper.js"></script>
+    <script src="/Content/assets/vendors/sweetalert2/sweetalert2.all.min.js"></script>
+    @RenderSection("scripts", false)
 </body>
 
 </html>

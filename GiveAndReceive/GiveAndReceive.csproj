@@ -3657,6 +3657,8 @@
     <Content Include="Content\fontawesome\svgs\solid\yen-sign.svg" />
     <Content Include="Content\fontawesome\svgs\solid\yin-yang.svg" />
     <Content Include="Content\fontawesome\svgs\solid\z.svg" />
+    <Content Include="Content\js\base64.js" />
+    <Content Include="Content\js\helper.js" />
     <Content Include="Content\js\jquery-3.6.0.min.js" />
     <Content Include="Content\Site.css" />
     <Content Include="Global.asax" />
@@ -3695,6 +3697,7 @@
     <Compile Include="Models\SystemTransaction.cs" />
     <Compile Include="Models\SystemWallet.cs" />
     <Compile Include="Models\User.cs" />
+    <Compile Include="Models\UserAdmin.cs" />
     <Compile Include="Models\UserBankInfo.cs" />
     <Compile Include="Models\UserPinTransfer.cs" />
     <Compile Include="Models\UserProperties.cs" />
@@ -3714,6 +3717,7 @@
     <Compile Include="Services\BaseService.cs" />
     <Compile Include="Services\CodeConfirmService.cs" />
     <Compile Include="Services\SystemWalletService.cs" />
+    <Compile Include="Services\UserAdminService.cs" />
     <Compile Include="Services\UserPropertiesService.cs" />
     <Compile Include="Services\UserService.cs" />
     <Compile Include="Services\UserWithdrawOrderService.cs" />
