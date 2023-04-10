@@ -33,5 +33,13 @@ namespace GiveAndReceive.Models
             public const string LOGIN_ACCOUNT_OR_PASSWORD_EMPTY = "Số điện thoại/Email/Tên tài khoản hoặc mật khẩu không được để trống.";
             public const string LOGIN_ACCOUNT_OR_PASSWORD_INCORRECT = "Số điện thoại/Email/Tên tài khoản hoặc mật khẩu không chính xác.";
         }
+
+        public static class Constant
+        {
+            public const int PAGE_NEWS_SIZE = 6;
+            public const int PAGE_SIZE = 25;
+            public const int ADMIN_PAGE_SIZE = 20;
+            public const int USER_PAGE_SIZE = 20;
+        }
     }
 }

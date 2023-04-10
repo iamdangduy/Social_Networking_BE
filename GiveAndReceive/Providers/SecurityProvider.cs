@@ -134,5 +134,15 @@ namespace GiveAndReceive.Providers
             UserService userService = new UserService(connection);
             return userService.GetUserByToken(token, transaction);
         }
+
+        public static UserAdmin GetUserAdminByToken(HttpRequestMessage requestMessage, IDbConnection connection = null, IDbTransaction transaction = null)
+        {
+            if (requestMessage == null) return null;
+            if (requestMessage.Headers == null) return null;
+            if (requestMessage.Headers.Authorization == null) return null;
+            string token = requestMessage.Headers.Authorization.ToString();
+            UserAdminService userService = new UserAdminService(connection);
+            return userService.GetUserAdminByToken(token, transaction);
+        }
     }
 }
