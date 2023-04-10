@@ -3662,6 +3662,7 @@
   <ItemGroup>
     <Compile Include="ApiControllers\ApiBaseController.cs" />
     <Compile Include="ApiControllers\HomeController.cs" />
+    <Compile Include="ApiControllers\UserController.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
