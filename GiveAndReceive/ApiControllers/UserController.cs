@@ -13,6 +13,43 @@ namespace GiveAndReceive.ApiControllers
     public class UserController : ApiBaseController
     {
         [HttpPost]
+        public JsonResult ChangePassword(UserRequest model)
+        {
+            try
+            {
+                using (var connect = BaseService.Connect())
+                {
+                    connect.Open();
+                    using (var transaction = connect.BeginTransaction())
+                    {
+                        string token = Request.Headers.Authorization.ToString();
+
+                        UserService userService = new UserService(connect);
+                        User user = userService.GetUserByToken(token, transaction);
+                        if (user == null) return Unauthorized();
+
+                        string password = SecurityProvider.EncodePassword(user.UserId, model.Password);
+                        if (!user.Password.Equals(password)) return Error("Mật khẩu cũ không đúng");
+                        else
+                        {
+                            model.NewPassword = SecurityProvider.EncodePassword(user.UserId, model.NewPassword);
+                            //userService.ChangePassword(user.UserId, model.NewPassword, transaction);
+
+                            transaction.Commit();
+                            return Success();
+                        }
+
+                        return Success(user);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return Error(ex.Message);
+            }
+        }
+
+        [HttpPost]
         public JsonResult UpdateInfoUser(User model)
         {
             try
