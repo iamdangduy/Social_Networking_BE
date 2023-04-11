@@ -3687,6 +3687,7 @@
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\UserQuestController.cs" />
     <Compile Include="Filters\APIAuthenticationFilterAttribute.cs" />
+    <Compile Include="Filters\ApiTokenRequireAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

@@ -164,9 +164,28 @@
     <script src="/Content/assets/vendors/sweetalert2/sweetalert2.all.min.js"></script>
     <script src="/Content/js/datepicker.min.js"></script>
     <script src="/Content/assets/js/main.js"></script>
+    <script src="/Content/js/helper.js"></script>
     <script>
         const LogOut = async () => {
-
+            Swal.fire({
+                icon: "question",
+                title: "Bạn có chắc muốn đăng xuất tài khoản khỏi hệ thống?",
+                showCancelButton: true,
+                preConfirm: async function () {
+                ///    const userToken = GetCookie('UserToken');
+                    let rq = await fetch('/api/user/logout', {
+                        method: 'get',
+                        headers: Enum.OptionHeaderDefault
+                    });
+                    let rs = await rq.json();
+                    if (CheckErrorResponse(rs) === false) return;
+                    EraseCookie('UserToken');
+                    window.location.href = '/dang-nhap';
+                },
+                didClose: function () {
+                    return;
+                }
+            })
         }
     </script>
     @RenderSection("scripts", false)
