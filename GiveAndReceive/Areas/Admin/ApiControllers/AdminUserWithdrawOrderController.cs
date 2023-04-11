@@ -1,5 +1,6 @@
 ﻿using GiveAndReceive.ApiControllers;
 using GiveAndReceive.Areas.Admin.Services;
+using GiveAndReceive.Filters;
 using GiveAndReceive.Models;
 using GiveAndReceive.Providers;
 using GiveAndReceive.Services;
@@ -14,6 +15,7 @@ namespace GiveAndReceive.Areas.Admin.ApiControllers
     public class AdminUserWithdrawOrderController : ApiBaseController
     {
         [HttpGet]
+        [ApiAdminTokenRequire]
         public JsonResult GetListUserWithdrawOrder(string keyword, int page)
         {
             try
@@ -27,6 +29,8 @@ namespace GiveAndReceive.Areas.Admin.ApiControllers
             }
         }
 
+        [HttpGet]
+        [ApiAdminTokenRequire]
         public JsonResult ProcessUserWithdrawOrder(string userWithdrawOrderId)
         {
             try
@@ -36,17 +40,14 @@ namespace GiveAndReceive.Areas.Admin.ApiControllers
                     connect.Open();
                     using(var transaction = connect.BeginTransaction())
                     {
-                        UserAdmin userAdmin = SecurityProvider.GetUserAdminByToken(Request);
-                        if (userAdmin == null) return Unauthorized();
-
                         AdminUserWithdrawOrderService adminUserWithdrawOrderService = new AdminUserWithdrawOrderService(connect);
-                        UserWithdrawOrder userWithdrawOrder = adminUserWithdrawOrderService.GetUserWithdrawOrderById(userWithdrawOrderId);
+                        UserWithdrawOrder userWithdrawOrder = adminUserWithdrawOrderService.GetUserWithdrawOrderById(userWithdrawOrderId, transaction);
                         if (userWithdrawOrder == null) return Error();
 
                         if(userWithdrawOrder.Status != UserWithdrawOrder.EnumStatus.PENDING) return Error("Giao dịch này hiện tại không thể xử lý. Vui lòng thử lại sau.");
 
                         userWithdrawOrder.Status = UserWithdrawOrder.EnumStatus.PROCESSING;
-                        adminUserWithdrawOrderService.UpdateUserWithdrawOrderStatus(userWithdrawOrder);
+                        adminUserWithdrawOrderService.UpdateUserWithdrawOrderStatus(userWithdrawOrder, transaction);
 
                         UserWithdrawOrderStatus userWithdrawOrderStatus = new UserWithdrawOrderStatus();
                         userWithdrawOrderStatus.UserWithdrawOrderStatusId = Guid.NewGuid().ToString();
@@ -66,7 +67,8 @@ namespace GiveAndReceive.Areas.Admin.ApiControllers
             }
         }
 
-
+        [HttpGet]
+        [ApiAdminTokenRequire]
         public JsonResult DoneUserWithdrawOrder(string userWithdrawOrderId)
         {
             try
@@ -76,17 +78,14 @@ namespace GiveAndReceive.Areas.Admin.ApiControllers
                     connect.Open();
                     using (var transaction = connect.BeginTransaction())
                     {
-                        UserAdmin userAdmin = SecurityProvider.GetUserAdminByToken(Request);
-                        if (userAdmin == null) return Unauthorized();
-
                         AdminUserWithdrawOrderService adminUserWithdrawOrderService = new AdminUserWithdrawOrderService(connect);
-                        UserWithdrawOrder userWithdrawOrder = adminUserWithdrawOrderService.GetUserWithdrawOrderById(userWithdrawOrderId);
+                        UserWithdrawOrder userWithdrawOrder = adminUserWithdrawOrderService.GetUserWithdrawOrderById(userWithdrawOrderId, transaction);
                         if (userWithdrawOrder == null) return Error();
 
                         if (userWithdrawOrder.Status != UserWithdrawOrder.EnumStatus.PROCESSING) return Error("Giao dịch này hiện tại không thể xử lý. Vui lòng thử lại sau.");
 
                         userWithdrawOrder.Status = UserWithdrawOrder.EnumStatus.DONE;
-                        adminUserWithdrawOrderService.UpdateUserWithdrawOrderStatus(userWithdrawOrder);
+                        adminUserWithdrawOrderService.UpdateUserWithdrawOrderStatus(userWithdrawOrder, transaction);
 
                         UserWithdrawOrderStatus userWithdrawOrderStatus = new UserWithdrawOrderStatus();
                         userWithdrawOrderStatus.UserWithdrawOrderStatusId = Guid.NewGuid().ToString();
@@ -106,6 +105,8 @@ namespace GiveAndReceive.Areas.Admin.ApiControllers
             }
         }
 
+        [HttpGet]
+        [ApiAdminTokenRequire]
         public JsonResult CancelUserWithdrawOrder(string userWithdrawOrderId)
         {
             try
@@ -115,18 +116,16 @@ namespace GiveAndReceive.Areas.Admin.ApiControllers
                     connect.Open();
                     using (var transaction = connect.BeginTransaction())
                     {
-                        UserAdmin userAdmin = SecurityProvider.GetUserAdminByToken(Request);
-                        if (userAdmin == null) return Unauthorized();
-
+                        
                         AdminUserWalletService adminUserWalletService = new AdminUserWalletService(connect);
                         AdminUserTransactionService adminUserTransactionService = new AdminUserTransactionService(connect);
                         AdminUserWithdrawOrderService adminUserWithdrawOrderService = new AdminUserWithdrawOrderService(connect);
-                        UserWithdrawOrder userWithdrawOrder = adminUserWithdrawOrderService.GetUserWithdrawOrderById(userWithdrawOrderId);
+                        UserWithdrawOrder userWithdrawOrder = adminUserWithdrawOrderService.GetUserWithdrawOrderById(userWithdrawOrderId, transaction);
                         if (userWithdrawOrder == null) return Error();
 
                         // Cập nhật trạng thái
                         userWithdrawOrder.Status = UserWithdrawOrder.EnumStatus.SYSTEM_DECLINE;
-                        adminUserWithdrawOrderService.UpdateUserWithdrawOrderStatus(userWithdrawOrder);
+                        adminUserWithdrawOrderService.UpdateUserWithdrawOrderStatus(userWithdrawOrder, transaction);
                         DateTime now = DateTime.Now;
                         UserWithdrawOrderStatus userWithdrawOrderStatus = new UserWithdrawOrderStatus();
                         userWithdrawOrderStatus.UserWithdrawOrderStatusId = Guid.NewGuid().ToString();

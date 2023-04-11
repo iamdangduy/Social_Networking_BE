@@ -85,9 +85,7 @@
             let keyword = $('#keyword').val();
             const rp = await fetch('/api/AdminUserWithdrawOrder/GetListUserWithdrawOrder?keyword=' + keyword + '&page=' + page, {
                 method: 'get',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
+                headers: Enum.OptionAdminHeaderDefault
             });
             let rs = await rp.json();
             if (rs.status === 'error') if (rs.message !== '' && rs.message !== null) alert(rs.message);
@@ -146,6 +144,7 @@
         const ProcessUserWithdrawOrder = async function (el) {
             if (confirm("Duyệt yêu cầu rút này?")) {
                 let id = $(el).data('id');
+                console.log(id);
                 const rp = await fetch('/api/AdminUserWithdrawOrder/ProcessUserWithdrawOrder?userWithdrawOrderId=' + id, {
                     method: 'get',
                     headers: Enum.OptionAdminHeaderDefault
