@@ -1,0 +1,235 @@
+﻿
+@{
+    ViewBag.Title = "Lịch sử giao dịch Vé";
+    ViewBag.Menu = "manage-user";
+}
+
+@section styles{
+    <style>
+        .account-page-content .main-content {
+            padding: 10px 10px 10px 10px !important;
+        }
+
+        #tab-knt .knt-point {
+            background-color: white;
+            width: fit-content;
+            padding: 20px 40px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+        }
+
+        #tab-knt .search-order {
+            display: flex;
+            background-color: white;
+            padding: 20px 20px;
+            margin-bottom: 20px;
+        }
+
+        #tab-knt .search-keyword {
+            flex: 1;
+            margin-right: 10px;
+        }
+
+        #tab-knt .salary {
+            display: flex;
+        }
+
+            #tab-knt .salary .real-salary {
+                background-color: white;
+                width: fit-content;
+                padding: 20px 40px;
+                margin-bottom: 20px;
+                border-radius: 10px;
+                margin-right: 15px;
+            }
+
+            #tab-knt .salary .holding-salary {
+                background-color: white;
+                width: fit-content;
+                padding: 20px 40px;
+                margin-bottom: 20px;
+                border-radius: 10px;
+                margin-left: 15px;
+            }
+
+        #tab-knt .list-option {
+            display: flex;
+            padding: 20px;
+            align-items: center;
+            background-color: white;
+            margin-top: 20px;
+        }
+
+            #tab-knt .list-option .date-pick {
+                display: flex;
+                flex: 2;
+                align-items: center;
+            }
+
+                #tab-knt .list-option .date-pick span {
+                    font-weight: 500;
+                }
+
+                #tab-knt .list-option .date-pick input {
+                    width: 30%;
+                    margin: 5px 15px;
+                    border-radius: 10px;
+                }
+
+            #tab-knt .list-option .amount-optione {
+                flex: 1;
+            }
+
+                #tab-knt .list-option .amount-optione select {
+                    width: 50%;
+                    border-radius: 10px;
+                }
+
+            #tab-knt .list-option .search-tab-3 {
+                display: flex;
+                align-items: center;
+                flex: 1;
+            }
+
+                #tab-knt .list-option .search-tab-3 .search-btn {
+                    padding: 5px 25px;
+                    border: solid #8c237b 0.5px;
+                    border-radius: 10px;
+                    font-size: 16px;
+                    font-weight: 500;
+                    cursor: pointer;
+                    color: white !important;
+                    background-color: #8c237b;
+                }
+
+        .list-order {
+            background-color: white;
+        }
+
+        .active-custom {
+            background-color: #3f87f5;
+            color: white !important;
+        }
+        .card .page-header {
+            border-bottom: 1px solid #edf2f9;
+        }
+    </style>
+}
+
+<div class="account-page-content">
+    <div class="main-content">
+        <div class="card" style="padding:20px;">
+            <div class="page-header no-gutters has-tab">
+
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link " href="/Admin/ManageUser/UpdateUserInfo/@ViewBag.Id">Thông tin cá nhân</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link " href="/Admin/ManageUser/TransactionHistory/@ViewBag.Id">Lịch sử giao dịch</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/Admin/ManageUser/PinHistory/@ViewBag.Id">Lịch sử sử dụng Vé</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="">
+                <div class="tab-content m-t-15">
+                    <div class="tab-pane fade show active" id="tab-knt">
+
+                        <div class="list-option">
+                            <div class="date-pick">
+                                <span>Từ ngày</span>
+                                <input class="form-control" id="start-date" />
+                                <span>đến ngày</span>
+                                <input class="form-control" id="end-date" />
+                            </div>
+                            <div class="search-tab-3"><a onclick="SearchKNT();" class="btn btn-primary">Tìm kiếm</a></div>
+                        </div>
+                        <div class="list-order">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Ngày giao dịch</th>
+                                            <th scope="col" style="width:50%;">Lời nhắn</th>
+                                            <th scope="col">Tổng tiền</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="list-knt">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="product-page-list">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        $('#start-date').datepicker({
+            format: 'dd-mm-yyyy',
+            autoHide: true,
+        });
+
+        $('#end-date').datepicker({
+            format: 'dd-mm-yyyy',
+            autoHide: true,
+        });
+
+        const SearchKNT = function () {
+            GetListHistoryTransactionUser();
+        }
+
+        let _currentPage = 1;
+        const GetListHistoryTransactionUser = async function (page = 1) {
+            _currentPage = page;
+
+            let userId = '@ViewBag.Id';
+            let fromTime = ConvertTime($('#start-date').val());
+            let toTime = ConvertTime($('#end-date').val(), 23, 59, 59, 999);
+
+            let rq = await fetch(Enum.ApiUrl + '/api/AdminManageUser/GetListHistoryTransactionUser?UserId=' + userId + '&CreateStart=' + fromTime + '&CreateEnd=' + toTime + '&PageIndex=' + page, {
+                method: 'get',
+                headers: Enum.OptionAdminHeaderDefault,
+            });
+            let rs = await rq.json();
+
+            if (AdminCheckErrorResponse(rs) === false) return;
+            if (rs.data === null) return;
+            $('#list-knt').html('');
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                $('.product-page-list').html('');
+                for (let page = 1; page <= rs.data.TotalPage; page++) {
+                    $('.product-page-list').append(`<a onclick="GetListHistoryTransactionUser(${page});" data-page="${page}" class="product-page ${_currentPage === page ? 'active-custom' : ''}" id="page-num">${page}</a>`);
+                }
+
+                for (let index = 0; index < rs.data.ListData.length; index++) {
+                    var x = rs.data.ListData[index];
+                    let html = '<tr>';
+                    html += '<td>' + DateStringFormat({ stringDate: new Date(x.CreateTime),newFormat:'dd/mm/yyyy hh:mi:ss' }) + '</td>';
+                    html += '<td>' + x.Message + '</td>';
+                    html += '<td>' + NumberFormat(x.Amount) + '</td> </tr>';
+
+                    $('#list-knt').append(html);
+                }
+            }
+        }
+
+        const initPage = async function () {
+            await GetListHistoryTransactionUser();
+
+        }
+
+        initPage();
+    </script>
+}
+
+
+

@@ -19,5 +19,17 @@ namespace GiveAndReceive.Areas.Admin.Controllers
             ViewBag.Id = id;
             return View();
         }
+
+        public ActionResult TransactionHistory(string id)
+        {
+            ViewBag.Id = id;
+            return View();
+        }
+
+        public ActionResult PinHistory(string id)
+        {
+            ViewBag.Id = id;
+            return View();
+        }
     }
 }
