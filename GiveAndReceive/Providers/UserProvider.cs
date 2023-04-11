@@ -41,7 +41,7 @@ namespace GiveAndReceive.Providers
         }
 
 
-        /*public static void UpdateUserPoint(string userId, long point, string note = "", IDbConnection connection = null, IDbTransaction transaction = null)
+        public static void UpdateUserPoint(string userId, long point, string note = "", IDbConnection connection = null, IDbTransaction transaction = null)
         {
             UserService userService = new UserService(connection);
             UserWallet userWallet = userService.GetUserWallet(userId, transaction);
@@ -58,7 +58,7 @@ namespace GiveAndReceive.Providers
                 UserId = userId,
                 UserTransactionId = Guid.NewGuid().ToString()
             }, transaction);
-        }*/
+        }
 
 
     }

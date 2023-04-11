@@ -23,7 +23,7 @@ namespace GiveAndReceive.Areas.Admin.Services
             listUserWithdrawOrderView.List = new List<UserWithdrawOrderModel>();
             listUserWithdrawOrderView.TotalPage = 0;
 
-            string querySelect = "select u.Name, u.Phone, u.Email, uwo.Code, uwo.Amount, uwo.Status, uwo.CreateTime";
+            string querySelect = "select uwo.UserWithdrawOrderId, u.UserId, u.Name, u.Phone, u.Email, uwo.Code, uwo.Amount, uwo.Status, uwo.CreateTime";
             string queryCount = "select count(*)";
             string query = " from [dbo].[user_withdraw_order] uwo left join [dbo].[user] u on uwo.UserId = u.UserId where 1=1";
 

@@ -34,6 +34,13 @@
         .product-page.active {
             background-color: #3f87f5;
             color: white !important;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            font-size: 13px;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
         }
 
         .product-page-list .product-page {
@@ -70,9 +77,9 @@
     <table class="table table-hover">
         <thead>
             <tr>
+                <th>Mã code</th>
                 <th id="Name">Người dùng</th>
-                <th style="width:200px;">Thông tin ngân hàng</th>
-                <th style="width:250px;text-align:center;">Số tiền (VNĐ)</th>
+                <th>Số tiền</th>
                 <th>Ngày tạo</th>
                 <th>Trạng thái</th>
                 <th id="Tablebutton" style="width:200px;">Thao tác</th>
@@ -135,32 +142,35 @@
                 page = 1;
             }
             let keyword = $('#keyword').val();
-            const rp = await fetch('/api/AdminUserWithDrawOrder/GetListUserDrawOrder?pageIndex=' + page + '&pageSearch=' + keyword, {
+            const rp = await fetch('/api/AdminUserWithdrawOrder/GetListUserWithdrawOrder?keyword=' + keyword + '&page=' + page, {
                 method: 'get',
                 headers: Enum.OptionAdminHeaderDefault
             });
             let rs = await rp.json();
+            if (AdminCheckErrorResponse(rs) === false) return;
             if (rs.status === 'error') if (rs.message !== '' && rs.message !== null) alert(rs.message);
             if (rs.status === 'success') {
                 if (rs.message !== '' && rs.message !== null) alert(rs.message);
-                for (let index = 0; index < rs.data.ListData.length; index++) {
-                    let i = rs.data.ListData[index];
+                for (let index = 0; index < rs.data.List.length; index++) {
+                    let i = rs.data.List[index];
+                    console.log(i);
                     let html = '<tr>';
-                    html += '<td><div class="name"><span>' + i.Name + '</span> <span>[' + i.Code + ']</span></div></td>';
-                    html += '<td><div class="bankInfo"><span>' + GetObjectProperty(i, 'BankName') + '</span> <span>' + GetObjectProperty(i, 'BankAccountNumber') + '</span> <span>' + GetObjectProperty(i,'BankOwnerName') + '</span></div></td>';
-                    html += '<td style="text-align:center">' + NumberFormat(GetObjectProperty(i, 'Amount')) + '</td>';
+                    html += '<td><div><span>' + i.Code + '</span></div></td>';
+                    html += '<td><div class="name"><span>' + i.Name + '</span></div></td>';
+                    html += '<td>' + NumberFormat(GetObjectProperty(i, 'Amount')) + ' VNĐ</td>';
                     html += '<td>' + DateStringFormat({ stringDate: new Date(i.CreateTime), newFormat: 'dd/mm/yyyy hh:mi:ss' }) + '</td>';
                     let button = '';
                     let status = '';
                     switch (i.Status) {
                         case 'PENDING':
                             status = '<span class="badge bg-light-warning"> Chờ xác nhận </span>';
-                            button = '<button class="btn btn-primary btn-tone m-r-5 btn-sm" onclick="ConfirmWithdrawalOrder(this)" data-id="' + i.UserWithdrawOrderId + '"> Xác nhận </button>';
-                            button += '<button class="btn btn-danger btn-tone m-r-5 btn-sm" onclick="ChangeOrderStatusToSystemCancel(this)" data-id="' + i.UserWithdrawOrderId + '"> Huỷ </button>';
+                            button = '<button class="btn btn-success btn-tone m-r-5 btn-sm" onclick="ProcessUserWithdrawOrder(this)" data-id="' + i.UserWithdrawOrderId + '"> Duyệt </button>';
+                            button += '<button class="btn btn-danger btn-tone m-r-5 btn-sm" onclick="CancelUserWithdrawOrder(this)" data-id="' + i.UserWithdrawOrderId + '"> Huỷ </button>';
                             break;
                         case 'PROCESSING':
                             status = '<span class="badge bg-light-info">Đang xử lý</span>';
-                            button = '<button class="btn btn-primary btn-tone m-r-5 btn-sm" onclick="ChangeOrderStatusToDone(this)" data-id="' + i.UserWithdrawOrderId + '"> Xác nhận đã hoàn thành </button>';
+                            button = '<button class="btn btn-primary btn-tone m-r-5 btn-sm" onclick="DoneUserWithdrawOrder(this)" data-id="' + i.UserWithdrawOrderId + '"> Xác nhận </button>';
+                            button += '<button class="btn btn-danger btn-tone m-r-5 btn-sm" onclick="CancelUserWithdrawOrder(this)" data-id="' + i.UserWithdrawOrderId + '"> Huỷ </button>';
                             break;
                         case 'DONE':
                             status = '<span class="badge bg-light-success">Đã hoàn thành</span>';
@@ -168,7 +178,7 @@
                         case 'USER_CANCEL':
                             status = '<span class="badge bg-light-danger">Người dùng hủy</span>';
                             break;
-                        case 'SYSTEM_CANCEL':
+                        case 'SYSTEM_DECLINE':
                             status = '<span class="badge bg-light-danger">Hệ thống hủy</span>';
                             break;
 
@@ -191,10 +201,11 @@
                 }
             }
         }
-        const ConfirmWithdrawalOrder = async function (el) {
-            if (confirm("Xác nhận cho yêu cầu rút này")) {
+        const ProcessUserWithdrawOrder = async function (el) {
+            if (confirm("Duyệt yêu cầu rút này?")) {
                 let id = $(el).data('id');
-                const rp = await fetch('/api/AdminUserWithDrawOrder/ChangeOrderStatusToProcessing?UserWithdrawOrderId=' + id, {
+                console.log(id);
+                const rp = await fetch('/api/AdminUserWithdrawOrder/ProcessUserWithdrawOrder?userWithdrawOrderId=' + id, {
                     method: 'get',
                     headers: Enum.OptionAdminHeaderDefault
                 });
@@ -202,15 +213,17 @@
                 if (rs.status === 'error') if (rs.message !== '' && rs.message !== null) alert(rs.message);
                 if (rs.status === 'success') {
                     if (rs.message !== '' && rs.message !== null) alert(rs.message);
+                    alert("Duyệt thành công.");
                     window.location.reload();
                 }
             }
         }
 
-        const ChangeOrderStatusToDone = async function (el) {
+
+        const DoneUserWithdrawOrder = async function (el) {
             if (confirm("Xác nhận hoàn thành lệnh rút của người dùng?")) {
                 let id = $(el).data('id');
-                const rp = await fetch('/api/AdminUserWithDrawOrder/ChangeOrderStatusToDone?UserWithdrawOrderId=' + id, {
+                const rp = await fetch('/api/AdminUserWithdrawOrder/DoneUserWithdrawOrder?userWithdrawOrderId=' + id, {
                     method: 'get',
                     headers: Enum.OptionAdminHeaderDefault
                 });
@@ -218,36 +231,31 @@
                 if (rs.status === 'error') if (rs.message !== '' && rs.message !== null) alert(rs.message);
                 if (rs.status === 'success') {
                     if (rs.message !== '' && rs.message !== null) alert(rs.message);
+                    alert("Hoàn thành.")
                     window.location.reload();
                 }
             }
         }
-        const ChangeOrderStatusToSystemCancel = async function (el) {
 
-            let model = {
-                UserWithdrawOrderId: $(el).data('id'),
-
+        const CancelUserWithdrawOrder = async function (el) {
+            if (confirm("Hệ thống hủy yêu cầu rút này")) {
+                let id = $(el).data('id');
+                const rp = await fetch('/api/AdminUserWithdrawOrder/CancelUserWithdrawOrder?userWithdrawOrderId=' + id, {
+                    method: 'get',
+                    headers: Enum.OptionAdminHeaderDefault
+                });
+                let rs = await rp.json();
+                if (rs.status === 'error') if (rs.message !== '' && rs.message !== null) alert(rs.message);
+                if (rs.status === 'success') {
+                    if (rs.message !== '' && rs.message !== null) alert(rs.message);
+                    alert("Hủy thành công.")
+                    window.location.reload();
+                }
             }
-            const rp = await fetch('/api/AdminUserWithDrawOrder/ChangeOrderStatusToSystemCancel', {
-                method: 'post',
-                headers: Enum.OptionAdminHeaderDefault,
-                body: JSON.stringify(model)
-            });
-            let rs = await rp.json();
-            if (rs.status === 'error') if (rs.message !== '' && rs.message !== null) alert(rs.message);
-            if (rs.status === 'success') {
-                if (rs.message !== '' && rs.message !== null) alert(rs.message);
-                alert("Hủy thành công!");
-                window.location.reload();
-            }
-
         }
 
-        const InitPage = async function () {
-            await getListUserWithdrawalOrder();
-            $(".modal-container").click(function (event) {
-                event.stopPropagation();
-            });
+        const InitPage = function () {
+            getListUserWithdrawalOrder();
         }
 
         InitPage();
