@@ -1,0 +1,396 @@
+﻿
+@{
+    ViewBag.Title = "Thêm sản phẩm";
+    ViewBag.Menu = "product";
+}
+
+@section styles{
+    <style>
+        .create-product {
+            max-width: 70%;
+        }
+
+            .create-product .title {
+                text-align: center;
+                text-transform: uppercase;
+                font-size: 30px;
+            }
+
+        .form-add {
+        }
+
+            .form-add .price {
+                margin-top: 10px;
+            }
+
+        .create-button {
+            width: fit-content;
+            padding: 5px 5px;
+            color: white !important;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .body {
+            margin-top: 20px;
+        }
+
+        .product-image {
+            padding: 0 10px 10px 0;
+        }
+
+            .product-image > .image {
+                width: 100px;
+                height: 100px;
+                border-radius: 10px;
+                background-position: center;
+                background-repeat: no-repeat;
+                background-size: cover;
+                position: relative;
+            }
+
+                .product-image > .image > .remove {
+                    display: flex;
+                    width: 20px;
+                    height: 20px;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 20px;
+                    color: #f15050;
+                    top: -5px;
+                    right: -5px;
+                    position: absolute;
+                }
+
+        /*#UnitUpdateModal .form-body .form-group {
+            width: 90%;
+            margin: 5px auto;
+        }*/
+        .form .form-header .title {
+            display: flex;
+            flex: 1;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+            color: black;
+        }
+
+        .form .form-footer {
+            display: flex;
+            height: 70px;
+            border-top: 0.5px solid #e9e9e9;
+            padding: 15px;
+            gap: 10px;
+            align-items: center;
+            justify-content: flex-end;
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.4);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .modal-container {
+            background-color: #fff;
+            width: 900px;
+            max-width: calc(100% - 32px);
+            position: relative;
+            animation: modalFadeIn ease 0.5s;
+            transition: top 0.4s, opacity 0.4s;
+        }
+
+        .modal-header {
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center !important;
+            font-size: 20px;
+            border-bottom: solid #ccc 0.5px;
+            text-transform: uppercase;
+        }
+
+        .modal-body {
+            width: 90%;
+            margin: auto;
+        }
+
+        .modal-footer {
+            width: 90%;
+            margin: auto;
+            justify-content: end;
+            display: flex;
+            gap: 10px;
+            padding-bottom: 10px;
+        }
+
+            .modal-footer .update-btn {
+                width: 100px;
+                padding: 5px 5px;
+                background-color: #435ebe;
+                color: white;
+                border-radius: 5px;
+                cursor: pointer;
+                border: solid #435ebe 1px;
+            }
+
+            .modal-footer .close-modal {
+                width: 80px;
+                color: black;
+                border: solid #ccc 0.5px;
+                cursor: pointer;
+                border-radius: 5px;
+            }
+
+        @@keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-200px);
+            }
+
+            to {
+                transform: translateY(0px);
+                opacity: 1;
+            }
+        }
+    </style>
+}
+
+
+
+
+<div class="body" style="display: flex; flex-wrap: wrap;">
+    <input id="ProductId" value="@ViewBag.Id" type="hidden" />
+    <div style="flex: 1; display: flex; flex-direction: column; padding: 20px; min-width: 350px; ">
+        <div class="form-group">
+            <label class="font-weight-semibold" for="name">Ảnh sản phẩm</label>
+            <div class="preview" style=" width: 100px; height: 100px; background-position: center; background-repeat: no-repeat; background-size: cover; border: .5px solid #d7d7d7; cursor: pointer; background-image: url('/Content/img/pick-image.png');" onclick="ChooseThumbnail(this);"></div>
+            <input type="file" style="display:none;" onchange="ChooseThumbnail_OnChange(this);" required />
+            <input type="hidden" id="Thumbnail" />
+        </div>
+
+        <div class="form-group" id="">
+            <label class="font-weight-semibold" for="name">Tên sản phẩm</label>
+            <input type="text" class="form-control" id="Name" placeholder="Nhập tên sản phẩm" required>
+        </div>
+
+        <div class="form-group price" id="">
+            <label class="font-weight-semibold" for="name">Giá sản phẩm</label>
+            <input type="text" class="form-control" id="Price" placeholder="Giá của sản phẩm" onkeyup="ValidateInputOnlyNumber(event, this);" required>
+        </div>
+
+        <div class="form-group unit" id="">
+            <label class="font-weight-semibold" for="name">Đơn vị tính</label>
+            <div style="display:flex;">
+                <select class="form-control" id="UnitId">
+                    <option value="">Chọn đơn vị tính</option>
+                </select>
+                <button class="btn btn-sm btn-primary btn-add-supplier" onclick="openCreateModal()"><i class="fa-solid fa-plus"></i></button>
+            </div>
+
+        </div>
+
+
+        <div class="form-group price" id="">
+            <label class="font-weight-semibold" for="DiscountForSystem">Chiết khấu cho hệ thống</label>
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" id="DiscountForSystem" placeholder="Chiết khấu cho hệ thống" onkeyup="ValidateInputOnlyNumber(event, this);">
+                <span class="input-group-text">%</span>
+            </div>
+        </div>
+
+        <div class="form-group" id="">
+            <label class="font-weight-semibold" for="name">Số lượng sản phẩm </label>
+            <input type="text" class="form-control" id="ComboSet" placeholder="Nhập số lượng sản phẩm có trong sản phẩm" onkeyup="ValidateInputOnlyNumber(event, this);">
+        </div>
+
+        <div class="form-group">
+            <div class="label">Ảnh sản phẩm</div>
+            <div class="content" id="ListImage" style="overflow-y: auto; height: 200px; border: .5px solid #979797; padding: 10px; display: flex; flex-direction: row; flex-wrap: wrap; justify-content: flex-start; align-items: flex-start; ">
+                <div class="add-image">
+                    <a onclick="AddMoreImage(this);"><i class="fa-solid fa-camera" style="font-size:30px;margin-right:10px"></i></a>
+                    <input type="file" style="display:none;" onchange="AddMoreImage_OnChange(event,this);" multiple />
+                </div>
+
+            </div>
+        </div>
+        <button type="button" onclick="CreateProduct();" class="create-button btn btn-primary">Thêm sản phẩm</button>
+    </div>
+    <div style="flex: 2; display: flex; flex-direction: column; padding: 20px;">
+        <div class="form-group product-property">
+            <label class="font-weight-semibold">Mô tả</label>
+            <textarea style="resize:none;" placeholder="Nhập mô tả cho sản phẩm" rows="30" class="form-control" aria-label="With textarea" id="Description"></textarea>
+        </div>
+
+    </div>
+
+</div>
+
+
+@*Modal Add Unit*@
+<div id="modalUnit" class="modal" onclick="closeModal()">
+    <div class="modal-container">
+        <div class="modal-header">Thêm đơn vị tính</div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label class="font-weight-semibold" for="UnitName">Tên đơn vị:</label>
+                <input type="text" class="form-control" id="UnitName" placeholder="Nhập đơn vị tính">
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button class="btn btn-sm btn-secondary" onclick="closeModal()">Đóng</button>
+            <button class="btn btn-sm btn-primary" onclick="CreateUnitCategory()">Lưu</button>
+
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="/Content/ckeditor/ckeditor.js"></script>
+    <script>
+
+        var editorDescription = CKEDITOR.replace('Description', {
+            height: 600,
+        });
+        let _lsImage = [];
+        var AddMoreImage = function (el) { $(el).siblings('input[type=file]').click(); }
+        var AddMoreImage_OnChange = function (e, el) {
+            var files = e.currentTarget.files;
+            console.log(files);
+            for (let i = 0; i < files.length; i++) {
+                let currFile = files[i];
+
+                let reader = new FileReader();
+                reader.onloadend = function (e1) {
+                    const addImage = $(el).closest('.add-image');
+                    $(`<div class="product-image">
+                    <div class="image" style="background-image: url(${e1.currentTarget.result});"><a class="remove" data-id="" onclick="RemoveProductImage(this);"><i class="fa-solid fa-trash-can"></i></a></div>
+                    <input type="hidden" value="${e1.currentTarget.result.substring(e1.currentTarget.result.indexOf(',') + 1, e1.currentTarget.result.length)}"/>
+                    </div>`).insertAfter(addImage);
+                    _lsImage.push(e1.currentTarget.result.substring(e1.currentTarget.result.indexOf(',') + 1, e1.currentTarget.result.length))
+                }
+
+                reader.readAsDataURL(currFile)
+            }
+
+        }
+        var RemoveProductImage = function (el) {
+            const id = $(el).data('id');
+            if (id !== '') {
+                lsDeleteImage.push(id);
+            }
+            $(el).closest('.product-image').remove();
+        }
+
+        var ChooseThumbnail = function (el) { $(el).siblings('input[type=file]').click(); }
+        var ChooseThumbnail_OnChange = function (el) {
+            let reader = new FileReader();
+            reader.onloadend = function (e) {
+                $(el).siblings('input[type=hidden]').val(e.currentTarget.result.substring(e.currentTarget.result.indexOf(',') + 1, e.currentTarget.result.length));
+                $(el).siblings('.preview').css('background-image', `url(${e.currentTarget.result})`);
+            }
+            reader.readAsDataURL(el.files[0])
+        }
+        const GetlistUnit = async function () {
+            let rp = await fetch('/api/AdminUnit/GetListAllUnit', {
+                method: 'get',
+                headers: Enum.OptionAdminHeaderDefault
+            });
+            let rs = await rp.json();
+
+            $('#UnitId').html('<option value="" selected>Chọn đơn vị tính</option>');
+            for (let index = 0; index < rs.data.length; index++) {
+                var x = rs.data[index]
+                $('#UnitId').append(`<option value="${x.UnitId}">${x.UnitName}</option>`);
+            }
+        }
+
+        const CreateProduct = async function () {
+            let model = {
+                ProductId: '',
+                Name: $('#Name').val(),
+                Thumbnail: $('#Thumbnail').val(),
+                NameSearch: '',
+                Description: editorDescription.getData(),
+                Price: $('#Price').val().replace(/,/g, ''),
+                Quantity: $('#ComboSet').val().replace(/,/g, ''),
+                DiscountForSystem: $('#DiscountForSystem').val(),
+                UnitId: $('#UnitId').val(),
+                ListImage: _lsImage,
+                ListImageDelete: [],
+            };
+            if (model.Thumbnail === '') {
+                alert("Bạn cần thêm ảnh"); return;
+            }
+            if (GetObjectProperty(model, 'Price') === '') { alert('Tên sản phẩm không được để trống'); return; }
+            if (GetObjectProperty(model, 'Quantity') === '') { alert('Số lượng sản phẩm không được để trống'); return; }
+            @*if (GetObjectProperty(model, 'KNTReward') === '') { alert('Điểm thưởng KNT khi mua sản phẩm không được để trống'); return; }*@
+
+            model.NameSearch = RemoveVietnameseTones(model.Name);
+
+            const rp = await fetch('/api/ManageProduct/InsertProduct', {
+                method: 'post',
+                headers: Enum.OptionAdminHeaderDefault,
+                body: JSON.stringify(model)
+            });
+            let rs = await rp.json();
+
+            if (AdminCheckErrorResponse(rs) === false) return;
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                if (rs.message !== '' && rs.message !== null) alert(rs.message);
+                alert('Thêm sản phẩm thành công');
+                window.location.href = '/Admin/Product/';
+            }
+
+        }
+
+        const openCreateModal = function () {
+            $('#modalUnit').css('display', 'flex');
+        }
+
+        const closeModal = function () {
+            $('#modalUnit').css('display', 'none');
+            $('#UnitName').val('');
+        }
+
+        const CreateUnitCategory = async function () {
+            let model = {
+                UnitName: $('#UnitName').val(),
+            };
+            if (model.Name !== '') {
+                const rp = await fetch('/api/AdminUnit/InsertUnit', {
+                    method: 'post',
+                    headers: Enum.OptionAdminHeaderDefault,
+                    body: JSON.stringify(model)
+                });
+                let rs = await rp.json();
+                if (AdminCheckErrorResponse(rs) === false) return;
+                if (rs.status === 'success') {
+                    if (rs.message !== '' && rs.message !== null) alert(rs.message);
+                    alert('Bạn đã thêm thành công!');
+                    GetlistUnit();
+                    closeModal();
+                }
+            }
+        }
+
+
+        const InitPage = async function () {
+            //GetlistUnit();
+            $(".modal-container").click(function (event) {
+                event.stopPropagation();
+            });
+        }
+        InitPage();
+    </script>
+}
+

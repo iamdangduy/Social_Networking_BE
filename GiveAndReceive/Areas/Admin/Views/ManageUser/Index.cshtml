@@ -1,0 +1,240 @@
+﻿
+@{
+    ViewBag.Title = "Quản lý người dùng";
+    ViewBag.Menu = "manage-user";
+}
+
+@section styles{
+    <style>
+        .account-page-content .main-content {
+            padding: 10px 10px 10px 10px !important;
+        }
+
+        .btn-custom-color {
+            color: white;
+            background-color: #8c237b;
+            float: right;
+        }
+
+        .list-detail {
+            background-color: white;
+        }
+
+            .list-detail .list-option {
+                display: flex;
+                padding: 20px;
+                align-items: center;
+            }
+
+                .list-detail .list-option > div {
+                    padding: 10px;
+                }
+
+                .list-detail .list-option .search-keyword {
+                }
+
+
+
+                .list-detail .list-option select {
+                    border-radius: 5px;
+                    padding: 10px;
+                }
+
+        #list-user td a {
+            padding-right: 10px;
+            cursor: pointer;
+        }
+
+        .product-page-list a {
+            cursor: pointer;
+        }
+
+        .active-custom {
+            background-color: #3f87f5;
+            color: white !important;
+        }
+
+        .user-info {
+        }
+
+            .user-info .name {
+            }
+
+            .user-info .rank {
+            }
+    </style>
+}
+
+
+<div class="account-page-content">
+    <div class="main-content">
+
+        <div class="">
+            <div class="tab-content m-t-15">
+                <div class="tab-pane fade show active" id="">
+                    <div class="list-detail">
+                        <div class="list-option">
+                            <div class="search-keyword" id="email-form" style="flex:1;">
+                                <input type="text" class="form-control" id="keyword" placeholder="Nhập từ khoá tìm kiếm" onkeyup="enterGetListUser(event)">
+                            </div>
+
+                            <div class="search-rank" style="width:200px;">
+                                <select id="rank" class="form-control " onchange="getListUser()">
+                                    <option value="0">Tất cả chức danh</option>
+                                    <option value="1">Khách hàng</option>
+                                    <option value="2">Đại lý</option>
+                                    <option value="3">Phó phòng</option>
+                                    <option value="4">Trưởng phòng</option>
+                                    <option value="5">Phó giám đốc</option>
+                                    <option value="6">Giám đốc</option>
+                                </select>
+                            </div>
+
+                            <div class="search-active">
+                                <select id="isEnable" class="form-control" onchange="getListUser()">
+                                    <option value="true">Đang kích hoạt</option>
+                                    <option value="false">Chưa kích hoạt</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="table-responsive" style="padding:15px;">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" style="width:20%">Tên người dùng</th>
+                                        <th scope="col" style="width:20%">Email</th>
+                                        <th scope="col" style="width:25%">Tên đăng nhập</th>
+                                        <th scope="col" style="width:20%">Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="list-user">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="product-page-list">
+</div>
+
+@section Scripts{
+    <script>
+        var ChooseThumbnail = function (el) { $(el).siblings('input[type=file]').click(); }
+        var ChooseThumbnail_OnChange = function (el) {
+            let reader = new FileReader();
+            reader.onloadend = function (e) {
+                $(el).siblings('input[type=hidden]').val(e.currentTarget.result.substring(e.currentTarget.result.indexOf(',') + 1, e.currentTarget.result.length));
+                $(el).siblings('.preview').css('background-image', `url(${e.currentTarget.result})`);
+            }
+            reader.readAsDataURL(el.files[0])
+        }
+
+        const enterGetListUser = function (e) {
+            if (e.keyCode === 13) {
+                getListUser();
+            }
+        }
+
+        let _currentPage = 1;
+
+
+        const getListUser = async function (page = 1) {
+            _currentPage = page;
+            let keyword = $('#keyword').val();
+            let enable = $('#isEnable').val();
+            let rank = $('#rank').val();
+            if (keyword != '') keyword = RemoveVietnameseTones(keyword);
+
+            //gọi api ở admin
+            let rq = await fetch(Enum.ApiUrl + '/api/ManageUser/GetListUser?keyword=' + keyword + '&enable=' + enable + '&page=' + page + '&rank=' + rank, {
+                method: 'get',
+                headers: Enum.OptionAdminHeaderDefault
+            });
+            let rs = await rq.json();
+
+            if (AdminCheckErrorResponse(rs) === false) return;
+
+            $('#list-user').html('');
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                $('#keyword').val('');
+                $('.product-page-list').html('');
+                for (let page = 1; page <= rs.data.TotalPage; page++) {
+                    $('.product-page-list').append(`<a onclick="getListUser(${page});" data-page="${page}" class="product-page ${_currentPage === page ? 'active-custom' : ''}" id="page-num">${page}</a>`);
+                }
+
+                for (let index = 0; index < rs.data.ListUser.length; index++) {
+                    var x = rs.data.ListUser[index];
+                    let html = '<tr>';
+                    html += '<td> <div class="user-info"><div class="name">' + GetObjectProperty(x, 'Name') + '</div><div class="rank">' + Enum.Rank[GetObjectProperty(x, 'RankId')] + '</div></div> </td>';
+                    html += '<td>' + GetObjectProperty(x, 'Email') + '</td>';
+                    html += '<td>' + GetObjectProperty(x, 'Account') + '</td>';
+                    html += '<td>';
+                    html += '<a data-id="' + x.UserId + '" onclick="updateUserInfo(this);"><button class="btn btn-primary btn-xs"><i class="fa-solid fa-pen-to-square"></i></button></a>';
+                    if (x.Enable === true) {
+                        html += '<a data-id="' + x.UserId + '" onclick="DeactiveUser(this);"><button class="btn btn-danger btn-xs"><i class="fa-solid fa-power-off"></i></button></a> </td> </tr>';
+                    } else {
+                        html += '<a data-id="' + x.UserId + '" onclick="ActiveUser(this);"><button class="btn btn-danger btn-xs"><i class="fa-solid fa-power-off"></i></button></a> </td> </tr>';
+                    }
+                    $('#list-user').append(html);
+                }
+            }
+
+        }
+
+        const DeactiveUser = async function (el) {
+            let UserId = $(el).data('id');
+            let enable = 'false'
+            if (confirm('Bạn có chắc chắn muốn huỷ kích hoạt tài khoản này?')) {
+                let rq = await fetch(Enum.ApiUrl + '/api/ManageUser/ChangeUserActivation?Userid=' + UserId + '&enable=' + enable, {
+                    method: 'get',
+                    headers: Enum.OptionAdminHeaderDefault,
+
+                });
+                let rs = await rq.json();
+
+                if (AdminCheckErrorResponse(rs) === false) return;
+                if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                    alert('Cập nhật trạng thái tài khoản thành công!');
+                    window.location.reload();
+                }
+            }
+
+        }
+
+        const ActiveUser = async function (el) {
+            let UserId = $(el).data('id');
+            let enable = 'true'
+            if (confirm('Bạn có chắc chắn muốn kích hoạt tài khoản này?')) {
+                let rq = await fetch(Enum.ApiUrl + '/api/ManageUser/ChangeUserActivation?Userid=' + UserId + '&enable=' + enable, {
+                    method: 'get',
+                    headers: Enum.OptionAdminHeaderDefault,
+
+                });
+                let rs = await rq.json();
+
+                if (AdminCheckErrorResponse(rs) === false) return;
+                if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                    alert('Cập nhật trạng thái tài khoản thành công!');
+                    window.location.reload();
+                }
+            }
+
+        }
+        const updateUserInfo = function (el) {
+            const userId = $(el).data('id');
+            window.location.href = ('/Admin/ManageUser/UpdateUserInfo/' + userId);
+        }
+
+        const initPage = async function () {
+            await getListUser();
+        }
+
+        initPage();
+    </script>
+}
+
