@@ -43,6 +43,9 @@ namespace GiveAndReceive.Models
 
             public const string IDENTITY_THUMBNAIL_URL = "/files/identity/";
             public const string IDENTITY_THUMBNAIL_PATH = "~/files/identity/";
+
+            public const string SYSTEM_BANK_QR_IMAGE_URL = "/files/systembank/";
+            public const string SYSTEM_BANK_QR_IMAGE_PATH = "~/files/systembank/";
         }
     }
 }

@@ -4097,8 +4097,10 @@
   <ItemGroup>
     <Compile Include="ApiControllers\ApiBaseController.cs" />
     <Compile Include="ApiControllers\HomeController.cs" />
+    <Compile Include="ApiControllers\UserBankInfoController.cs" />
     <Compile Include="ApiControllers\UserController.cs" />
     <Compile Include="ApiControllers\UserPropertiesController.cs" />
+    <Compile Include="ApiControllers\UserWalletController.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
@@ -4168,8 +4170,10 @@
     <Compile Include="Services\CodeConfirmService.cs" />
     <Compile Include="Services\SystemWalletService.cs" />
     <Compile Include="Services\UserAdminService.cs" />
+    <Compile Include="Services\UserBankInfoService.cs" />
     <Compile Include="Services\UserPropertiesService.cs" />
     <Compile Include="Services\UserService.cs" />
+    <Compile Include="Services\UserWalletService.cs" />
     <Compile Include="Services\UserWithdrawOrderService.cs" />
   </ItemGroup>
   <ItemGroup>
