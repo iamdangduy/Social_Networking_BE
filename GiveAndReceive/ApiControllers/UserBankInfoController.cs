@@ -104,7 +104,20 @@ namespace GiveAndReceive.ApiControllers
                         userBankInfo.BankName = model.BankName;
                         userBankInfo.BankOwnerName = model.BankOwnerName;
                         userBankInfo.BankNumber = model.BankNumber;
-                        
+
+                        if (string.IsNullOrEmpty(model.QRImage)) return Error();
+                        //tạo file mới
+                        if (model.QRImage == null) return Error();
+                        string filename = Guid.NewGuid().ToString() + ".jpg";
+                        var path = System.Web.HttpContext.Current.Server.MapPath(Constant.SYSTEM_BANK_QR_IMAGE_PATH + filename);
+                        HelperProvider.Base64ToImage(model.QRImage, path);
+                        userBankInfo.QRImage = Constant.SYSTEM_BANK_QR_IMAGE_URL + filename;
+
+                        UserBankInfoService userBankInfoService = new UserBankInfoService(connect);
+                        userBankInfoService.UpdateUserBankInfo(userBankInfo, transaction);
+
+                        transaction.Commit();
+                        return Success();
                     }
                 }
             }

@@ -46,6 +46,9 @@ namespace GiveAndReceive.Models
 
             public const string SYSTEM_BANK_QR_IMAGE_URL = "/files/systembank/";
             public const string SYSTEM_BANK_QR_IMAGE_PATH = "~/files/systembank/";
+
+            public const string PRODUCT_THUMBNAIL_URL = "/files/product/thumbnail/";
+            public const string PRODUCT_THUMBNAIL_PATH = "~/files/product/thumbnail/";
         }
     }
 }
