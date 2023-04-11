@@ -106,8 +106,20 @@ namespace GiveAndReceive.Services
         }
         public void UpdateUserToken(string userId, string token, IDbTransaction transaction = null)
         {
-            string query = "update [user] set Token=@token where UserId=@userId";
+            string query = "update [user_token] set Token=@token where UserId=@userId";
             int status = this._connection.Execute(query, new { token = token, userId = userId }, transaction);
+            if (status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
+        }
+        public void InsertUserToken(UserToken model, IDbTransaction transaction = null)
+        {
+            string query = "INSERT INTO [dbo].[user_token]([UserTokenId],[UserId],[Token],[ExpireTime],[CreateTime]) VALUES (@UserTokenId,@UserId,@Token,@ExpireTime,@CreateTime)";
+            int status = this._connection.Execute(query, model, transaction);
+            if (status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
+        }
+        public void RemoveUserToken(string token, IDbTransaction transaction = null)
+        {
+            string query = "update [user_token] set Token=NULL where Token=@token";
+            int status = this._connection.Execute(query, new { token = token }, transaction);
             if (status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
         }
     }
