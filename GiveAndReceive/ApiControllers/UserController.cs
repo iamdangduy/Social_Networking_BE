@@ -303,7 +303,7 @@ namespace GiveAndReceive.ApiControllers
 
 
                         int codeConfirmCheck = codeConfirmService.CountCodeConfirmOfEOPIn24Hours(phone, transaction);
-                        if (codeConfirmCheck >= 3) return Error("Bạn đã dùng hết 3 lượt lấy OTP bằng điện thoại. Vui lòng thử lại sau 24 giờ.");
+                    //    if (codeConfirmCheck >= 3) return Error("Bạn đã dùng hết 3 lượt lấy OTP bằng điện thoại. Vui lòng thử lại sau 24 giờ.");
 
                         Random rnd = new Random();
                         int code = rnd.Next(100000, 999999);
