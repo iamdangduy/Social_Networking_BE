@@ -1,0 +1,205 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+
+@section styles{
+    <style>
+        .list-data {
+            margin-top: 20px;
+            background-color: white;
+            padding: 20px;
+        }
+
+        .search-keyword {
+            flex: 1;
+        }
+
+        .search-tab-3 {
+            display: flex;
+            align-items: center;
+            margin-left: 10px;
+        }
+
+        .product-page.active {
+            background-color: #3f87f5;
+            color: white !important;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            font-size: 13px;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+        }
+
+        .product-page-list .product-page {
+            cursor: pointer;
+        }
+
+        .product-page-list .product-page:hover {
+            color: black !important;
+        }
+
+        td button {
+            margin-right: 5px;
+        }
+    </style>
+}
+
+<div class="list-option" style="width:50%;display:flex">
+    <div class="search-keyword" id="email-form">
+        <input type="text" class="form-control" id="keyword" placeholder="Nhập từ khoá tìm kiếm" required="">
+    </div>
+    <div class="search-tab-3"><a onclick="getListUserWithdrawalOrder();" class="btn btn-primary">Tìm kiếm</a></div>
+</div>
+<div class="list-data">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Mã code</th>
+                <th id="Name">Người dùng</th>
+                <th>Số tiền</th>
+                <th>Ngày tạo</th>
+                <th>Trạng thái</th>
+                <th id="Tablebutton" style="width:200px;">Thao tác</th>
+            </tr>
+        </thead>
+        <tbody id="listuserWithdrawalOrder">
+        </tbody>
+    </table>
+    <div class="product-page-list">
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        const getListUserWithdrawalOrder = async function (el) {
+            $('#listuserWithdrawalOrder').html('');
+            $('.product-page-list').html('');
+            let page = $(el).data('page');
+            if (el === undefined) {
+                page = 1;
+            }
+            let keyword = $('#keyword').val();
+            const rp = await fetch('/api/AdminUserWithdrawOrder/GetListUserWithdrawOrder?keyword=' + keyword + '&page=' + page, {
+                method: 'get',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            let rs = await rp.json();
+            if (rs.status === 'error') if (rs.message !== '' && rs.message !== null) alert(rs.message);
+            if (rs.status === 'success') {
+                if (rs.message !== '' && rs.message !== null) alert(rs.message);
+                for (let index = 0; index < rs.data.List.length; index++) {
+                    let i = rs.data.List[index];
+                    let html = '<tr>';
+                    html += '<td><div><span>' + i.Code + '</span></div></td>';
+                    html += '<td><div class="name"><span>' + i.Name + '</span></div></td>';
+                    html += '<td>' + NumberFormat(GetObjectProperty(i, 'Amount')) + ' VNĐ</td>';
+                    html += '<td>' + DateStringFormat({ stringDate: new Date(i.CreateTime), newFormat: 'dd/mm/yyyy hh:mi:ss' }) + '</td>';
+                    let button = '';
+                    let status = '';
+                    switch (i.Status) {
+                        case 'PENDING':
+                            status = '<span class="badge bg-light-warning"> Chờ xác nhận </span>';
+                            button = '<button class="btn btn-success btn-tone m-r-5 btn-sm" onclick="ProcessUserWithdrawOrder(this)" data-id="' + i.UserWithdrawOrderId + '"> Duyệt </button>';
+                            button += '<button class="btn btn-danger btn-tone m-r-5 btn-sm" onclick="CancelUserWithdrawOrder(this)" data-id="' + i.UserWithdrawOrderId + '"> Huỷ </button>';
+                            break;
+                        case 'PROCESSING':
+                            status = '<span class="badge bg-light-info">Đang xử lý</span>';
+                            button = '<button class="btn btn-primary btn-tone m-r-5 btn-sm" onclick="DoneUserWithdrawOrder(this)" data-id="' + i.UserWithdrawOrderId + '"> Xác nhận </button>';
+                            button += '<button class="btn btn-danger btn-tone m-r-5 btn-sm" onclick="CancelUserWithdrawOrder(this)" data-id="' + i.UserWithdrawOrderId + '"> Huỷ </button>';
+                            break;
+                        case 'DONE':
+                            status = '<span class="badge bg-light-success">Đã hoàn thành</span>';
+                            break;
+                        case 'USER_CANCEL':
+                            status = '<span class="badge bg-light-danger">Người dùng hủy</span>';
+                            break;
+                        case 'SYSTEM_CANCEL':
+                            status = '<span class="badge bg-light-danger">Hệ thống hủy</span>';
+                            break;
+
+                        default:
+                            break;
+                    }
+                    html += '<td>' + status + '</td>';
+                    html += '<td>' + button + '</td>';
+                    html += '</tr>';
+
+                    $('#listuserWithdrawalOrder').append(html);
+
+                }
+                for (let _page = 1; _page <= rs.data.TotalPage; _page++) {
+                    if (_page === page) {
+                        $('.product-page-list').append('<a onclick="getListUserWithdrawalOrder(this);" data-page="' + _page + '" class="product-page active">' + _page + '</a>')
+                    } else {
+                        $('.product-page-list').append('<a onclick="getListUserWithdrawalOrder(this);" data-page="' + _page + '" class="product-page">' + _page + '</a>')
+                    }
+                }
+            }
+        }
+
+        const ProcessUserWithdrawOrder = async function (el) {
+            if (confirm("Duyệt yêu cầu rút này?")) {
+                let id = $(el).data('id');
+                const rp = await fetch('/api/AdminUserWithdrawOrder/ProcessUserWithdrawOrder?userWithdrawOrderId=' + id, {
+                    method: 'get',
+                    headers: Enum.OptionAdminHeaderDefault
+                });
+                let rs = await rp.json();
+                if (rs.status === 'error') if (rs.message !== '' && rs.message !== null) alert(rs.message);
+                if (rs.status === 'success') {
+                    if (rs.message !== '' && rs.message !== null) alert(rs.message);
+                    alert("Duyệt thành công.");
+                    window.location.reload();
+                }
+            }
+        }
+
+
+        const DoneUserWithdrawOrder = async function (el) {
+            if (confirm("Xác nhận hoàn thành lệnh rút của người dùng?")) {
+                let id = $(el).data('id');
+                const rp = await fetch('/api/AdminUserWithdrawOrder/DoneUserWithdrawOrder?userWithdrawOrderId=' + id, {
+                    method: 'get',
+                    headers: Enum.OptionAdminHeaderDefault
+                });
+                let rs = await rp.json();
+                if (rs.status === 'error') if (rs.message !== '' && rs.message !== null) alert(rs.message);
+                if (rs.status === 'success') {
+                    if (rs.message !== '' && rs.message !== null) alert(rs.message);
+                    alert("Hoàn thành.")
+                    window.location.reload();
+                }
+            }
+        }
+
+        const CancelUserWithdrawOrder = async function (el) {
+            if (confirm("Duyệt yêu cầu rút này")) {
+                let id = $(el).data('id');
+                const rp = await fetch('/api/AdminUserWithdrawOrder/CancelUserWithdrawOrder?userWithdrawOrderId=' + id, {
+                    method: 'get',
+                    headers: Enum.OptionAdminHeaderDefault
+                });
+                let rs = await rp.json();
+                if (rs.status === 'error') if (rs.message !== '' && rs.message !== null) alert(rs.message);
+                if (rs.status === 'success') {
+                    if (rs.message !== '' && rs.message !== null) alert(rs.message);
+                    alert("Hủy thành công.")
+                    window.location.reload();
+                }
+            }
+        }
+
+        const InitPage = function () {
+            getListUserWithdrawalOrder();            
+        }
+
+        InitPage();
+    </script>
+    }
+

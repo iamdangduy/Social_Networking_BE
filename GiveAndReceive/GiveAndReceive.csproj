@@ -4112,9 +4112,12 @@
     <Compile Include="Areas\Admin\Controllers\ManageUserController.cs" />
     <Compile Include="Areas\Admin\Controllers\ManageWithdrawController.cs" />
     <Compile Include="Areas\Admin\Controllers\ProductController.cs" />
+    <Compile Include="Areas\Admin\Controllers\UserWithdrawOrderController.cs" />
     <Compile Include="Areas\Admin\Services\AdminProductService.cs" />
+    <Compile Include="Areas\Admin\Services\AdminShareFundUserMonthService.cs" />
     <Compile Include="Areas\Admin\Services\AdminUserPropertiesService.cs" />
     <Compile Include="Areas\Admin\Services\AdminUserService.cs" />
+    <Compile Include="Areas\Admin\Services\AdminUserTransactionService.cs" />
     <Compile Include="Areas\Admin\Services\AdminUserWalletService.cs" />
     <Compile Include="Areas\Admin\Services\AdminUserWithdrawOrderService.cs" />
     <Compile Include="Controllers\ConnectMemberController.cs" />
@@ -4329,6 +4332,7 @@
     <Content Include="Areas\Admin\Views\ManageSystemBank\Index.cshtml" />
     <Content Include="Areas\Admin\Views\ManageUser\TransactionHistory.cshtml" />
     <Content Include="Areas\Admin\Views\ManageUser\PinHistory.cshtml" />
+    <Content Include="Areas\Admin\Views\UserWithdrawOrder\Index.cshtml" />
     <None Include="packages.config" />
     <Content Include="Views\Home\Login.cshtml" />
     <Content Include="Views\Home\Register.cshtml" />

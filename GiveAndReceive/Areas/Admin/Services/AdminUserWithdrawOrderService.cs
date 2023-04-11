@@ -20,17 +20,17 @@ namespace GiveAndReceive.Areas.Admin.Services
         public ListUserWithdrawOrderView GetListUserWithdrawOrder(int page, string keyword, IDbTransaction transaction = null)
         {
             ListUserWithdrawOrderView listUserWithdrawOrderView = new ListUserWithdrawOrderView();
-            listUserWithdrawOrderView.List = new List<UserWithdrawOrder>();
+            listUserWithdrawOrderView.List = new List<UserWithdrawOrderModel>();
             listUserWithdrawOrderView.TotalPage = 0;
 
-            string querySelect = "select *";
+            string querySelect = "select u.Name, u.Phone, u.Email, uwo.Code, uwo.Amount, uwo.Status, uwo.CreateTime";
             string queryCount = "select count(*)";
             string query = " from [dbo].[user_withdraw_order] uwo left join [dbo].[user] u on uwo.UserId = u.UserId where 1=1";
 
             if (!string.IsNullOrEmpty(keyword))
             {
                 keyword = "%" + keyword.Replace(' ', '%') + "%";
-                query += " and (Phone like @keyword or Email like @keyword)";
+                query += " and (u.Phone like @keyword or u.Email like @keyword)";
             }
 
             int totalRow = _connection.Query<int>(queryCount + query, new { keyword = keyword }, transaction).FirstOrDefault();
@@ -40,8 +40,8 @@ namespace GiveAndReceive.Areas.Admin.Services
             }
 
             int skip = (page - 1) * Constant.ADMIN_PAGE_SIZE;
-            query += " order by p.Price desc offset " + skip + " rows fetch next " + Constant.ADMIN_PAGE_SIZE + " rows only";
-            listUserWithdrawOrderView.List = this._connection.Query<UserWithdrawOrder>(querySelect + query, new { keyword = keyword }, transaction).ToList();
+            query += " order by uwo.CreateTime desc offset " + skip + " rows fetch next " + Constant.ADMIN_PAGE_SIZE + " rows only";
+            listUserWithdrawOrderView.List = this._connection.Query<UserWithdrawOrderModel>(querySelect + query, new { keyword = keyword }, transaction).ToList();
             return listUserWithdrawOrderView;
         }
 
