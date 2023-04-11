@@ -40,6 +40,9 @@ namespace GiveAndReceive.Models
             public const int PAGE_SIZE = 25;
             public const int ADMIN_PAGE_SIZE = 20;
             public const int USER_PAGE_SIZE = 20;
+
+            public const string IDENTITY_THUMBNAIL_URL = "/files/identity/";
+            public const string IDENTITY_THUMBNAIL_PATH = "~/files/identity/";
         }
     }
 }
