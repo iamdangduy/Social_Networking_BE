@@ -31,3 +31,29 @@
         </div>
     </div>
 </section>
+
+
+@section scripts{
+    <script>
+        var _page = 1;
+
+        const getNotificationList = async function () {
+            let rq = await fetch('/api/Notification/GetListNotification?page=' + _page, {
+                method: 'get',
+                headers: Enum.OptionHeaderDefault
+            });
+            let rs = await rq.json();
+            if (CheckErrorResponse(rs) === false) return;
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                              
+            }
+            _page++
+        }
+
+        const InitPage = async function () {
+            await getNotificationList();
+        }
+
+        InitPage();
+    </script>    
+}

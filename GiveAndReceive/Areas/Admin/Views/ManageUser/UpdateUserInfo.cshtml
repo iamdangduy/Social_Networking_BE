@@ -261,48 +261,6 @@
                                 <input type="text" class="" id="phoneNum" placeholder="Số điện thoại" value="" disabled>
                             </div>
 
-
-                            <div class="form-custom">
-                                <div class="label-custom">
-                                    <label class="font-weight-semibold">Chức danh:</label>
-                                </div>
-                                <select id="RankId" class="form-control">
-                                    <option>Chưa có chức danh</option>
-                                </select>
-                            </div>
-
-                            <div class="form-custom">
-                                <div class="label-custom">
-                                    <label class="font-weight-semibold" for="Province">Tỉnh (Thành Phố):</label>
-                                </div>
-                                <select id="Province" class="form-control" onchange="provinceOnChange()">
-                                    <option>Tỉnh (Thành Phố)</option>
-                                </select>
-                            </div>
-                            <div class="form-custom">
-                                <div class="label-custom">
-                                    <label class="font-weight-semibold" for="District">Quận (Huyện):</label>
-                                </div>
-                                <select id="District" class="form-control" onchange="districtOnChange()">
-                                    <option>Quận (Huyện)</option>
-                                </select>
-                            </div>
-                            <div class="form-custom">
-                                <div class="label-custom">
-                                    <label class="font-weight-semibold" for="Ward">Phường (Xã):</label>
-                                </div>
-                                <select id="Ward" class="form-control">
-                                    <option>Phường (Xã)</option>
-                                </select>
-                            </div>
-
-                            <div class="form-custom">
-                                <div class="label-custom">
-                                    <label class="font-weight-semibold" for="fullAddress">Địa chỉ:</label>
-                                </div>
-                                <input type="text" class="" id="fullAddress" placeholder="Địa chỉ chi tiết" value="">
-                            </div>
-
                             <div class="form-custom">
                                 <div class="label-custom">
                                     <label class="font-weight-semibold" for="password">Mật khẩu:</label>
@@ -434,129 +392,11 @@
             reader.readAsDataURL(el.files[0])
         }
 
-        let _lsDistrict = [];
-        let _lsWard = [];
-
-        const getListRank = async function () {
-            let rq = await fetch(Enum.ApiUrl + '/api/Rank/GetListRank', {
-                method: 'get',
-                headers: Enum.OptionAdminHeaderDefault
-            });
-            let rs = await rq.json();
-            $('#RankId').html('');
-            $('#RankId').append($('<option>', {
-                value: '',
-                text: 'Chưa có chức danh'
-            }));
-            if (AdminCheckErrorResponse(rs) === false) return;
-            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
-                for (let index = 0; index < rs.data.length; index++) {
-                    let x = rs.data[index];
-                    $('#RankId').append($('<option>', {
-                        value: x.RankId,
-                        text: x.Name
-                    }));
-                }
-            }
-        }
-
-        const getListProvince = async function () {
-            let rq = await fetch(Enum.ApiUrl + '/api/user/GetListProvince', {
-                method: 'get',
-                headers: Enum.OptionHeaderDefault
-            });
-            let rs = await rq.json();
-            $('#Province').html('');
-            $('#Province').append($('<option>', {
-                value: '',
-                text: 'Tỉnh (Thành Phố)'
-            }));
-            if (AdminCheckErrorResponse(rs) === false) return;
-            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
-                for (let index = 0; index < rs.data.length; index++) {
-                    let x = rs.data[index];
-                    $('#Province').append($('<option>', {
-                        value: x.ProvinceId,
-                        text: x.Name
-                    }));
-                }
-            }
-        }
-
-        const getListDistrict = async function () {
-            let rq = await fetch(Enum.ApiUrl + '/api/user/GetListDistrict', {
-                method: 'get',
-                headers: Enum.OptionHeaderDefault
-            });
-            let rs = await rq.json();
-            if (AdminCheckErrorResponse(rs) === false) return;
-
-            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
-                for (let index = 0; index < rs.data.length; index++) {
-                    let x = rs.data[index];
-                    _lsDistrict.push(x);
-                }
-            }
-
-        }
-        const provinceOnChange = function () {
-            let provinceID = $('#Province').val();
-            if (typeof provinceID === 'string') provinceID = parseInt(provinceID);
-            $('#District').html('');
-            $('#District').append($('<option>', {
-                value: '',
-                text: 'Quận (Huyện)'
-            }));
-            for (let index = 0; index < _lsDistrict.length; index++) {
-                if (_lsDistrict[index].ProvinceId === provinceID) {
-                    $('#District').append($('<option>', {
-                        value: _lsDistrict[index].DistrictId,
-                        text: _lsDistrict[index].Name
-                    }));
-                }
-            }
-        }
-
-        const getListWard = async function () {
-            let districtId = $('#District').val();
-            let rq = await fetch(Enum.ApiUrl + '/api/user/GetListWard?districtId=' + districtId, {
-                method: 'get',
-                headers: Enum.OptionHeaderDefault
-            });
-            let rs = await rq.json();
-
-            if (AdminCheckErrorResponse(rs) === false) return;
-            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
-                for (let index = 0; index < rs.data.length; index++) {
-                    let x = rs.data[index];
-
-                    _lsWard.push(x);
-                }
-            }
-        }
-
-        const districtOnChange = function () {
-            let districtId = $('#District').val();
-            if (typeof districtId === 'string') districtId = parseInt(districtId);
-            $('#Ward').html('');
-            $('#Ward').append($('<option>', {
-                value: '',
-                text: 'Phường (Xã)'
-            }));
-            for (let index = 0; index < _lsWard.length; index++) {
-                if (_lsWard[index].DistrictId === districtId) {
-                    $('#Ward').append($('<option>', {
-                        value: _lsWard[index].WardId,
-                        text: _lsWard[index].WardName
-                    }));
-                }
-            }
-        }
 
         const getUserDetail = async function () {
             const id = "@ViewBag.Id";
 
-            let rq = await fetch(Enum.ApiUrl + '/api/ManageUser/GetUserDetail?userId=' + id, {
+            let rq = await fetch(Enum.ApiUrl + '/api/AdminUser/GetUserByUserId?UserId=' + id, {
                 method: 'get',
                 headers: Enum.OptionAdminHeaderDefault
             });
@@ -570,18 +410,12 @@
                 html1 += '<input type="hidden" id="Thumnail" /></div>';
 
                 $('.tab-avatar').append(html1);
-                $('#RankId').val(rs.data.RankId);
                 $('#userId').val(rs.data.UserId);
                 $('#Name').val(rs.data.Name);
                 $('#Account').val(rs.data.Account);
                 $('#Email').val(rs.data.Email);
                 $('#phoneNum').val('******'+rs.data.Phone.substr(rs.data.Phone.length-4,4));
-                $('#Province').val(rs.data.ProvinceId).change();
-                $('#District').val(rs.data.DistrictId).change();
-                $('#Ward').val(rs.data.WardId).change();
-                $('#fullAddress').val(rs.data.Address);
                 $('#shareCode').val(rs.data.ShareCode);
-                $('#ComboBounght').val(rs.data.ComboBounght);
 
                 let html2 = '<div class="tab-function">';
                 html2 += '<a class="btn btn-outline-primary" onclick="updateUserInfo(this);">Cập nhật</a>';
@@ -649,7 +483,7 @@
         }
 
         const GetUserPropertiesByUserId = async function () {
-            let UserId = $('#userId').val();
+            let UserId = "@ViewBag.Id";
 
             let rq = await fetch(Enum.ApiUrl + '/api/AdminUserProperties/GetUserPropertiesByUserId?UserId=' + UserId, {
                 method: 'get',
@@ -660,21 +494,21 @@
 
             if (AdminCheckErrorResponse(rs) === false) return;
             if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
-                if (rs.data.IdentityApprove !== true) {
+                if (rs.data.IdentificationApprove !== true) {
                     $('.accuracy').html('');
                     $('.accuracy').append('<a class="btn btn-outline-dark" onclick="openModal()">Xác thực</a>');
                 }
 
-                $('#Thumbnail1').siblings('.preview').css('background-image', `url(${rs.data.IdentityImageFront})`);
-                $('#Thumbnail2').siblings('.preview').css('background-image', `url(${rs.data.IdentityImageBack})`);
-                $('#Thumbnail3').siblings('.preview').css('background-image', `url(${rs.data.IdentityImagePortrait})`);
+                $('#Thumbnail1').siblings('.preview').css('background-image', `url(${rs.data.CitizenIdentificationImageFront})`);
+                $('#Thumbnail2').siblings('.preview').css('background-image', `url(${rs.data.CitizenIdentificationImageBack})`);
+                $('#Thumbnail3').siblings('.preview').css('background-image', `url(${rs.data.PhotoFace})`);
 
-                $('#identityID').val(rs.data.IdentityNumber);
-                $('#identityAddess').val(rs.data.IdentityAddress);
-                $('#DateRange').val(DateStringFormat({ stringDate: new Date(rs.data.IdentityDateOf), newFormat: 'dd-mm-yyyy' }));
-                $('#issuedBy').val(rs.data.IdentityPlaceOf);
+                $('#identityID').val(rs.data.CitizenIdentificationNumber);
+                $('#identityAddess').val(rs.data.CitizenIdentificationAddress);
+                $('#DateRange').val(DateStringFormat({ stringDate: new Date(rs.data.CitizenIdentificationDateOf), newFormat: 'dd-mm-yyyy' }));
+                $('#issuedBy').val(rs.data.CitizenIdentificationPlaceOf);
                 $('#identityBirthDate').val(DateStringFormat({ stringDate: new Date(rs.data.IdentityBirthDate), newFormat: 'dd-mm-yyyy' }));
-                $('#identityFullName').val(rs.data.IdentityFullName);
+                $('#identityFullName').val(rs.data.CitizenIdentificationName);
             }
         }
 
@@ -747,10 +581,6 @@
         });
 
         const initPage = async function () {
-            await getListRank();
-            await getListProvince();
-            await getListDistrict();
-            await getListWard();
             await getUserDetail();
             await GetUserPropertiesByUserId();
 

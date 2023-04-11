@@ -17,7 +17,7 @@ namespace GiveAndReceive.Areas.Admin.Services
         public object GetListUser(int PageIndex = 1, string Keyword = "")
         {
             string queryCount = "select COUNT(*) ";
-            string querySelect = "select UserId, Name, Avatar ";
+            string querySelect = "select UserId, Name, Avatar, Email, Account ";
             string queryWhere = "from [user] where 1=1";
             if (!string.IsNullOrEmpty(Keyword))
             {
