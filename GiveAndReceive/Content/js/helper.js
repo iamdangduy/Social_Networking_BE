@@ -180,7 +180,7 @@ var AdminCheckErrorResponse = function (model) {
     if (GetObjectProperty(model, 'status') === Enum.ResponseStatus.UNAUTHORIZED) {
         EraseCookie('UserAdminToken');
         alert('Phiên làm việc của bạn đã hết hạn, vui lòng đăng nhập lại để tiếp tục sử dụng hệ thống.');
-        window.location.href = '/admin/system/login';
+        window.location.href = '/admin/home/login';
         return false;
     } else if (GetObjectProperty(model, 'status') === Enum.ResponseStatus.ERROR) {
         if (GetObjectProperty(model, 'message') !== '') alert(GetObjectProperty(model, 'message'));
