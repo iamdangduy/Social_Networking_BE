@@ -4103,8 +4103,10 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminProductController.cs" />
+    <Compile Include="Areas\Admin\ApiControllers\AdminSystemController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminUserPropertiesController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminUserWithdrawOrderController.cs" />
+    <Compile Include="Areas\Admin\ApiControllers\ApiAdminBaseController.cs" />
     <Compile Include="Areas\Admin\Controllers\HomeController.cs" />
     <Compile Include="Areas\Admin\Controllers\ManageSystemBankController.cs" />
     <Compile Include="Areas\Admin\Controllers\ManageUserController.cs" />
@@ -4121,6 +4123,7 @@
     <Compile Include="Controllers\NotificationController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\UserQuestController.cs" />
+    <Compile Include="Filters\ApiAdminTokenRequireAttribute.cs" />
     <Compile Include="Filters\APIAuthenticationFilterAttribute.cs" />
     <Compile Include="Filters\ApiTokenRequireAttribute.cs" />
     <Compile Include="Global.asax.cs">

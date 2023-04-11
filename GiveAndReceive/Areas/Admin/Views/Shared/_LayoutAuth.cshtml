@@ -18,22 +18,20 @@
 <body>
     <div id="auth">
         <div class="row h-100">
-            <div class="col-lg-5 col-12">
-                <div id="auth-left">
+            <div class="col-lg-3 col-12" style="margin:auto">
+                <div>
                     <div class="auth-logo">
-                        <a href="/"><img src="/Content/assets/images/logo/logo.png" alt="Logo"></a>
                     </div>
                     @RenderBody()
-                </div>
-            </div>
-            <div class="col-lg-7 d-none d-lg-block">
-                <div id="auth-right">
-
                 </div>
             </div>
         </div>
     </div>
     <script src="/Content/js/jquery-3.6.0.min.js"></script>
+    <script src="/Content/js/vendors.min.js"></script>
+
+    <script src="/Content/js/app.min.js"></script>
+    <script src="/Content/js/helper.js"></script>
     @RenderSection("scripts", false)
 </body>
 

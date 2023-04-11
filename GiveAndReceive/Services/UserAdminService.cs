@@ -25,11 +25,11 @@ namespace GiveAndReceive.Services
             return this._connection.Query<UserAdmin>(query, new { token = token }, transaction).FirstOrDefault();
         }
 
-        public bool UpdateUserAdminToken(string userAdminId, string token, IDbTransaction transaction = null)
+        public void UpdateUserAdminToken(string userAdminId, string token, IDbTransaction transaction = null)
         {
             string query = "update user_admin set Token=@token where UserAdminId=@userAdminId";
             int status = this._connection.Execute(query, new { userAdminId, token }, transaction);
-            return status > 0;
+            if (status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
         }
 
         public bool UpdateUserAdminPassword(string userAdminId, string password, IDbTransaction transaction = null)
