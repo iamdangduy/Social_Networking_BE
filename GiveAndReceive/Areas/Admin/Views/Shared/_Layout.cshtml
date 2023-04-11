@@ -149,7 +149,18 @@
     <script src="/Content/assets/js/main.js"></script>
     <script>
         const LogOut = async () => {
+            if (confirm('Bạn có chắc muốn đăng xuất khỏi hệ thống') === false) return;
 
+            let rq = await fetch('/api/adminsystem/logout', {
+                method: 'get',
+                headers: Enum.OptionAdminHeaderDefault
+            })
+            let rs = await rq.json();
+            if (AdminCheckErrorResponse(rs) === false) return;
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                EraseCookie('UserAdminToken');
+                window.location.href = '/admin/home/login';
+            }
         }
     </script>
     @RenderSection("scripts", false)
