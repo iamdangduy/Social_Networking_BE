@@ -98,7 +98,6 @@
                     <th id="Avatar" style="width:125px;">Ảnh sản phẩm </th>
                     <th id="Name">Tên sản phẩm</th>
                     <th id="Price" style="width:15%;">Giá (VNĐ)</th>
-                    <th id="Preferential" style="width:15%;">Chiết khẩu cho hệ thống</th>
                     <th id="Tablebutton" style=" width: 125px;">Hoạt động</th>
                 </tr>
             </thead>
@@ -131,13 +130,12 @@
             }
 
             $('#list-product').html('');
-            for (let index = 0; index < rs.data.ListProduct.length; index++) {
-                var x = rs.data.ListProduct[index];
+            for (let index = 0; index < rs.data.ListData.length; index++) {
+                var x = rs.data.ListData[index];
                 let html = '<tr>';
                 html += '<td><div class="thumnail" style="background-image:url(' + x.Thumbnail + ')"></div></td>';
                 html += '<td class="name">' + x.Name + '</td> ';
                 html += '<td>' + NumberFormat(x.Price) + '</td>';
-                html += '<td style="text-align:center">' + x.DiscountForSystem + '%</td>'
 
                 html += '<td>';
                 html += '<a data-id="' + x.ProductId + '" onclick="Update(this);"><button class="btn btn-primary btn-xs"><i class="fa-solid fa-pen-to-square"></i></button></a>';
@@ -161,7 +159,7 @@
         const Delete = async function (el) {
             if (confirm('Bạn có chắc muốn xóa sản phẩm này?')) {
                 let id = $(el).data('id');
-                let rp = await fetch('/api/ManageProduct/DeleteProduct?productId=' + id, {
+                let rp = await fetch('/api/AdminProduct/DeleteProduct?ProductId=' + id, {
                     method: 'get',
                     headers: Enum.OptionAdminHeaderDefault
                 });

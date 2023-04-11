@@ -166,7 +166,7 @@ namespace GiveAndReceive.Areas.Admin.ApiControllers
                         if (userAdmin == null) return Unauthorized();
 
                         AdminProductService adminProductService = new AdminProductService(connect);
-                        var product = adminProductService.GetProductByProductId(ProductId);
+                        var product = adminProductService.GetProductByProductId(ProductId,transaction);
                         if (product == null) return Error();
 
                         adminProductService.DeleteProduct(ProductId, transaction);
