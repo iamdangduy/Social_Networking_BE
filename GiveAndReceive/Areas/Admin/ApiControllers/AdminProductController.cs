@@ -15,6 +15,7 @@ namespace GiveAndReceive.Areas.Admin.ApiControllers
     public class AdminProductController : ApiBaseController
     {
         [HttpGet]
+
         public JsonResult GetListProduct(int PageIndex = 1, string Keyword = "")
         {
             try
