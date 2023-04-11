@@ -119,12 +119,12 @@
         async function GetListProduct(page = 1) {
             _currentPage = page;
             var keyword = $('.select-asset').find('input').val();
-            var rp = await fetch('/api/ManageProduct/GetListProduct?page=' + page + '&keyword=' + keyword, {
+            var rp = await fetch('/api/AdminProduct/GetListProduct?PageIndex=' + page + '&Keyword=' + keyword, {
                 method: 'get',
                 headers: Enum.OptionAdminHeaderDefault
             });
             var rs = await rp.json();
-
+            if (AdminCheckErrorResponse(rs) === false) return;
             $('.product-page-list').html('');
             for (let page = 1; page <= rs.data.TotalPage; page++) {
                 $('.product-page-list').append(`<a onclick="GetListProduct(${page});" data-page="${page}" class="product-page ${_currentPage === page ? 'active' : ''}" id="page-num">${page}</a>`);
