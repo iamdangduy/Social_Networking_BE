@@ -38,8 +38,6 @@ namespace GiveAndReceive.ApiControllers
                             transaction.Commit();
                             return Success();
                         }
-
-                        return Success(user);
                     }
                 }
             }
