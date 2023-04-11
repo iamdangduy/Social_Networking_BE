@@ -4327,6 +4327,8 @@
     <Content Include="Areas\Admin\Views\ManageUser\Index.cshtml" />
     <Content Include="Areas\Admin\Views\ManageUser\UpdateUserInfo.cshtml" />
     <Content Include="Areas\Admin\Views\ManageSystemBank\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\ManageUser\TransactionHistory.cshtml" />
+    <Content Include="Areas\Admin\Views\ManageUser\PinHistory.cshtml" />
     <None Include="packages.config" />
     <Content Include="Views\Home\Login.cshtml" />
     <Content Include="Views\Home\Register.cshtml" />

@@ -14,6 +14,7 @@
             display: flex;
             background-color: white;
             padding: 40px;
+            margin-top:20px;
         }
 
             #tab-info .tab-avatar {
@@ -201,141 +202,135 @@
             padding: 10px;
             font-size: 18px;
         }
+
+        .card .page-header {
+            border-bottom: 1px solid #edf2f9;
+        }
     </style>
 }
 
 
 <div class="account-page-content">
     <div class="main-content">
-        <div class="page-header no-gutters has-tab">
-
-            <ul class="nav nav-tabs">
-                <li class="nav-item">
-                    <a class="nav-link active" href="/Admin/ManageUser/UpdateUserInfo/@ViewBag.Id">Thông tin cá nhân</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link " href="/Admin/ManageUser/UserOrder/@ViewBag.Id">Đơn hàng</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link " href="/Admin/ManageUser/WalletHistory/@ViewBag.Id">Lịch sử UTAO</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link " href="/Admin/ManageUser/TransactionHistory/@ViewBag.Id">Lịch sử giao dịch</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link " href="/Admin/ManageUser/WithDrawal/@ViewBag.Id">Lệnh rút</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link " href="/Admin/ManageUser/BankInfo/@ViewBag.Id">Thông tin thanh toán</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link " href="/Admin/ManageUser/TeamMember/@ViewBag.Id">Danh sách thành viên</a>
-                </li>
-            </ul>
-        </div>
-        <div class="">
-            <div class="tab-content m-t-15">
-                <div class="tab-pane fade show active" id="tab-info">
-                    <div class="tab-avatar">
-                    </div>
-                    <div class="info-detail" id="info-detail">
-                        <input id="userId" style="display:none" value="" />
-                        <div class="form-custom">
-                            <div class="label-custom">
-                                <label class="font-weight-semibold" for="Name">Họ tên:</label>
-                            </div>
-                            <input type="text" class="" id="Name" placeholder="Họ và tên" value="">
+        <div class="card" style="padding:20px;">
+            <div class="page-header no-gutters has-tab">
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/Admin/ManageUser/UpdateUserInfo/@ViewBag.Id">Thông tin cá nhân</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link " href="/Admin/ManageUser/TransactionHistory/@ViewBag.Id">Lịch sử giao dịch</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link " href="/Admin/ManageUser/PinHistory/@ViewBag.Id">Lịch sử sử dụng Vé</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="">
+                <div class="tab-content m-t-15">
+                    <div class="tab-pane fade show active" id="tab-info">
+                        <div class="tab-avatar">
                         </div>
-
-                        <div class="form-custom">
-                            <div class="label-custom">
-                                <label class="font-weight-semibold" for="Account">Tên đăng nhập:</label>
+                        <div class="info-detail" id="info-detail">
+                            <input id="userId" style="display:none" value="" />
+                            <div class="form-custom">
+                                <div class="label-custom">
+                                    <label class="font-weight-semibold" for="Name">Họ tên:</label>
+                                </div>
+                                <input type="text" class="" id="Name" placeholder="Họ và tên" value="">
                             </div>
-                            <input type="text" class="" id="Account" placeholder="Tên đăng nhập" value="" disabled>
-                        </div>
 
-                        <div class="form-custom">
-                            <div class="label-custom">
-                                <label class="font-weight-semibold" for="Email">Email:</label>
+                            <div class="form-custom">
+                                <div class="label-custom">
+                                    <label class="font-weight-semibold" for="Account">Tên đăng nhập:</label>
+                                </div>
+                                <input type="text" class="" id="Account" placeholder="Tên đăng nhập" value="" disabled>
                             </div>
-                            <input type="text" class="" id="Email" placeholder="Email" value="">
-                        </div>
 
-                        <div class="form-custom">
-                            <div class="label-custom">
-                                <label class="font-weight-semibold" for="phoneNum">Số điện thoại:</label>
+                            <div class="form-custom">
+                                <div class="label-custom">
+                                    <label class="font-weight-semibold" for="Email">Email:</label>
+                                </div>
+                                <input type="text" class="" id="Email" placeholder="Email" value="">
                             </div>
-                            <input type="text" class="" id="phoneNum" placeholder="Số điện thoại" value="" disabled>
-                        </div>
+
+                            <div class="form-custom">
+                                <div class="label-custom">
+                                    <label class="font-weight-semibold" for="phoneNum">Số điện thoại:</label>
+                                </div>
+                                <input type="text" class="" id="phoneNum" placeholder="Số điện thoại" value="" disabled>
+                            </div>
 
 
-                        <div class="form-custom">
-                            <div class="label-custom">
-                                <label class="font-weight-semibold">Chức danh:</label>
+                            <div class="form-custom">
+                                <div class="label-custom">
+                                    <label class="font-weight-semibold">Chức danh:</label>
+                                </div>
+                                <select id="RankId" class="form-control">
+                                    <option>Chưa có chức danh</option>
+                                </select>
                             </div>
-                            <select id="RankId" class="form-control">
-                                <option>Chưa có chức danh</option>
-                            </select>
+
+                            <div class="form-custom">
+                                <div class="label-custom">
+                                    <label class="font-weight-semibold" for="Province">Tỉnh (Thành Phố):</label>
+                                </div>
+                                <select id="Province" class="form-control" onchange="provinceOnChange()">
+                                    <option>Tỉnh (Thành Phố)</option>
+                                </select>
+                            </div>
+                            <div class="form-custom">
+                                <div class="label-custom">
+                                    <label class="font-weight-semibold" for="District">Quận (Huyện):</label>
+                                </div>
+                                <select id="District" class="form-control" onchange="districtOnChange()">
+                                    <option>Quận (Huyện)</option>
+                                </select>
+                            </div>
+                            <div class="form-custom">
+                                <div class="label-custom">
+                                    <label class="font-weight-semibold" for="Ward">Phường (Xã):</label>
+                                </div>
+                                <select id="Ward" class="form-control">
+                                    <option>Phường (Xã)</option>
+                                </select>
+                            </div>
+
+                            <div class="form-custom">
+                                <div class="label-custom">
+                                    <label class="font-weight-semibold" for="fullAddress">Địa chỉ:</label>
+                                </div>
+                                <input type="text" class="" id="fullAddress" placeholder="Địa chỉ chi tiết" value="">
+                            </div>
+
+                            <div class="form-custom">
+                                <div class="label-custom">
+                                    <label class="font-weight-semibold" for="password">Mật khẩu:</label>
+                                </div>
+                                <input type="text" class="" id="password" placeholder="Mật khẩu" value="">
+                            </div>
+
+                            <div class="form-custom">
+                                <div class="label-custom">
+                                    <label class="font-weight-semibold" for="shareCode">Mã giới thiệu:</label>
+                                </div>
+                                <input type="text" class="" id="shareCode" placeholder="Mã giới thiệu" value="" disabled>
+                            </div>
+
+                            <div class="form-custom">
+                                <div class="label-custom">
+                                    <label class="font-weight-semibold" for="shareCode">Xác thực tài khoản:</label>
+                                </div>
+                                <div class="accuracy"> Đã xác thực </div>
+                            </div>
                         </div>
 
-                        <div class="form-custom">
-                            <div class="label-custom">
-                                <label class="font-weight-semibold" for="Province">Tỉnh (Thành Phố):</label>
-                            </div>
-                            <select id="Province" class="form-control" onchange="provinceOnChange()">
-                                <option>Tỉnh (Thành Phố)</option>
-                            </select>
-                        </div>
-                        <div class="form-custom">
-                            <div class="label-custom">
-                                <label class="font-weight-semibold" for="District">Quận (Huyện):</label>
-                            </div>
-                            <select id="District" class="form-control" onchange="districtOnChange()">
-                                <option>Quận (Huyện)</option>
-                            </select>
-                        </div>
-                        <div class="form-custom">
-                            <div class="label-custom">
-                                <label class="font-weight-semibold" for="Ward">Phường (Xã):</label>
-                            </div>
-                            <select id="Ward" class="form-control">
-                                <option>Phường (Xã)</option>
-                            </select>
-                        </div>
-
-                        <div class="form-custom">
-                            <div class="label-custom">
-                                <label class="font-weight-semibold" for="fullAddress">Địa chỉ:</label>
-                            </div>
-                            <input type="text" class="" id="fullAddress" placeholder="Địa chỉ chi tiết" value="">
-                        </div>
-
-                        <div class="form-custom">
-                            <div class="label-custom">
-                                <label class="font-weight-semibold" for="password">Mật khẩu:</label>
-                            </div>
-                            <input type="text" class="" id="password" placeholder="Mật khẩu" value="">
-                        </div>
-
-                        <div class="form-custom">
-                            <div class="label-custom">
-                                <label class="font-weight-semibold" for="shareCode">Mã giới thiệu:</label>
-                            </div>
-                            <input type="text" class="" id="shareCode" placeholder="Mã giới thiệu" value="" disabled>
-                        </div>
-
-                        <div class="form-custom">
-                            <div class="label-custom">
-                                <label class="font-weight-semibold" for="shareCode">Xác thực tài khoản:</label>
-                            </div>
-                            <div class="accuracy"> Đã xác thực </div>
-                        </div>
                     </div>
 
                 </div>
-
             </div>
         </div>
+        
     </div>
 </div>
 
