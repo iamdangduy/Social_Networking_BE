@@ -22,5 +22,34 @@ namespace GiveAndReceive.Services
             int status = this._connection.Execute(query, model, transaction);
             if (status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
         }
+
+        public UserProperties GetUserPropertiesByUserId(string userId, IDbTransaction transaction = null)
+        {
+            string query = "select top(1) * from user_properties where UserId =@userId";
+            return this._connection.Query<UserProperties>(query, new { userId }, transaction).FirstOrDefault();
+        }
+
+        public void CreateUserPropertiesForIdentity(UserProperties model, IDbTransaction transaction = null)
+        {
+            string query = "update [user_properties] " +
+                "set CitizenIdentificationImageFront = @CitizenIdentificationImageFront, " +
+                "CitizenIdentificationImageBack = @CitizenIdentificationImageBack, " +
+                "PhotoFace = @PhotoFace, " +
+                "CitizenIdentificationName = @CitizenIdentificationName, " +
+                "CitizenIdentificationNumber = @CitizenIdentificationNumber, " +
+                "CitizenIdentificationPlaceOf = @CitizenIdentificationPlaceOf, " +
+                "CitizenIdentificationDateOf = @CitizenIdentificationDateOf, " +
+                "CitizenIdentificationAddress = @CitizenIdentificationAddress, " +
+                "IdentificationApprove = 0 where UserId = @UserId";
+            int Status = this._connection.Execute(query, model, transaction);
+            if (Status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
+        }
+
+        public void UpdateUserPropertiesForIdentity(UserProperties model, IDbTransaction transaction = null)
+        {
+            string query = $"update [user_properties] set IdentityImageFront = @IdentityImageFront, IdentityImageBack = @IdentityImageBack, IdentityImagePortrait = @IdentityImagePortrait, IdentityFullName = @IdentityFullName, IdentityNumber = @IdentityNumber, IdentityBirthDate = @IdentityBirthDate, IdentityAddress = @IdentityAddress, IdentityDateOf = @IdentityDateOf, IdentityPlaceOf = @IdentityPlaceOf, IdentityApprove = 0 where UserId = @UserId";
+            int Status = this._connection.Execute(query, model, transaction);
+            if (Status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
+        }
     }
 }
