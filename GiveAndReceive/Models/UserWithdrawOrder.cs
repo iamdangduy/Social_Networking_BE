@@ -13,6 +13,15 @@ namespace GiveAndReceive.Models
         public decimal Amount { get; set; }
         public string Status { get; set; }
         public long CreateTime { get; set; }
+        public class EnumStatus
+        {
+            public const string PENDING = "PENDING";
+            public const string PROCESSING = "PROCESSING";
+            public const string CONFIRMED = "CONFIRMED";
+            public const string DONE = "DONE";
+            public const string SYSTEM_DECLINE = "SYSTEM_DECLINE";
+            public const string USER_CANCEL = "USER_CANCEL";
+        }
     }
 
     public class ListUserWithdrawOrderView
