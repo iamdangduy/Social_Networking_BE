@@ -24,6 +24,29 @@
         #main #main-content {
             padding-top: 0;
         }
+        .product-page-list {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            background-color:white;
+            padding:20px;
+        }
+
+            .product-page-list > a {
+                width: 25px;
+                height: 25px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                border-radius: 100%;
+                font-size: 13px;
+                cursor: pointer;
+            }
+
+            .product-page-list .active {
+                background-color: #3f87f5;
+                color: white !important;
+            }
     </style>
     @RenderSection("styles", false)
 </head>
@@ -54,7 +77,7 @@
                         <li class="sidebar-item  @(ViewBag.Menu == "product" ? "active":"")">
                             <a href="/admin/product" class='sidebar-link'>
                                 <i class="fa-solid fa-grip"></i>
-                                <span>Sản phẩm</span>
+                                <span>Quản lý Sản phẩm</span>
                             </a>
                         </li>
                         <li class="sidebar-item @(ViewBag.Menu == "manage-user" ? "active" : "")">

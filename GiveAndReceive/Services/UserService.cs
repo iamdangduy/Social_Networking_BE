@@ -37,10 +37,10 @@ namespace GiveAndReceive.Services
             if (status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
         }
 
-        public UserWallet GetUserWallet(string userId, IDbTransaction transaction = null)
+        public UserWalletService GetUserWallet(string userId, IDbTransaction transaction = null)
         {
             string query = "select top 1 * from [user_wallet] where UserId = @userId";
-            return this._connection.Query<UserWallet>(query, new { userId }, transaction).FirstOrDefault();
+            return this._connection.Query<UserWalletService>(query, new { userId }, transaction).FirstOrDefault();
         }
 
         public void InsertUserTransaction(UserTransaction model, IDbTransaction transaction = null)

@@ -88,48 +88,17 @@
             <input type="text" class="form-control" id="Price" placeholder="Giá của sản phẩm" onkeyup="ValidateInputOnlyNumber(event, this);" required>
         </div>
 
-        <div class="form-group">
-            <label class="font-weight-semibold"> Danh mục</label>
-            <div style="display:flex">
-                <select class="form-control" id="CategoryId">
-                    <option value="">Chọn danh mục</option>
-                </select>
-                <button class="btn btn-sm btn-primary btn-add-supplier" onclick="openCreateCategoryModal()"><i class="fa-solid fa-plus"></i></button>
-            </div>
-        </div>
-        <div class="form-group unit" id="">
-            <label class="font-weight-semibold" for="name">Đơn vị tính</label>
-            <div style="display:flex;">
-                <select class="form-control" id="UnitId">
-                    <option value="">Chọn đơn vị tính</option>
-                </select>
-                <button class="btn btn-sm btn-primary btn-add-supplier" onclick="openCreateModal()"><i class="fa-solid fa-plus"></i></button>
-            </div>
-        </div>
-        <div class="form-group price" id="">
+
+       @* <div class="form-group price" id="">
             <label class="font-weight-semibold" for="DiscountForSystem">Chiết khấu cho hệ thống</label>
             <div class="input-group mb-3">
                 <input type="text" class="form-control" id="DiscountForSystem" placeholder="Chiết khấu cho hệ thống" onkeyup="ValidateInputOnlyNumber(event, this);">
                 <span class="input-group-text">%</span>
             </div>
 
-        </div>
+        </div>*@
 
-        <div class="form-group" id="">
-            <label class="font-weight-semibold" for="name">Số lượng sản phẩm </label>
-            <input type="text" class="form-control" id="QuantityProduct" placeholder="Nhập số lượng sản phẩm có trong sản phẩm" required onkeyup="ValidateInputOnlyNumber(event, this);">
-        </div>
 
-        <div class="form-group">
-            <div class="label">Ảnh sản phẩm</div>
-            <div class="content" id="ListImage" style="overflow-y: auto; height: 200px; border: .5px solid #979797; padding: 10px; display: flex; flex-direction: row; flex-wrap: wrap; justify-content: flex-start; align-items: flex-start; ">
-                <div class="add-image">
-                    <a onclick="AddMoreImage(this);"><i class="fa-solid fa-camera" style="font-size:30px;margin-right:10px"></i></a>
-                    <input type="file" style="display:none;" onchange="AddMoreImage_OnChange(event,this);" multiple />
-                </div>
-
-            </div>
-        </div>
         @*<div class="form-group price" id="">
                 <label class="font-weight-semibold" for="name">Điểm UTAO khi mua</label>
                 <div style="display:flex;align-items:center;">
@@ -137,7 +106,7 @@
                     <span style="padding:0 10px;font-weight:bold;">UTAO</span>
                 </div>
             </div>*@
-        <button type="button" onclick="UpdateProduct();" class="create-button btn btn-primary">Cập nhật sản phẩm</button>
+        <button type="button" onclick="UpdateProduct();" style="margin-top:50px;" class="create-button btn btn-primary">Cập nhật sản phẩm</button>
     </div>
     <div style="flex: 2; display: flex; flex-direction: column; padding: 20px;">
         <div class="form-group product-property">
@@ -147,45 +116,6 @@
 
     </div>
 
-</div>
-
-
-@*Modal Add Unit*@
-<div id="modalUnit" class="modal" onclick="closeModal()">
-    <div class="modal-container">
-        <div class="modal-header">Thêm đơn vị tính</div>
-        <div class="modal-body">
-            <div class="form-group">
-                <label class="font-weight-semibold" for="UnitName">Tên đơn vị:</label>
-                <input type="text" class="form-control" id="UnitName" placeholder="Nhập đơn vị tính">
-            </div>
-        </div>
-
-        <div class="modal-footer">
-            <button class="btn btn-sm btn-secondary" onclick="closeModal()">Đóng</button>
-            <button class="btn btn-sm btn-primary" onclick="CreateUnitCategory()">Lưu</button>
-
-        </div>
-    </div>
-</div>
-
-@*Modal Add Product Category*@
-<div id="modalProductCategory" class="modal" onclick="closeModal()">
-    <div class="modal-container">
-        <div class="modal-header">Thêm danh mục sản phẩm</div>
-        <div class="modal-body">
-            <div class="form-group">
-                <label class="font-weight-semibold" for="CategoryName">Tên danh mục:</label>
-                <input type="text" class="form-control" id="CategoryName" placeholder="Nhập tên danh mục">
-            </div>
-        </div>
-
-        <div class="modal-footer">
-            <button class="btn btn-sm btn-secondary" onclick="closeCategoryModal()">Đóng</button>
-            <button class="btn btn-sm btn-primary" onclick="CreateProductCategory()">Lưu</button>
-
-        </div>
-    </div>
 </div>
 
 @section scripts{
@@ -255,27 +185,19 @@
 
             const id = $('#ProductId').val();
             if (id === '' || id === null || typeof id === 'undefined') return;
-            let rp = await fetch('/api/ManageProduct/GetProductDetail?productId=' + id, {
+            let rp = await fetch('/api/AdminProduct/GetProductByProductId?ProductId=' + id, {
                 method: 'get',
                 headers: Enum.OptionAdminHeaderDefault
             });
             let rs = await rp.json();
             if (AdminCheckErrorResponse(rs) === false) return;
-            let item = rs.data.product;
+            let item = rs.data;
             $('#Name').val(item.Name);
             $('.preview').css('background-image', `url(${item.Thumbnail})`)
             //$('#Description').val(item.Description);
             editorDescription.setData(item.Description)
             $('#Price').val(NumberFormat(item.Price));
-            $('#UnitId').val(item.UnitId).change();
-            $('#DiscountForSystem').val(item.DiscountForSystem);
             $('#QuantityProduct').val(NumberFormat(item.Quantity));
-            for (let indexImage = 0; indexImage < rs.data.productImages.length; indexImage++) {
-                $('#ListImage').append(`<div class="product-image">
-<div class="image" style="background-image: url(${rs.data.productImages[indexImage].LinkImage});"><a class="remove" data-id="${rs.data.productImages[indexImage].ProductImageId}" onclick="RemoveProductImage(this);"><i class="fa-solid fa-trash-can"></i></a></div>
-<input type="hidden" value="${rs.data.productImages[indexImage].LinkImage}"/>
-</div>`);
-            }
             @*$('#KNTReward').val(NumberFormat(item.KNTReward));*@
 
         }
@@ -283,25 +205,16 @@
             if (confirm('Bạn có chắc muốn cập nhật sản phẩm này?') === false) return;
             let model = {
                 Name: $('#Name').val(),
-                NameSearch: '',
                 Thumbnail: $('#Thumbnail').val(),
                 Description: editorDescription.getData(),
                 Price: $('#Price').val().replace(/,/g, ''),
-                UnitId: $('#UnitId').val(),
-                DiscountForSystem: $('#DiscountForSystem').val(),
-                Quantity: $('#QuantityProduct').val().replace(/,/g, ''),
                 ProductId: $('#ProductId').val(),
-                ListImage: _lsImage,
-                ListImageDelete: _lsDeleteImage,
             };
             if (GetObjectProperty(model, 'Name') === '') { alert('Tên sản phẩm không được để trống'); return; }
             if (GetObjectProperty(model, 'Price') === '') { alert('Giá sản phẩm không được để trống'); return; }
-            if (GetObjectProperty(model, 'Quantity') === '') { alert('Số lượng sản phẩm trong sản phẩm không được để trống'); return; }
 
-            model.NameSearch = RemoveVietnameseTones(model.Name.trim());
-
-            let url = '/api/ManageProduct/UpdateProduct';
-            if (GetObjectProperty(model, 'ProductId') === '') url = '/api/ManageProduct/InsertProduct';
+            let url = '/api/AdminProduct/UpdateProduct';
+            if (GetObjectProperty(model, 'ProductId') === '') url = '/api/AdminProduct/InsertProduct';
 
             const rp = await fetch(url, {
                 method: 'post',
@@ -349,7 +262,6 @@
         }
 
         const initPage = async function () {
-            await GetlistUnit();
             await GetProduct();
         }
         initPage();

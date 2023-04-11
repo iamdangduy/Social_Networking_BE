@@ -34,7 +34,7 @@ namespace GiveAndReceive.Areas.Admin.Services
                 TotalPage = (int)Math.Ceiling((decimal)TotalRow / Constant.PAGE_SIZE);
             }
             int skip = (PageIndex - 1) * Constant.PAGE_SIZE;
-            queryWhere += " order by u.CreateTime desc offset " + skip + " rows fetch next " + Constant.PAGE_SIZE + " rows only";
+            queryWhere += " order by Name offset " + skip + " rows fetch next " + Constant.PAGE_SIZE + " rows only";
             List<object> ListData = this._connection.Query<object>(querySelect + queryWhere, new { PageIndex, Keyword }).ToList();
 
             return new
@@ -52,14 +52,14 @@ namespace GiveAndReceive.Areas.Admin.Services
 
         public void InsertProduct(Product model, IDbTransaction transaction = null)
         {
-            string query = "insert into [product] ([ProductId], [Name], [Price], [Description]) values (@ProductId, @Name, @Price, @Description)";
+            string query = "insert into [product] ([ProductId], [Name], [Price], [Description], [Thumbnail]) values (@ProductId, @Name, @Price, @Description, @Thumbnail)";
             int status = this._connection.Execute(query, model, transaction);
             if (status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
         }
 
         public void UpdateProduct(Product model, IDbTransaction transaction = null)
         {
-            string query = "update [product] set [Name] = @Name, [Price] = @Price, [Description] = @Description where ProductId = @ProductId";
+            string query = "update [product] set [Name] = @Name, [Price] = @Price, [Description] = @Description, [Thumbnail] = @Thumbnail where ProductId = @ProductId";
             int status = this._connection.Execute(query, model, transaction);
             if (status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
         }
