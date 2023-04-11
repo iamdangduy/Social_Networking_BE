@@ -36,6 +36,31 @@ namespace GiveAndReceive.Areas.Admin.ApiControllers
             }
         }
 
+        [HttpGet]
+        [ApiAdminTokenRequire]
+        public JsonResult GetProductByProductId(string ProductId)
+        {
+            try
+            {
+                using (var connect = BaseService.Connect())
+                {
+                    connect.Open();
+                    using (var transaction = connect.BeginTransaction())
+                    {
+                        UserAdmin userAdmin = SecurityProvider.GetUserAdminByToken(Request);
+                        if (userAdmin == null) return Unauthorized();
+
+                        AdminProductService adminProductService = new AdminProductService(connect);
+                        return Success(adminProductService.GetProductByProductId(ProductId, transaction), "Lấy dữ liệu thành công!");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return Error(ex.Message);
+            }
+        }
+
         [HttpPost]
         [ApiAdminTokenRequire]
         public JsonResult InsertProduct(Product model)
