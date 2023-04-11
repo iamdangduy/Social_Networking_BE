@@ -1,0 +1,358 @@
+﻿
+@{
+    ViewBag.Title = "Cập nhật thông tin sản phẩm";
+    ViewBag.Menu = "product";
+}
+
+@section styles{
+    <style>
+        .create-product {
+            max-width: 70%;
+        }
+
+            .create-product .title {
+                text-align: center;
+                text-transform: uppercase;
+                font-size: 30px;
+            }
+
+        .form-add {
+            margin-left: 50px;
+        }
+
+            .form-add .price {
+                margin-top: 10px;
+            }
+
+        .create-button {
+            width: fit-content;
+            padding: 5px 5px;
+            color: white !important;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+
+        .promo-status {
+            margin-bottom: 10px;
+        }
+
+        .product-image {
+            padding: 0 10px 10px 0;
+        }
+
+            .product-image > .image {
+                width: 100px;
+                height: 100px;
+                border-radius: 10px;
+                background-position: center;
+                background-repeat: no-repeat;
+                background-size: cover;
+                position: relative;
+            }
+
+                .product-image > .image > .remove {
+                    display: flex;
+                    width: 20px;
+                    height: 20px;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 20px;
+                    color: #f15050;
+                    top: -5px;
+                    right: -5px;
+                    position: absolute;
+                }
+    </style>
+}
+
+
+
+<div class="body" style="display: flex; flex-wrap: wrap;">
+    <input id="ProductId" value="@ViewBag.Id" type="hidden" />
+    <div style="flex: 1; display: flex; flex-direction: column; padding: 20px; min-width: 350px; ">
+        <div class="form-group">
+            <label class="font-weight-semibold" for="name">Ảnh sản phẩm</label>
+            <div class="preview" style=" width: 100px; height: 100px; background-position: center; background-repeat: no-repeat; background-size: cover; border: .5px solid #d7d7d7; cursor: pointer; background-image: url('/Content/img/pick-image.png');" onclick="ChooseThumbnail(this);"></div>
+            <input type="file" style="display:none;" onchange="ChooseThumbnail_OnChange(this);" required />
+            <input type="hidden" id="Thumbnail" />
+        </div>
+
+        <div class="form-group" id="">
+            <label class="font-weight-semibold" for="name">Tên sản phẩm</label>
+            <input type="text" class="form-control" id="Name" placeholder="Nhập tên sản phẩm" required>
+        </div>
+
+        <div class="form-group price" id="">
+            <label class="font-weight-semibold" for="name">Giá sản phẩm</label>
+            <input type="text" class="form-control" id="Price" placeholder="Giá của sản phẩm" onkeyup="ValidateInputOnlyNumber(event, this);" required>
+        </div>
+
+        <div class="form-group">
+            <label class="font-weight-semibold"> Danh mục</label>
+            <div style="display:flex">
+                <select class="form-control" id="CategoryId">
+                    <option value="">Chọn danh mục</option>
+                </select>
+                <button class="btn btn-sm btn-primary btn-add-supplier" onclick="openCreateCategoryModal()"><i class="fa-solid fa-plus"></i></button>
+            </div>
+        </div>
+        <div class="form-group unit" id="">
+            <label class="font-weight-semibold" for="name">Đơn vị tính</label>
+            <div style="display:flex;">
+                <select class="form-control" id="UnitId">
+                    <option value="">Chọn đơn vị tính</option>
+                </select>
+                <button class="btn btn-sm btn-primary btn-add-supplier" onclick="openCreateModal()"><i class="fa-solid fa-plus"></i></button>
+            </div>
+        </div>
+        <div class="form-group price" id="">
+            <label class="font-weight-semibold" for="DiscountForSystem">Chiết khấu cho hệ thống</label>
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" id="DiscountForSystem" placeholder="Chiết khấu cho hệ thống" onkeyup="ValidateInputOnlyNumber(event, this);">
+                <span class="input-group-text">%</span>
+            </div>
+
+        </div>
+
+        <div class="form-group" id="">
+            <label class="font-weight-semibold" for="name">Số lượng sản phẩm </label>
+            <input type="text" class="form-control" id="QuantityProduct" placeholder="Nhập số lượng sản phẩm có trong sản phẩm" required onkeyup="ValidateInputOnlyNumber(event, this);">
+        </div>
+
+        <div class="form-group">
+            <div class="label">Ảnh sản phẩm</div>
+            <div class="content" id="ListImage" style="overflow-y: auto; height: 200px; border: .5px solid #979797; padding: 10px; display: flex; flex-direction: row; flex-wrap: wrap; justify-content: flex-start; align-items: flex-start; ">
+                <div class="add-image">
+                    <a onclick="AddMoreImage(this);"><i class="fa-solid fa-camera" style="font-size:30px;margin-right:10px"></i></a>
+                    <input type="file" style="display:none;" onchange="AddMoreImage_OnChange(event,this);" multiple />
+                </div>
+
+            </div>
+        </div>
+        @*<div class="form-group price" id="">
+                <label class="font-weight-semibold" for="name">Điểm UTAO khi mua</label>
+                <div style="display:flex;align-items:center;">
+                    <input type="text" class="form-control" id="KNTReward" placeholder="Nhập số điểm UTAO thưởng" onkeyup="ValidateInputOnlyNumber(event, this);" required>
+                    <span style="padding:0 10px;font-weight:bold;">UTAO</span>
+                </div>
+            </div>*@
+        <button type="button" onclick="UpdateProduct();" class="create-button btn btn-primary">Cập nhật sản phẩm</button>
+    </div>
+    <div style="flex: 2; display: flex; flex-direction: column; padding: 20px;">
+        <div class="form-group product-property">
+            <label class="font-weight-semibold">Mô tả</label>
+            <textarea style="resize:none;" placeholder="Nhập mô tả cho sản phẩm" rows="30" class="form-control" aria-label="With textarea" id="Description"></textarea>
+        </div>
+
+    </div>
+
+</div>
+
+
+@*Modal Add Unit*@
+<div id="modalUnit" class="modal" onclick="closeModal()">
+    <div class="modal-container">
+        <div class="modal-header">Thêm đơn vị tính</div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label class="font-weight-semibold" for="UnitName">Tên đơn vị:</label>
+                <input type="text" class="form-control" id="UnitName" placeholder="Nhập đơn vị tính">
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button class="btn btn-sm btn-secondary" onclick="closeModal()">Đóng</button>
+            <button class="btn btn-sm btn-primary" onclick="CreateUnitCategory()">Lưu</button>
+
+        </div>
+    </div>
+</div>
+
+@*Modal Add Product Category*@
+<div id="modalProductCategory" class="modal" onclick="closeModal()">
+    <div class="modal-container">
+        <div class="modal-header">Thêm danh mục sản phẩm</div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label class="font-weight-semibold" for="CategoryName">Tên danh mục:</label>
+                <input type="text" class="form-control" id="CategoryName" placeholder="Nhập tên danh mục">
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button class="btn btn-sm btn-secondary" onclick="closeCategoryModal()">Đóng</button>
+            <button class="btn btn-sm btn-primary" onclick="CreateProductCategory()">Lưu</button>
+
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="/Content/ckeditor/ckeditor.js"></script>
+    <script>
+        let _lsDeleteImage = [];
+        let _lsImage = [];
+        var editorDescription = CKEDITOR.replace('Description', {
+            height: 600,
+        });
+
+
+        var AddMoreImage = function (el) { $(el).siblings('input[type=file]').click(); }
+        var AddMoreImage_OnChange = function (e, el) {
+            var files = e.currentTarget.files;
+            console.log(files);
+            for (let i = 0; i < files.length; i++) {
+                let currFile = files[i];
+
+                let reader = new FileReader();
+                reader.onloadend = function (e1) {
+                    const addImage = $(el).closest('.add-image');
+                    $(`<div class="product-image">
+                    <div class="image" style="background-image: url(${e1.currentTarget.result});"><a class="remove" data-id="" onclick="RemoveProductImage(this);"><i class="fa-solid fa-trash-can"></i></a></div>
+                    <input type="hidden" value="${e1.currentTarget.result.substring(e1.currentTarget.result.indexOf(',') + 1, e1.currentTarget.result.length)}"/>
+                    </div>`).insertAfter(addImage);
+
+                    _lsImage.push(e1.currentTarget.result.substring(e1.currentTarget.result.indexOf(',') + 1, e1.currentTarget.result.length))
+                }
+                reader.readAsDataURL(currFile)
+            }
+
+        }
+        var RemoveProductImage = function (el) {
+            const id = $(el).data('id');
+            if (id !== '') {
+                _lsDeleteImage.push(id);
+            }
+            $(el).closest('.product-image').remove();
+        }
+
+
+        var ChooseThumbnail = function (el) { $(el).siblings('input[type=file]').click(); }
+        var ChooseThumbnail_OnChange = function (el) {
+            let reader = new FileReader();
+            reader.onloadend = function (e) {
+                $(el).siblings('input[type=hidden]').val(e.currentTarget.result.substring(e.currentTarget.result.indexOf(',') + 1, e.currentTarget.result.length));
+                $(el).siblings('.preview').css('background-image', `url(${e.currentTarget.result})`);
+            }
+            reader.readAsDataURL(el.files[0])
+        }
+
+        const GetlistUnit = async function () {
+            let rp = await fetch('/api/adminUnit/GetListAllUnit', {
+                method: 'get',
+                headers: Enum.OptionAdminHeaderDefault
+            });
+            let rs = await rp.json();
+
+            $('#UnitId').html('<option value="" selected>Chọn đơn vị tính</option>');
+            for (let index = 0; index < rs.data.length; index++) {
+                var x = rs.data[index]
+                $('#UnitId').append(`<option value="${x.UnitId}">${x.UnitName}</option>`);
+            }
+        }
+        let GetProduct = async function () {
+
+            const id = $('#ProductId').val();
+            if (id === '' || id === null || typeof id === 'undefined') return;
+            let rp = await fetch('/api/ManageProduct/GetProductDetail?productId=' + id, {
+                method: 'get',
+                headers: Enum.OptionAdminHeaderDefault
+            });
+            let rs = await rp.json();
+            if (AdminCheckErrorResponse(rs) === false) return;
+            let item = rs.data.product;
+            $('#Name').val(item.Name);
+            $('.preview').css('background-image', `url(${item.Thumbnail})`)
+            //$('#Description').val(item.Description);
+            editorDescription.setData(item.Description)
+            $('#Price').val(NumberFormat(item.Price));
+            $('#UnitId').val(item.UnitId).change();
+            $('#DiscountForSystem').val(item.DiscountForSystem);
+            $('#QuantityProduct').val(NumberFormat(item.Quantity));
+            for (let indexImage = 0; indexImage < rs.data.productImages.length; indexImage++) {
+                $('#ListImage').append(`<div class="product-image">
+<div class="image" style="background-image: url(${rs.data.productImages[indexImage].LinkImage});"><a class="remove" data-id="${rs.data.productImages[indexImage].ProductImageId}" onclick="RemoveProductImage(this);"><i class="fa-solid fa-trash-can"></i></a></div>
+<input type="hidden" value="${rs.data.productImages[indexImage].LinkImage}"/>
+</div>`);
+            }
+            @*$('#KNTReward').val(NumberFormat(item.KNTReward));*@
+
+        }
+        const UpdateProduct = async function () {
+            if (confirm('Bạn có chắc muốn cập nhật sản phẩm này?') === false) return;
+            let model = {
+                Name: $('#Name').val(),
+                NameSearch: '',
+                Thumbnail: $('#Thumbnail').val(),
+                Description: editorDescription.getData(),
+                Price: $('#Price').val().replace(/,/g, ''),
+                UnitId: $('#UnitId').val(),
+                DiscountForSystem: $('#DiscountForSystem').val(),
+                Quantity: $('#QuantityProduct').val().replace(/,/g, ''),
+                ProductId: $('#ProductId').val(),
+                ListImage: _lsImage,
+                ListImageDelete: _lsDeleteImage,
+            };
+            if (GetObjectProperty(model, 'Name') === '') { alert('Tên sản phẩm không được để trống'); return; }
+            if (GetObjectProperty(model, 'Price') === '') { alert('Giá sản phẩm không được để trống'); return; }
+            if (GetObjectProperty(model, 'Quantity') === '') { alert('Số lượng sản phẩm trong sản phẩm không được để trống'); return; }
+
+            model.NameSearch = RemoveVietnameseTones(model.Name.trim());
+
+            let url = '/api/ManageProduct/UpdateProduct';
+            if (GetObjectProperty(model, 'ProductId') === '') url = '/api/ManageProduct/InsertProduct';
+
+            const rp = await fetch(url, {
+                method: 'post',
+                headers: Enum.OptionAdminHeaderDefault,
+                body: JSON.stringify(model)
+            });
+            let rs = await rp.json();
+
+            if (AdminCheckErrorResponse(rs) === false) return;
+
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                alert('Cập nhật sản phẩm thành công')
+                window.location.href = '/Admin/Product/';
+            }
+        }
+
+        const openCreateModal = function () {
+            $('#modalUnit').css('display', 'flex');
+        }
+
+        const closeModal = function () {
+            $('#modalUnit').css('display', 'none');
+            $('#UnitName').val('');
+        }
+
+        const CreateUnitCategory = async function () {
+            let model = {
+                UnitName: $('#UnitName').val(),
+            };
+            if (model.Name !== '') {
+                const rp = await fetch('/api/AdminUnit/InsertUnit', {
+                    method: 'post',
+                    headers: Enum.OptionAdminHeaderDefault,
+                    body: JSON.stringify(model)
+                });
+                let rs = await rp.json();
+                if (AdminCheckErrorResponse(rs) === false) return;
+                if (rs.status === 'success') {
+                    if (rs.message !== '' && rs.message !== null) alert(rs.message);
+                    alert('Bạn đã thêm thành công!');
+                    GetlistUnit();
+                    closeModal();
+                }
+            }
+        }
+
+        const initPage = async function () {
+            await GetlistUnit();
+            await GetProduct();
+        }
+        initPage();
+    </script>
+}
+

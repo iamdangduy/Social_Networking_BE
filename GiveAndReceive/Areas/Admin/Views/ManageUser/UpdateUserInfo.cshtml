@@ -1,0 +1,773 @@
+﻿
+@{
+    ViewBag.Title = "Quản lý thông tin người dùng";
+    ViewBag.Menu = "manage-user";
+}
+
+@section styles{
+    <style>
+        .account-page-content .main-content {
+            padding: 10px 10px 10px 10px !important;
+        }
+
+        #tab-info {
+            display: flex;
+            background-color: white;
+            padding: 40px;
+        }
+
+            #tab-info .tab-avatar {
+                flex: 1;
+            }
+
+                #tab-info .tab-avatar .preview {
+                    width: 150px;
+                    height: 150px;
+                    background-position: center;
+                    background-repeat: no-repeat;
+                    background-size: cover;
+                    border: .5px solid #d7d7d7;
+                    cursor: pointer;
+                }
+
+            #tab-info .info-detail {
+                flex: 4;
+            }
+
+                #tab-info .info-detail .form-custom {
+                    display: flex;
+                    margin-bottom: 10px;
+                }
+
+                    #tab-info .info-detail .form-custom .label-custom {
+                        display: flex;
+                        min-width: 170px;
+                        font-size: 1rem;
+                        line-height: 1.4;
+                        align-items: center;
+                    }
+
+                        #tab-info .info-detail .form-custom .label-custom label {
+                            margin-bottom: 0;
+                        }
+
+                    #tab-info .info-detail .form-custom input {
+                        padding: .55rem 1rem;
+                        height: auto;
+                        color: #53535f;
+                        border: 1px solid #edf2f9;
+                        font-size: .875rem;
+                        line-height: 1.4;
+                        border-radius: 5px;
+                        width: 60%;
+                    }
+
+                    #tab-info .info-detail .form-custom select {
+                        padding: .55rem 1rem;
+                        height: auto;
+                        color: #53535f;
+                        border: 1px solid #edf2f9;
+                        font-size: .875rem;
+                        line-height: 1.4;
+                        border-radius: 5px;
+                        width: 60%;
+                    }
+
+                #tab-info .info-detail .tab-function {
+                    display: flex;
+                    margin-top: 50px;
+                    justify-content: end;
+                    width: 75%;
+                    gap: 15px;
+                }
+
+                    #tab-info .info-detail .tab-function .update-btn {
+                        padding: 10px 20px;
+                        border: solid 0.5px red;
+                        border-radius: 10px;
+                        margin: 10px;
+                        cursor: pointer;
+                        color: red;
+                    }
+
+                    #tab-info .info-detail .tab-function .enable-btn {
+                        padding: 10px 20px;
+                        border: solid #dedede 0.5px;
+                        border-radius: 10px;
+                        margin: 10px;
+                        cursor: pointer;
+                    }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.4);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .modal-container {
+            background-color: #fff;
+            width: 900px;
+            max-width: calc(100% - 32px);
+            position: relative;
+            animation: modalFadeIn ease 0.5s;
+            transition: top 0.4s, opacity 0.4s;
+        }
+
+        .modal-header {
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center !important;
+            font-size: 20px;
+            border-bottom: solid #ccc 0.5px;
+            text-transform: uppercase;
+        }
+
+        .modal-body {
+            width: 90%;
+            margin: auto;
+        }
+
+        .modal-footer {
+            width: 90%;
+            margin: auto;
+            justify-content: end;
+            display: flex;
+            gap: 10px;
+            padding-bottom: 10px;
+        }
+
+            .modal-footer .update-btn {
+                width: 100px;
+                padding: 5px 5px;
+                background-color: #435ebe;
+                color: white;
+                border-radius: 5px;
+                cursor: pointer;
+                border: solid #435ebe 1px;
+            }
+
+            .modal-footer .close-modal {
+                width: 80px;
+                color: black;
+                border: solid #ccc 0.5px;
+                cursor: pointer;
+                border-radius: 5px;
+            }
+
+        @@keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-200px);
+            }
+
+            to {
+                transform: translateY(0px);
+                opacity: 1;
+            }
+        }
+
+        .modal .modal-body .list-image {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            width: 100%;
+        }
+
+            .modal .modal-body .list-image .form-group {
+                width: 30%;
+            }
+
+                .modal .modal-body .list-image .form-group .preview {
+                    width: 100%;
+                    background-position: center;
+                    background-repeat: no-repeat;
+                    background-size: contain;
+                    height: 100px;
+                    border-radius: 10px;
+                    border: .5px solid #d7d7d7;
+                    cursor: pointer;
+                }
+
+        .accuracy {
+            color: green;
+            padding: 10px;
+            font-size: 18px;
+        }
+    </style>
+}
+
+
+<div class="account-page-content">
+    <div class="main-content">
+        <div class="page-header no-gutters has-tab">
+
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active" href="/Admin/ManageUser/UpdateUserInfo/@ViewBag.Id">Thông tin cá nhân</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link " href="/Admin/ManageUser/UserOrder/@ViewBag.Id">Đơn hàng</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link " href="/Admin/ManageUser/WalletHistory/@ViewBag.Id">Lịch sử UTAO</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link " href="/Admin/ManageUser/TransactionHistory/@ViewBag.Id">Lịch sử giao dịch</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link " href="/Admin/ManageUser/WithDrawal/@ViewBag.Id">Lệnh rút</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link " href="/Admin/ManageUser/BankInfo/@ViewBag.Id">Thông tin thanh toán</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link " href="/Admin/ManageUser/TeamMember/@ViewBag.Id">Danh sách thành viên</a>
+                </li>
+            </ul>
+        </div>
+        <div class="">
+            <div class="tab-content m-t-15">
+                <div class="tab-pane fade show active" id="tab-info">
+                    <div class="tab-avatar">
+                    </div>
+                    <div class="info-detail" id="info-detail">
+                        <input id="userId" style="display:none" value="" />
+                        <div class="form-custom">
+                            <div class="label-custom">
+                                <label class="font-weight-semibold" for="Name">Họ tên:</label>
+                            </div>
+                            <input type="text" class="" id="Name" placeholder="Họ và tên" value="">
+                        </div>
+
+                        <div class="form-custom">
+                            <div class="label-custom">
+                                <label class="font-weight-semibold" for="Account">Tên đăng nhập:</label>
+                            </div>
+                            <input type="text" class="" id="Account" placeholder="Tên đăng nhập" value="" disabled>
+                        </div>
+
+                        <div class="form-custom">
+                            <div class="label-custom">
+                                <label class="font-weight-semibold" for="Email">Email:</label>
+                            </div>
+                            <input type="text" class="" id="Email" placeholder="Email" value="">
+                        </div>
+
+                        <div class="form-custom">
+                            <div class="label-custom">
+                                <label class="font-weight-semibold" for="phoneNum">Số điện thoại:</label>
+                            </div>
+                            <input type="text" class="" id="phoneNum" placeholder="Số điện thoại" value="" disabled>
+                        </div>
+
+
+                        <div class="form-custom">
+                            <div class="label-custom">
+                                <label class="font-weight-semibold">Chức danh:</label>
+                            </div>
+                            <select id="RankId" class="form-control">
+                                <option>Chưa có chức danh</option>
+                            </select>
+                        </div>
+
+                        <div class="form-custom">
+                            <div class="label-custom">
+                                <label class="font-weight-semibold" for="Province">Tỉnh (Thành Phố):</label>
+                            </div>
+                            <select id="Province" class="form-control" onchange="provinceOnChange()">
+                                <option>Tỉnh (Thành Phố)</option>
+                            </select>
+                        </div>
+                        <div class="form-custom">
+                            <div class="label-custom">
+                                <label class="font-weight-semibold" for="District">Quận (Huyện):</label>
+                            </div>
+                            <select id="District" class="form-control" onchange="districtOnChange()">
+                                <option>Quận (Huyện)</option>
+                            </select>
+                        </div>
+                        <div class="form-custom">
+                            <div class="label-custom">
+                                <label class="font-weight-semibold" for="Ward">Phường (Xã):</label>
+                            </div>
+                            <select id="Ward" class="form-control">
+                                <option>Phường (Xã)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-custom">
+                            <div class="label-custom">
+                                <label class="font-weight-semibold" for="fullAddress">Địa chỉ:</label>
+                            </div>
+                            <input type="text" class="" id="fullAddress" placeholder="Địa chỉ chi tiết" value="">
+                        </div>
+
+                        <div class="form-custom">
+                            <div class="label-custom">
+                                <label class="font-weight-semibold" for="password">Mật khẩu:</label>
+                            </div>
+                            <input type="text" class="" id="password" placeholder="Mật khẩu" value="">
+                        </div>
+
+                        <div class="form-custom">
+                            <div class="label-custom">
+                                <label class="font-weight-semibold" for="shareCode">Mã giới thiệu:</label>
+                            </div>
+                            <input type="text" class="" id="shareCode" placeholder="Mã giới thiệu" value="" disabled>
+                        </div>
+
+                        <div class="form-custom">
+                            <div class="label-custom">
+                                <label class="font-weight-semibold" for="shareCode">Xác thực tài khoản:</label>
+                            </div>
+                            <div class="accuracy"> Đã xác thực </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modal" class="modal" onclick="closeModal()">
+    <div class="modal-container">
+        <div class="modal-header">Cập nhật thông tin</div>
+        <div class="modal-body">
+            <div class="list-image">
+                <div class="form-group">
+                    <label class="font-weight-semibold" for="name">Mặt trước căn cước</label>
+                    <div class="preview" onclick="ChooseThumbnail(this);"></div>
+                    <input type="file" style="display:none;" onchange="ChooseThumbnail_OnChange(this);" />
+                    <input type="hidden" id="Thumbnail1" />
+                </div>
+
+                <div class="form-group">
+                    <label class="font-weight-semibold" for="name">Mặt sau căn cước</label>
+                    <div class="preview" onclick="ChooseThumbnail(this);"></div>
+                    <input type="file" style="display:none;" onchange="ChooseThumbnail_OnChange(this);" />
+                    <input type="hidden" id="Thumbnail2" />
+                </div>
+
+                <div class="form-group" style="width:120px;">
+                    <label class="font-weight-semibold" for="name">Ảnh chân dung</label>
+                    <div class="preview" onclick="ChooseThumbnail(this);"></div>
+                    <input type="file" style="display:none;" onchange="ChooseThumbnail_OnChange(this);" />
+                    <input type="hidden" id="Thumbnail3" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="font-weight-semibold" for="identityFullName">Họ và tên</label>
+                <input type="text" class="form-control" id="identityFullName" placeholder="Nhập họ và tên">
+            </div>
+
+            <div class="form-group">
+                <label class="font-weight-semibold" for="identityBirthDate">Ngày sinh</label>
+                <input type="text" class="form-control" id="identityBirthDate">
+            </div>
+
+            <div class="form-group">
+                <label class="font-weight-semibold" for="identityAddess">Nơi thường trú</label>
+                <input type="text" class="form-control" id="identityAddess" placeholder="Nơi thường trú">
+            </div>
+
+            <div class="form-group">
+                <label class="font-weight-semibold" for="identityID">Số căn cước công dân</label>
+                <input type="text" class="form-control" id="identityID" placeholder="Nhập số căn cước công dân">
+            </div>
+
+            <div class="form-group">
+                <label class="font-weight-semibold" for="DateRange">Ngày cấp</label>
+                <input type="text" class="form-control" id="DateRange">
+            </div>
+
+            <div class="form-group">
+                <label class="font-weight-semibold" for="issuedBy">Nơi cấp</label>
+                <input type="text" class="form-control" id="issuedBy" placeholder="Nhập nơi cấp">
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button class="close-modal btn" onclick="closeModal()">Đóng</button>
+            <button class="btn btn-danger" onclick="openReasonModal()">Từ chối</button>
+            <button class="btn btn-success" onclick="UpdateIdentityToSuccess()">Xác nhận</button>
+        </div>
+
+    </div>
+
+</div>
+
+
+<div id="reasonModal" class="modal" onclick="closeReasonModal()">
+    <div class="modal-container" style="width:500px;z-index:15">
+        <div class="modal-header">Lí do từ chối</div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label class="font-weight-semibold" for="reason">Lí do từ chối</label>
+                <textarea class="form-control" id="reason" placeholder="Nhập lí do từ chối"> </textarea>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button class="close-modal btn" onclick="closeReasonModal()">Đóng</button>
+            <button class="btn btn-danger" onclick="UpdateIdentityToSystemDecline()">Từ chối</button>
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts{
+    <script>
+        var Choose = function (el) { $(el).siblings('input[type=file]').click(); }
+        var Choose_OnChange = function (el) {
+            let reader = new FileReader();
+            reader.onloadend = function (e) {
+                $(el).siblings('input[type=hidden]').val(e.currentTarget.result.substring(e.currentTarget.result.indexOf(',') + 1, e.currentTarget.result.length));
+                $(el).siblings('.preview').css('background-image', `url(${e.currentTarget.result})`);
+            }
+            reader.readAsDataURL(el.files[0])
+        }
+
+        let _lsDistrict = [];
+        let _lsWard = [];
+
+        const getListRank = async function () {
+            let rq = await fetch(Enum.ApiUrl + '/api/Rank/GetListRank', {
+                method: 'get',
+                headers: Enum.OptionAdminHeaderDefault
+            });
+            let rs = await rq.json();
+            $('#RankId').html('');
+            $('#RankId').append($('<option>', {
+                value: '',
+                text: 'Chưa có chức danh'
+            }));
+            if (AdminCheckErrorResponse(rs) === false) return;
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                for (let index = 0; index < rs.data.length; index++) {
+                    let x = rs.data[index];
+                    $('#RankId').append($('<option>', {
+                        value: x.RankId,
+                        text: x.Name
+                    }));
+                }
+            }
+        }
+
+        const getListProvince = async function () {
+            let rq = await fetch(Enum.ApiUrl + '/api/user/GetListProvince', {
+                method: 'get',
+                headers: Enum.OptionHeaderDefault
+            });
+            let rs = await rq.json();
+            $('#Province').html('');
+            $('#Province').append($('<option>', {
+                value: '',
+                text: 'Tỉnh (Thành Phố)'
+            }));
+            if (AdminCheckErrorResponse(rs) === false) return;
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                for (let index = 0; index < rs.data.length; index++) {
+                    let x = rs.data[index];
+                    $('#Province').append($('<option>', {
+                        value: x.ProvinceId,
+                        text: x.Name
+                    }));
+                }
+            }
+        }
+
+        const getListDistrict = async function () {
+            let rq = await fetch(Enum.ApiUrl + '/api/user/GetListDistrict', {
+                method: 'get',
+                headers: Enum.OptionHeaderDefault
+            });
+            let rs = await rq.json();
+            if (AdminCheckErrorResponse(rs) === false) return;
+
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                for (let index = 0; index < rs.data.length; index++) {
+                    let x = rs.data[index];
+                    _lsDistrict.push(x);
+                }
+            }
+
+        }
+        const provinceOnChange = function () {
+            let provinceID = $('#Province').val();
+            if (typeof provinceID === 'string') provinceID = parseInt(provinceID);
+            $('#District').html('');
+            $('#District').append($('<option>', {
+                value: '',
+                text: 'Quận (Huyện)'
+            }));
+            for (let index = 0; index < _lsDistrict.length; index++) {
+                if (_lsDistrict[index].ProvinceId === provinceID) {
+                    $('#District').append($('<option>', {
+                        value: _lsDistrict[index].DistrictId,
+                        text: _lsDistrict[index].Name
+                    }));
+                }
+            }
+        }
+
+        const getListWard = async function () {
+            let districtId = $('#District').val();
+            let rq = await fetch(Enum.ApiUrl + '/api/user/GetListWard?districtId=' + districtId, {
+                method: 'get',
+                headers: Enum.OptionHeaderDefault
+            });
+            let rs = await rq.json();
+
+            if (AdminCheckErrorResponse(rs) === false) return;
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                for (let index = 0; index < rs.data.length; index++) {
+                    let x = rs.data[index];
+
+                    _lsWard.push(x);
+                }
+            }
+        }
+
+        const districtOnChange = function () {
+            let districtId = $('#District').val();
+            if (typeof districtId === 'string') districtId = parseInt(districtId);
+            $('#Ward').html('');
+            $('#Ward').append($('<option>', {
+                value: '',
+                text: 'Phường (Xã)'
+            }));
+            for (let index = 0; index < _lsWard.length; index++) {
+                if (_lsWard[index].DistrictId === districtId) {
+                    $('#Ward').append($('<option>', {
+                        value: _lsWard[index].WardId,
+                        text: _lsWard[index].WardName
+                    }));
+                }
+            }
+        }
+
+        const getUserDetail = async function () {
+            const id = "@ViewBag.Id";
+
+            let rq = await fetch(Enum.ApiUrl + '/api/ManageUser/GetUserDetail?userId=' + id, {
+                method: 'get',
+                headers: Enum.OptionAdminHeaderDefault
+            });
+            let rs = await rq.json();
+
+            if (AdminCheckErrorResponse(rs) === false) return;
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                let html1 = '<div class="form-group">';
+                html1 += '<div class="preview" style="background-image: url('+rs.data.Avatar +');" onclick = "Choose(this);" ></div >';
+                html1 += '<input type="file" style="display:none;" onchange="Choose_OnChange(this);"/>';
+                html1 += '<input type="hidden" id="Thumnail" /></div>';
+
+                $('.tab-avatar').append(html1);
+                $('#RankId').val(rs.data.RankId);
+                $('#userId').val(rs.data.UserId);
+                $('#Name').val(rs.data.Name);
+                $('#Account').val(rs.data.Account);
+                $('#Email').val(rs.data.Email);
+                $('#phoneNum').val('******'+rs.data.Phone.substr(rs.data.Phone.length-4,4));
+                $('#Province').val(rs.data.ProvinceId).change();
+                $('#District').val(rs.data.DistrictId).change();
+                $('#Ward').val(rs.data.WardId).change();
+                $('#fullAddress').val(rs.data.Address);
+                $('#shareCode').val(rs.data.ShareCode);
+                $('#ComboBounght').val(rs.data.ComboBounght);
+
+                let html2 = '<div class="tab-function">';
+                html2 += '<a class="btn btn-outline-primary" onclick="updateUserInfo(this);">Cập nhật</a>';
+
+                if (rs.data.Enable === true) {
+                    html2 += '<a class="btn btn-outline-danger" onclick="changeUserActivation()">Huỷ kích hoạt</a></div>';
+                    html2 += '<input type="hidden" id="Enable" value="false"></div>';
+                } else {
+                    html2 += '<a class="btn btn-outline-success" onclick="changeUserActivation()">Kích hoạt</a></div>';
+                    html2 += '<input type="hidden" id="Enable" value="true"></div>';
+                }
+
+                $('#info-detail').append(html2);
+            }
+        }
+
+        const updateUserInfo = async function (el) {
+            let model = {
+                Avatar: $('#Thumnail').val(),
+                UserId : $('#userId').val(),
+                Name: $('#Name').val(),
+                Password: $('#password').val(),
+                Email: $('#Email').val(),
+                ProvinceId: $('#Province').val(),
+                DistrictId: $('#District').val(),
+                WardId: $('#Ward').val(),
+                Address: $('#fullAddress').val(),
+                NameSearch: '',
+                RankId: $('#RankId').val(),
+                ComboBounght: $('#ComboBounght').val()
+            }
+
+            model.NameSearch = RemoveVietnameseTones(model.Name);
+            $(el).addClass('is-loading')
+            let rq = await fetch(Enum.ApiUrl + '/api/ManageUser/UpdateUser', {
+                method: 'post',
+                headers: Enum.OptionAdminHeaderDefault,
+                body: JSON.stringify(model)
+            });
+            let rs = await rq.json();
+            $(el).removeClass('is-loading')
+            if (AdminCheckErrorResponse(rs) === false) return;
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                alert('Cập nhật thông tin thành công!');
+                window.location.reload();
+            }
+        }
+
+        const changeUserActivation = async function () {
+            let UserId = $('#userId').val();
+            let enable = $('#Enable').val();
+
+            let rq = await fetch(Enum.ApiUrl + '/api/ManageUser/ChangeUserActivation?Userid=' + UserId + '&enable=' + enable, {
+                method: 'get',
+                headers: Enum.OptionAdminHeaderDefault,
+
+            });
+            let rs = await rq.json();
+
+            if (AdminCheckErrorResponse(rs) === false) return;
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                alert('Cập nhật trạng thái tài khoản thành công!');
+                window.location.reload();
+            }
+        }
+
+        const GetUserPropertiesByUserId = async function () {
+            let UserId = $('#userId').val();
+
+            let rq = await fetch(Enum.ApiUrl + '/api/AdminUserProperties/GetUserPropertiesByUserId?UserId=' + UserId, {
+                method: 'get',
+                headers: Enum.OptionAdminHeaderDefault,
+
+            });
+            let rs = await rq.json();
+
+            if (AdminCheckErrorResponse(rs) === false) return;
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                if (rs.data.IdentityApprove !== true) {
+                    $('.accuracy').html('');
+                    $('.accuracy').append('<a class="btn btn-outline-dark" onclick="openModal()">Xác thực</a>');
+                }
+
+                $('#Thumbnail1').siblings('.preview').css('background-image', `url(${rs.data.IdentityImageFront})`);
+                $('#Thumbnail2').siblings('.preview').css('background-image', `url(${rs.data.IdentityImageBack})`);
+                $('#Thumbnail3').siblings('.preview').css('background-image', `url(${rs.data.IdentityImagePortrait})`);
+
+                $('#identityID').val(rs.data.IdentityNumber);
+                $('#identityAddess').val(rs.data.IdentityAddress);
+                $('#DateRange').val(DateStringFormat({ stringDate: new Date(rs.data.IdentityDateOf), newFormat: 'dd-mm-yyyy' }));
+                $('#issuedBy').val(rs.data.IdentityPlaceOf);
+                $('#identityBirthDate').val(DateStringFormat({ stringDate: new Date(rs.data.IdentityBirthDate), newFormat: 'dd-mm-yyyy' }));
+                $('#identityFullName').val(rs.data.IdentityFullName);
+            }
+        }
+
+        const openModal = function () {
+            $('#modal').css('display', 'flex');
+        }
+
+        const closeModal = function () {
+            $('#modal').css('display', 'none');
+        }
+
+        const openReasonModal = function () {
+            $('#reasonModal').css('display', 'flex');
+        }
+
+        const closeReasonModal = function () {
+            $('#reasonModal').css('display', 'none');
+        }
+
+        const UpdateIdentityToSystemDecline = async function () {
+            let UserId = $('#userId').val();
+            let reason = $('#reason').val();
+
+            let rq = await fetch(Enum.ApiUrl + '/api/AdminUserProperties/UpdateIdentityToSystemDecline?UserId=' + UserId + '&Reason=' + reason, {
+                method: 'get',
+                headers: Enum.OptionAdminHeaderDefault,
+
+            });
+            let rs = await rq.json();
+
+            if (AdminCheckErrorResponse(rs) === false) return;
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                alert('Bạn đã từ chối yêu cầu xác thực thông tin của người dùng này!');
+                window.location.reload();
+            }
+        }
+
+        const UpdateIdentityToSuccess = async function () {
+            let UserId = $('#userId').val();
+
+            let rq = await fetch(Enum.ApiUrl + '/api/AdminUserProperties/UpdateIdentityToSuccess?UserId=' + UserId, {
+                method: 'get',
+                headers: Enum.OptionAdminHeaderDefault,
+
+            });
+            let rs = await rq.json();
+
+            if (AdminCheckErrorResponse(rs) === false) return;
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                alert('Bạn đã xác minh thông tin xác thực của người dùng này!');
+                window.location.reload();
+            }
+        }
+
+        $('.preview').addClass('img-enlargable').click(function () {
+            var src = $(this).css('background-image');
+            src = src.replace(/(url\(|\)|")/g, '');
+            console.log(src);
+            $('<div>').css({
+                background: 'RGBA(0,0,0,.5) url(' + src + ') no-repeat center',
+                backgroundSize: 'contain',
+                width: '100%', height: '100%',
+                position: 'fixed',
+                zIndex: '10000',
+                top: '0', left: '0',
+                cursor: 'zoom-out'
+            }).click(function () {
+                $(this).remove();
+            }).appendTo('body');
+        });
+
+        const initPage = async function () {
+            await getListRank();
+            await getListProvince();
+            await getListDistrict();
+            await getListWard();
+            await getUserDetail();
+            await GetUserPropertiesByUserId();
+
+            $(".modal-container").click(function (event) {
+                event.stopPropagation();
+            });
+
+        }
+
+        initPage();
+    </script>
+}
+
+
+

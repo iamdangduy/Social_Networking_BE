@@ -1,7 +1,819 @@
 ﻿
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Tổng quan";
+    ViewBag.Menu = "dashboard";
+}
+@section styles {
+    <style>
+        .dashboard-page {
+        }
+
+            .dashboard-page .dashboard-section {
+                padding-bottom: 30px;
+            }
+
+            .dashboard-page .system-general-parameter {
+            }
+
+                .dashboard-page .system-general-parameter > div {
+                    display: flex;
+                    gap: 10px;
+                }
+
+                .dashboard-page .system-general-parameter .parameter-box {
+                    flex: 1;
+                    display: flex;
+                    padding: 10px;
+                    background-color: white;
+                    border: 0.5px solid #eee;
+                    align-items: center;
+                }
+
+                    .dashboard-page .system-general-parameter .parameter-box .icon {
+                        display: flex;
+                        width: 50px;
+                        height: 50px;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: 25px;
+                        border-radius: 50px;
+                    }
+
+                    .dashboard-page .system-general-parameter .parameter-box .parameter {
+                        padding-left: 10px;
+                    }
+
+                        .dashboard-page .system-general-parameter .parameter-box .parameter .name {
+                            font-size: 12px;
+                            color: #a3a3a3;
+                        }
+
+                        .dashboard-page .system-general-parameter .parameter-box .parameter .value {
+                            font-size: 15px;
+                            font-weight: bold;
+                        }
+
+            .dashboard-page .system-revenue-chart {
+                padding: 30px 10px;
+                background-color: white;
+                border: 0.5px solid #eee;
+            }
+
+            .dashboard-page .dashboard-chart {
+            }
+
+                .dashboard-page .dashboard-chart .chart-header {
+                    display: flex;
+                    justify-content: space-between;
+                    padding-bottom: 35px;
+                }
+
+                    .dashboard-page .dashboard-chart .chart-header .chart-select {
+                        flex: 1;
+                        display: flex;
+                        position: relative;
+                        justify-content: flex-end;
+                        gap: 10px;
+                    }
+
+                        .dashboard-page .dashboard-chart .chart-header .chart-select .chart-unit {
+                            position: absolute;
+                            bottom: -25px;
+                            left: 4px;
+                        }
+
+                        .dashboard-page .dashboard-chart .chart-header .chart-select .select-input-month,
+                        .dashboard-page .dashboard-chart .chart-header .chart-select .select-input-year {
+                            padding: 5px 10px;
+                            border-radius: 5px;
+                            border-color: #d1d1d1;
+                        }
+
+                    .dashboard-page .dashboard-chart .chart-header .chart-name {
+                        flex: 1;
+                        text-align: center;
+                        font-size: 21px;
+                        font-weight: 500;
+                    }
+
+                    .dashboard-page .dashboard-chart .chart-header .chart-action {
+                        display: flex;
+                        flex: 1;
+                        justify-content: flex-end;
+                    }
+
+                        .dashboard-page .dashboard-chart .chart-header .chart-action > div {
+                            padding: 0 10px;
+                        }
+
+                        .dashboard-page .dashboard-chart .chart-header .chart-action a {
+                            cursor: pointer;
+                            color: #2d2df3;
+                            background-color: aliceblue;
+                            padding: 5px 10px;
+                            border-radius: 2px;
+                        }
+
+                            .dashboard-page .dashboard-chart .chart-header .chart-action a:hover {
+                                color: #6aaae3;
+                                background-color: #cee8ff;
+                            }
+
+                    .dashboard-page .dashboard-chart .chart-header .chart-select .select-input-year {
+                        margin-right: 120px;
+                    }
+    </style>
 }
 
-<h2>Index</h2>
+<div class="dashboard-page">
+    <div class="dashboard-section">
+        <div class="system-general-parameter">
+            <div style="padding-bottom:10px;">
+                <a href="/admin/SystemReport/Revenue" class="parameter-box">
+                    <div class="icon badge-magenta"><i class="fa-solid fa-money-bill-trend-up"></i></div>
+                    <div class="parameter system-revenue-total">
+                        <div class="value"></div>
+                        <div class="name"></div>
+                    </div>
+                </a>
+                <a href="#" class="parameter-box">
+                    <div class="icon badge-pill badge-cyan"><i class="fa-solid fa-dollar-sign"></i></div>
+                    <div class="parameter system-profit-total">
+                        <div class="value"></div>
+                        <div class="name"></div>
+                    </div>
+                </a>
+                <div class="parameter-box">
+                    <div class="icon badge-pill badge-purple"><i class="fa-solid fa-file-lines"></i></div>
+                    <div class="parameter total-order-pending">
+                        <div class="value"></div>
+                        <div class="name">ĐƠN HÀNG MỚI</div>
+                    </div>
+                </div>
+                <a href="/admin/ManageUser" class="parameter-box">
+                    <div class="icon badge-pill badge-blue"><i class="fa-solid fa-users"></i></div>
+                    <div class="parameter total-user">
+                        <div class="value"></div>
+                        <div class="name">NGƯỜI DÙNG</div>
+                    </div>
+                </a>
+            </div>
+            <div>
+                <a class="parameter-box">
+                    <div class="icon badge-magenta"><span style=" font-size: 15px; font-weight: bold;">UTAO</span></div>
+                    <div class="parameter system-apl-total">
+                        <div class="value"></div>
+                        <div class="name">UTAO HỆ THỐNG</div>
+                    </div>
+                </a>
+                <a href="/admin/SystemReport/BalanceDebt" class="parameter-box" style="cursor:pointer">
+                    <div class="icon badge-magenta"><i class="fa-solid fa-hand-holding-dollar"></i></div>
+                    <div class="parameter system-balance-total">
+                        <div class="value"></div>
+                        <div class="name">TỔNG NỢ LƯƠNG</div>
+                    </div>
+                </a>
+                <a class="parameter-box" style="border: .5px solid #00000000; background-color: transparent; "></a>
+                <a class="parameter-box" style="border: .5px solid #00000000; background-color: transparent; "></a>
+            </div>
+        </div>
+    </div>
+    <div class="dashboard-section" id="section-profit-chart" style="display:none">
+        <div class="dashboard-chart system-revenue-chart">
+            <div class="chart-header">
+                <div class="chart-select">
+                    <div class="chart-unit">
+                        (triệu)
+                    </div>
+                    <select class="select-input-month" onchange="ChoseMonthProfit(this);">
+                    </select>
+                    <select class="select-input-year" onchange="ChoseYearInMonthProfit(this);">
+                    </select>
+                </div>
+                <div class="chart-name">LỢI NHUẬN</div>
+                <div class="chart-action">
+                    <div><a onclick="ProfitInMonth();">THÁNG</a></div>
+                    <div><a onclick="ProfitInYear();">NĂM</a></div>
+                </div>
+            </div>
+            <div style="height:300px">
+                <div id="profit-chart-month">
+                    <canvas id="total-profit-chart-month" style="height:300px;"></canvas>
+                </div>
+                <div id="profit-chart-year">
+                    <canvas id="total-profit-chart-year" style="height:300px;"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="dashboard-section" id="section-revenue-chart">
+        <div class="dashboard-chart system-revenue-chart">
+            <div class="chart-header">
+                <div class="chart-select">
+                    <div class="chart-unit">
+                        (triệu)
+                    </div>
+                    <select class="select-input-month" onchange="ChoseMonthRevenue(this);">
+                    </select>
+                    <select class="select-input-year" onchange="ChoseYearInMonthRevenue(this);">
+                    </select>
+                </div>
+                <div class="chart-name">DOANH THU</div>
+                <div class="chart-action">
+                    <div><a onclick="RevenueInMonth();">THÁNG</a></div>
+                    <div><a onclick="RevenueInYear();">NĂM</a></div>
+                </div>
+            </div>
+            <div style="height:300px">
+                <div id="revenue-chart-month">
+                    <canvas id="total-revenue-chart-month" style="height:300px;"></canvas>
+                </div>
+                <div id="revenue-chart-year">
+                    <canvas id="total-revenue-chart-year" style="height:300px;"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section scripts{
+    <script>
+        const now = new Date();
+        var initPage = async function () {
+            await GetReportSystemRevenueThisMonth();
+            await GetCashOfSystem();
+            await GetTotalUserActive();
+            await GetTotalOrder();
+            await GetTotalPointMemberOfAllUser();
+            await GetTotalBalance();
+            await RenderMonthAndYear();
+            await RevenueInMonth();
+        }
+        var ChoseMonthProfit = function (el) {
+            let month = $(el).val();
+            ProfitInMonth(month);
+        }
+        var ChoseYearProfit = function (el) {
+            let year = $(el).val();
+            ProfitInYear(year);
+        }
+        var ChoseYearInMonthProfit = function (el) {
+            let month = $(el).siblings('.select-input-month').val();
+            ProfitInMonth(month);
+        }
+        var ChoseMonthRevenue = function (el) {
+            let month = $(el).val();
+            RevenueInMonth(month);
+        }
+        var ChoseYearInMonthRevenue = function (el) {
+            let month = $(el).siblings('.select-input-month').val();
+            RevenueInMonth(month);
+        }
+
+        const ChoseYearRevenue = function (el) {
+            let year = $(el).val();
+            RevenueInYear(year);
+        }
+
+        var RenderMonthAndYear = function () {
+            var selectProfit = $('#section-profit-chart').find('.select-input-month');
+            var selectRevenue = $('#section-revenue-chart').find('.select-input-month');
+            const currentYear = now.getFullYear();
+            const currentMonth = parseInt(now.getMonth()) + 1;
+            const minYear = currentYear - 10;
+            for (let numberYear = minYear; numberYear <= currentYear; numberYear++) {
+                if (numberYear === currentYear) {
+                    $('.select-input-year').append(`<option value="${numberYear}" selected>Năm ${numberYear}</option>`);
+                } else {
+                    $('.select-input-year').append(`<option value="${numberYear}">Năm ${numberYear}</option>`);
+                }
+
+            }
+            for (let numberMonth = 1; numberMonth <= 12; numberMonth++) {
+                if (numberMonth === currentMonth) {
+                    selectProfit.append(`<option value="${numberMonth}" selected>Tháng ${numberMonth}</option>`);
+                    selectRevenue.append(`<option value="${numberMonth}" selected>Tháng ${numberMonth}</option>`);
+                } else {
+                    selectProfit.append(`<option value="${numberMonth}">Tháng ${numberMonth}</option>`);
+                    selectRevenue.append(`<option value="${numberMonth}">Tháng ${numberMonth}</option>`);
+                }
+            }
+        }
+
+        const GetReportSystemRevenueThisMonth = async function () {
+            const userAdminToken = GetCookie('UserAdminToken');
+            if (userAdminToken == '') return;
+            let rq = await fetch(Enum.ApiUrl + '/api/ReportSystemRevenue/GetReportSystemRevenueThisMonth', {
+                method: 'get',
+                headers: Enum.OptionAdminHeaderDefault,
+            });
+            let rs = await rq.json();
+
+            if (AdminCheckErrorResponse(rs) === false) return;
+
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                $('.system-general-parameter .system-revenue-total  .name').text('DOANH THU THÁNG NÀY');
+                $('.system-general-parameter .system-revenue-total  .value').text(NumberFormat(GetObjectProperty(rs.data, 'TotalAmount', 0)) + ' VNĐ');
+            }
+        }
+
+        const GetTotalPointMemberOfAllUser = async function () {
+            const userAdminToken = GetCookie('UserAdminToken');
+            if (userAdminToken == '') return;
+            let rq = await fetch(Enum.ApiUrl + '/api/AdminHome/GetTotalPointMemberOfAllUser', {
+                method: 'get',
+                headers: Enum.OptionAdminHeaderDefault,
+            });
+            let rs = await rq.json();
+
+            if (AdminCheckErrorResponse(rs) === false) return;
+
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                $('.system-general-parameter .system-apl-total  .value').text(NumberFormat(GetObjectProperty(rs, 'data', 0)));
+            }
+        }
+
+        const GetTotalBalance = async function () {
+            const userAdminToken = GetCookie('UserAdminToken');
+            if (userAdminToken == '') return;
+            let rq = await fetch(Enum.ApiUrl + '/api/AdminHome/GetTotalBalance', {
+                method: 'get',
+                headers: Enum.OptionAdminHeaderDefault,
+            });
+            let rs = await rq.json();
+
+            if (AdminCheckErrorResponse(rs) === false) return;
+
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                $('.system-general-parameter .system-balance-total  .value').text(NumberFormat(GetObjectProperty(rs, 'data', 0)) + ' VNĐ');
+            }
+        }
+
+        const GetTotalUserActive = async function () {
+            const userAdminToken = GetCookie('UserAdminToken');
+            if (userAdminToken == '') return;
+            let rq = await fetch(Enum.ApiUrl + '/api/AdminHome/GetTotalUserActive', {
+                method: 'get',
+                headers: Enum.OptionAdminHeaderDefault,
+            });
+            let rs = await rq.json();
+
+            if (AdminCheckErrorResponse(rs) === false) return;
+
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                $('.system-general-parameter .total-user  .value').text(NumberFormat(GetObjectProperty(rs, 'data', 0)));
+            }
+        }
+
+        const GetTotalOrder = async function () {
+            const userAdminToken = GetCookie('UserAdminToken');
+            if (userAdminToken == '') return;
+            let rq = await fetch(Enum.ApiUrl + '/api/AdminHome/GetTotalOrder', {
+                method: 'get',
+                headers: Enum.OptionAdminHeaderDefault,
+            });
+            let rs = await rq.json();
+
+            if (AdminCheckErrorResponse(rs) === false) return;
+
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                $('.system-general-parameter .total-order-pending  .value').text(NumberFormat(GetObjectProperty(rs, 'data', 0)));
+            }
+        }
+
+        const GetCashOfSystem = async function () {
+            const userAdminToken = GetCookie('UserAdminToken');
+            if (userAdminToken == '') return;
+            let rq = await fetch(Enum.ApiUrl + '/api/AdminHome/GetCashOfSystem', {
+                method: 'get',
+                headers: Enum.OptionAdminHeaderDefault,
+            });
+            let rs = await rq.json();
+
+            if (AdminCheckErrorResponse(rs) === false) return;
+
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                $('.system-general-parameter .system-profit-total  .name').text('SỐ DƯ CỦA HỆ THỐNG');
+                $('.system-general-parameter .system-profit-total  .value').text(NumberFormat(GetObjectProperty(rs.data, 'Amount', 0)) + ' VNĐ');
+            }
+        }
+
+        const ThemeConstant = {
+
+            magenta: '#eb2f96',
+            magentaLight: 'rgba(235, 47, 150, 0.05)',
+            red: '#de4436',
+            redLight: 'rgba(222, 68, 54, 0.05)',
+            volcano: '#fa541c',
+            volcanoLight: 'rgba(250, 84, 28, 0.05)',
+            orange: '#fa8c16',
+            orangeLight: 'rgba(250, 140, 22, 0.1)',
+            gold: '#ffc107',
+            goldLight: 'rgba(255, 193, 7, 0.1)',
+            lime: '#a0d911',
+            limeLight: 'rgba(160, 217, 17, 0.1)',
+            green: '#52c41a',
+            greenLight: 'rgba(82, 196, 26, 0.1)',
+            cyan: "#05c9a7",
+            cyanLight: 'rgba(0, 201, 167, 0.1)',
+            blue: '#3f87f5',
+            blueLight: 'rgba(63, 135, 245, 0.15)',
+            geekBlue: '#2f54eb',
+            geekBlueLight: 'rgba(47, 84, 235, 0.1)',
+            purple: '#886cff',
+            purpleLight: 'rgba(136, 108, 255, 0.1)',
+            gray: '#53535f',
+            grayLight: '#77838f',
+            grayLighter: '#ededed',
+            grayLightest: '#f1f2f3',
+            border: '#edf2f9',
+            white: '#ffffff',
+            dark: '#2a2a2a',
+            transparent: 'rgba(255, 255, 255, 0)'
+        }
+
+        var profitChartConfig = null;
+        var ProfitInMonth = async function (el) {
+            $('#profit-chart-year').hide();
+            $('#profit-chart-month').show();
+            $('#section-profit-chart').find('.select-input-month').show();
+            $('#section-profit-chart').find('.select-input-year').attr("onchange", 'ChoseYearInMonthProfit(this);')
+
+            if (el === undefined || el === 'undefined' || el === '') {
+                var month = parseInt(now.getMonth()) + 1;
+                $('#section-profit-chart').find('.select-input-month').val(month);
+            } else {
+                var month = el;
+            }
+            const year = $('#section-profit-chart').find('.select-input-year').val();
+            const numberDay = new Date(year, month, 0).getDate();
+            let rq = await fetch('/api/AdminReportSystemProfit/GetListReportSystemProfitDaily?month=' + month + '&year=' + year, {
+                method: 'get',
+                headers: Enum.OptionAdminHeaderDefault
+            });
+            let rs = await rq.json();
+            var labels = [];
+            var datas = [];
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                for (let index = 1; index <= numberDay; index++) {
+                    labels.push(index);
+                    datas.push(null);
+                }
+                for (let i = 0; i < rs.data.length; i++) {
+                    datas[parseInt(rs.data[i].Day) - 1] = rs.data[i].Profit / 1000000;
+                }
+                if (profitChartConfig !== null) profitChartConfig.destroy();
+                profitChartConfig = new Chart($('#total-profit-chart-month')[0].getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Lợi nhuận',
+                            backgroundColor: ThemeConstant.blue,
+                            borderColor: ThemeConstant.blue,
+                            pointBackgroundColor: ThemeConstant.blue,
+                            pointBorderColor: ThemeConstant.white,
+                            pointHoverBackgroundColor: ThemeConstant.blueLight,
+                            pointHoverBorderColor: ThemeConstant.blueLight,
+                            data: datas
+                        }]
+                    },
+                    options: {
+                        legend: {
+                            display: false
+                        },
+                        maintainAspectRatio: false,
+                        responsive: true,
+                        hover: {
+                            mode: 'nearest',
+                            intersect: true
+                        },
+                        tooltips: {
+                            mode: 'index'
+                        },
+                        scales: {
+                            xAxes: [{
+                                barPercentage: 0.4,
+                                gridLines: [{
+                                    display: false,
+                                }],
+                                ticks: {
+                                    display: true,
+                                    fontColor: ThemeConstant.grayLight,
+                                    fontSize: 13,
+                                    padding: 10
+                                }
+                            }],
+                            yAxes: [{
+                                gridLines: {
+                                    drawBorder: false,
+                                    drawTicks: false,
+                                    borderDash: [3, 4],
+                                    zeroLineWidth: 1,
+                                    zeroLineBorderDash: [3, 4]
+                                },
+                                ticks: {
+                                    display: true,
+                                    beginAtZero: true,
+                                    fontColor: ThemeConstant.grayLight,
+                                    fontSize: 13,
+                                    padding: 10
+                                }
+                            }],
+                        },
+                    }
+                });
+
+            }
+        }
+
+        var profitChartConfigs = null;
+        var ProfitInYear = async function (el) {
+            $('#profit-chart-year').show();
+            $('#profit-chart-month').hide();
+            $('#section-profit-chart').find('.select-input-month').hide();
+            $('#section-profit-chart').find('.select-input-year').attr("onchange", 'ChoseYearProfit(this);');
+            if (el === undefined || el === 'undefined' || el === '') {
+                var year = now.getFullYear();
+            } else {
+                 var year = el;
+            }
+            $('#section-profit-chart').find('.select-input-year').val(year);
+            let rq = await fetch('/api/AdminReportSystemProfit/GetListReportSystemProfitMonth?year=' + year, {
+                method: 'get',
+                headers: Enum.OptionAdminHeaderDefault
+            });
+            let rs = await rq.json();
+            var labels = [];
+            var datas = [];
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                console.log(rs)
+                for (let numberMonth = 1; numberMonth <= 12; numberMonth++) {
+                    labels.push('Tháng ' + numberMonth);
+                    datas.push(null);
+                }
+                for (i = 0; i < rs.data.length; i++) {
+                    datas[parseInt(rs.data[i].Month) - 1] = rs.data[i].Profit / 1000000;
+                }
+                if (profitChartConfigs !== null) profitChartConfigs.destroy();
+                 profitChartConfigs = new Chart($('#total-profit-chart-year')[0].getContext('2d'), {
+                     type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Lợi nhuận',
+                            backgroundColor: ThemeConstant.blue,
+                            borderColor: ThemeConstant.blue,
+                            pointBackgroundColor: ThemeConstant.blue,
+                            pointBorderColor: ThemeConstant.white,
+                            pointHoverBackgroundColor: ThemeConstant.blueLight,
+                            pointHoverBorderColor: ThemeConstant.blueLight,
+                            data: datas
+                        }]
+                    },
+                     options: {
+                        legend: {
+                            display: false
+                        },
+                        maintainAspectRatio: false,
+                        responsive: true,
+                        hover: {
+                            mode: 'nearest',
+                            intersect: true
+                        },
+                        tooltips: {
+                            mode: 'index'
+                        },
+                        scales: {
+                            xAxes: [{
+                                barPercentage: 0.4,
+                                gridLines: [{
+                                    display: false,
+                                }],
+                                ticks: {
+                                    display: true,
+                                    fontColor: ThemeConstant.grayLight,
+                                    fontSize: 13,
+                                    padding: 10
+                                }
+                            }],
+                            yAxes: [{
+                                gridLines: {
+                                    drawBorder: false,
+                                    drawTicks: false,
+                                    borderDash: [3, 4],
+                                    zeroLineWidth: 1,
+                                    zeroLineBorderDash: [3, 4]
+                                },
+                                ticks: {
+                                    display: true,
+                                    beginAtZero: true,
+                                    fontColor: ThemeConstant.grayLight,
+                                    fontSize: 13,
+                                    padding: 10
+                                }
+                            }],
+                        }
+                    }
+                });
+
+            }
+        }
+
+
+        var revenueChartConfig = null;
+        var RevenueInMonth = async function (el) {
+            $('#revenue-chart-month').show();
+            $('#revenue-chart-year').hide();
+            $('#section-revenue-chart').find('.select-input-month').show();
+            $('#section-revenue-chart').find('.select-input-year').attr("onchange", 'ChoseYearInMonthRevenue(this);')
+            if (el === undefined || el === 'undefined' || el === '') {
+                var month = parseInt(now.getMonth()) + 1;
+                $('#section-revenue-chart').find('.select-input-month').val(month);
+            } else {
+                var month = el;
+            }
+            const year = $('#section-revenue-chart').find('.select-input-year').val();
+            const numberDay = new Date(year, month, 0).getDate();
+            const userAdminToken = GetCookie('UserAdminToken');
+            if (userAdminToken == '') return;
+            let rq = await fetch('/api/AdminHome/GetListReportSystemRevenueMonthly?month=' + month + '&year=' + year, {
+                method: 'get',
+                headers: Enum.OptionAdminHeaderDefault
+            });
+            let rs = await rq.json();
+            var labels = [];
+            var datas = [];
+            if (AdminCheckErrorResponse(rs) === false) return;
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                for (let index = 1; index <= numberDay; index++) {
+                    labels.push(index);
+                    datas.push(null);
+                }
+                for (let i = 0; i < rs.data.length; i++) {
+                    datas[parseInt(rs.data[i].Day) - 1] = rs.data[i].TotalAmount / 1000000;
+                }
+
+                if (revenueChartConfig !== null) revenueChartConfig.destroy();
+                revenueChartConfig = new Chart($('#total-revenue-chart-month')[0].getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Doanh thu',
+                            backgroundColor: ThemeConstant.blue,
+                            borderColor: ThemeConstant.blue,
+                            pointBackgroundColor: ThemeConstant.blue,
+                            pointBorderColor: ThemeConstant.white,
+                            pointHoverBackgroundColor: ThemeConstant.blueLight,
+                            pointHoverBorderColor: ThemeConstant.blueLight,
+                            data: datas
+                        }]
+                    },
+                    options: {
+                        legend: {
+                            display: false
+                        },
+                        maintainAspectRatio: false,
+                        responsive: true,
+                        hover: {
+                            mode: 'nearest',
+                            intersect: true
+                        },
+                        tooltips: {
+                            mode: 'index'
+                        },
+                        scales: {
+                            xAxes: [{
+                                barPercentage: 0.4,
+                                gridLines: [{
+                                    display: false,
+                                }],
+                                ticks: {
+                                    display: true,
+                                    fontColor: ThemeConstant.grayLight,
+                                    fontSize: 13,
+                                    padding: 10
+                                }
+                            }],
+                            yAxes: [{
+                                gridLines: {
+                                    drawBorder: false,
+                                    drawTicks: false,
+                                    borderDash: [3, 4],
+                                    zeroLineWidth: 1,
+                                    zeroLineBorderDash: [3, 4]
+                                },
+                                ticks: {
+                                    display: true,
+                                    beginAtZero: true,
+                                    fontColor: ThemeConstant.grayLight,
+                                    fontSize: 13,
+                                    padding: 10,
+                                }
+                            }],
+                        }
+                    }
+                });
+
+            }
+        }
+
+        var revenueChartConfigs = null;
+        var RevenueInYear = async function (el) {
+            $('#revenue-chart-month').hide();
+            $('#revenue-chart-year').show();
+            $('#section-revenue-chart').find('.select-input-month').hide();
+            $('#section-revenue-chart').find('.select-input-year').attr("onchange", 'ChoseYearRevenue(this);');
+            if (el === undefined || el === 'undefined' || el === '') {
+                var year = now.getFullYear();
+            } else {
+                var year = el;
+            }
+            $('#section-revenue-chart').find('.select-input-year').val(year);
+            let rq = await fetch('/api/AdminHome/GetListReportSystemRevenueYearly?year=' + year, {
+                method: 'get',
+                headers: Enum.OptionAdminHeaderDefault
+            });
+            let rs = await rq.json();
+            var labels = [];
+            var datas = [];
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                console.log(rs)
+                for (let numberMonth = 1; numberMonth <= 12; numberMonth++) {
+                    labels.push('Tháng ' + numberMonth);
+                    datas.push(null);
+                }
+                for (i = 0; i < rs.data.length; i++) {
+                    datas[parseInt(rs.data[i].Month) - 1] = rs.data[i].TotalAmount / 1000000;
+                }
+                if (revenueChartConfigs !== null) revenueChartConfigs.destroy();
+                revenueChartConfigs = new Chart($('#total-revenue-chart-year')[0].getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Doanh thu',
+                            backgroundColor: ThemeConstant.blue,
+                            borderColor: ThemeConstant.blue,
+                            pointBackgroundColor: ThemeConstant.blue,
+                            pointBorderColor: ThemeConstant.white,
+                            pointHoverBackgroundColor: ThemeConstant.blueLight,
+                            pointHoverBorderColor: ThemeConstant.blueLight,
+                            data: datas
+                        }]
+                    },
+                    options: {
+                        legend: {
+                            display: false
+                        },
+                        maintainAspectRatio: false,
+                        responsive: true,
+                        hover: {
+                            mode: 'nearest',
+                            intersect: true
+                        },
+                        tooltips: {
+                            mode: 'index'
+                        },
+                        scales: {
+                            xAxes: [{
+                                barPercentage: 0.4,
+                                gridLines: [{
+                                    display: false,
+                                }],
+                                ticks: {
+                                    display: true,
+                                    fontColor: ThemeConstant.grayLight,
+                                    fontSize: 13,
+                                    padding: 10
+                                }
+                            }],
+                            yAxes: [{
+                                gridLines: {
+                                    drawBorder: false,
+                                    drawTicks: false,
+                                    borderDash: [3, 4],
+                                    zeroLineWidth: 1,
+                                    zeroLineBorderDash: [3, 4]
+                                },
+                                ticks: {
+                                    display: true,
+                                    beginAtZero: true,
+                                    fontColor: ThemeConstant.grayLight,
+                                    fontSize: 13,
+                                    padding: 10
+                                }
+                            }],
+                        }
+                    }
+                });
+
+            }
+        }
+        initPage();
+    </script>
+}
 

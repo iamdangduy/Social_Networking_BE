@@ -1,0 +1,411 @@
+﻿
+@{
+    ViewBag.Title = "Thông tin ngân hàng của hệ thống";
+    ViewBag.Menu = "manage-bank";
+}
+
+@section styles{
+    <style>
+        .main-content {
+            padding: 10px 10px 10px 10px !important;
+        }
+
+        .btn-custom-color {
+            color: white;
+            background-color: #8c237b;
+            float: right;
+        }
+
+
+        #tab-bank-account {
+            background-color: white;
+            padding: 30px;
+            margin-top: 20px;
+            border-radius: 10px;
+            min-height: 210px;
+        }
+
+            #tab-bank-account .create-bank-btn {
+                padding: 10px 30px;
+                border: solid #9c9c9c 0.5px;
+                border-radius: 10px;
+                font-size: 16px;
+                font-weight: 500;
+                cursor: pointer;
+            }
+
+            #tab-bank-account .list-bank-account {
+                margin-top: 30px;
+            }
+
+        .list-bank-account td a {
+            padding-right: 10px;
+            cursor: pointer;
+        }
+
+        .list-bank-account .isDefault {
+            padding: 3px;
+            background-color: #31c6ff;
+            color: white;
+            width: fit-content;
+            border-radius: 5px;
+            font-size: 10px;
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.4);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .modal-container {
+            background-color: #fff;
+            width: 900px;
+            max-width: calc(100% - 32px);
+            min-height: 400px;
+            position: relative;
+            animation: modalFadeIn ease 0.5s;
+            transition: top 0.4s, opacity 0.4s;
+        }
+
+        .modal-header {
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center !important;
+            font-size: 20px;
+            border-bottom: solid #ccc 0.5px;
+            text-transform: uppercase;
+        }
+
+        .modal-body {
+            width: 90%;
+            margin: auto;
+        }
+
+        .modal-footer {
+            width: 90%;
+            margin: auto;
+            justify-content: end;
+            display: flex;
+            gap: 10px;
+            padding-bottom: 10px;
+        }
+
+            .modal-footer .update-btn {
+                width: 100px;
+                padding: 5px 5px;
+                background-color: #435ebe;
+                color: white;
+                border-radius: 5px;
+                cursor: pointer;
+                border: solid #435ebe 1px;
+            }
+
+            .modal-footer .close-modal {
+                width: 80px;
+                color: black;
+                border: solid #ccc 0.5px;
+                cursor: pointer;
+                border-radius: 5px;
+            }
+
+        @@keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-200px);
+            }
+
+            to {
+                transform: translateY(0px);
+                opacity: 1;
+            }
+        }
+    </style>
+}
+
+
+
+<div class="main-content">
+    <div class="">
+        <div class="tab-content m-t-15">
+            <div class="tab-pane fade show active" id="tab-bank-account">
+                <div class="create-bank">
+                    <a onclick="openCreateModal();" class="create-bank-btn">Tạo mới</a>
+                </div>
+                <div class="list-bank-account">
+                    <div class="table-responsive desktop">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Ngân hàng</th>
+                                    <th scope="col">Tên chủ tài khoản</th>
+                                    <th scope="col">Số tài khoản</th>
+                                    <th scope="col">Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody id="list-bank-desktop">
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="table-responsive mobile">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th scope="col" style="width:60%">Mô tả</th>
+                                    <th scope="col" style="width:40%">Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody id="list-bank-mobile">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<div id="modal" class="modal" onclick="closeModal()">
+    <div class="modal-container">
+        <div class="modal-header">Cập nhật thông tin</div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label class="font-weight-semibold" for="bankName">Ngân hàng:</label>
+                <input type="text" class="form-control" id="bankName" placeholder="Ngân hàng">
+            </div>
+
+            <div class="form-group">
+                <label class="font-weight-semibold" for="nameOwner">Tên chủ tài khoản</label>
+                <input type="text" class="form-control" id="nameOwner" placeholder="Tên chủ tài khoản">
+            </div>
+
+            <div class="form-group">
+                <label class="font-weight-semibold" for="bankNum">Số tài khoản</label>
+                <input type="text" class="form-control" id="bankNum" placeholder="Số tài khoản">
+            </div>
+            <input type="text" id="userBankInfoId" value="" style="display:none" />
+
+            <div class="form-check">
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox"
+                           class="form-check-input form-check-success"
+                           name="customCheck" id="bank-default">
+                    <label class="form-check-label"
+                           for="bank-default">Đặt làm tài khoản mặc định</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button class="close-modal" onclick="closeModal()">Đóng</button>
+            <button class="update-btn" id="updateBank-btn">Lưu</button>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section scripts{
+    <script>
+
+            const openCreateModal = function () {
+                $('#updateBank-btn').attr('onclick', 'creatBankAccount()');
+                $('#modal').css('display', 'flex');
+            }
+
+            const openUpdateModal = async function (el) {
+                const id = $(el).data('id');
+                $('#userBankInfoId').val(id);
+
+                let rq = await fetch(Enum.ApiUrl + '/api/UserBankInfo/GetUserBankInfoDetail?userBankInfoId=' + id, {
+                    method: 'get',
+                    headers: Enum.OptionHeaderDefault
+                });
+                let rs = await rq.json();
+
+                if (CheckErrorResponse(rs) === false) return;
+                if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                    $('#bankName').val(rs.data.BankName);
+                    $('#nameOwner').val(rs.data.BankOwnerName);
+                    $('#bankNum').val(rs.data.BankAccountNumber);
+                    $('#updateBank-btn').attr('onclick', 'updateBankAccount()');
+                    if (rs.data.IsDefault === true) {
+                        $("#bank-default").prop("checked", true);
+                    } else {
+                        $("#bank-default").prop("checked", false);
+                    }
+
+                    $('#modal').css('display', 'flex');
+                }
+            }
+
+            const closeModal = function () {
+                $('#modal').css('display', 'none');
+                $('#bankName').val('');
+                $('#nameOwner').val('');
+                $('#bankNum').val('');
+                $("#bank-default").prop("checked", false);
+            }
+
+            const getBankInfo = async function () {
+                let rq = await fetch(Enum.ApiUrl + '/api/UserBankInfo/GetListUserBankInfo', {
+                    method: 'get',
+                    headers: Enum.OptionHeaderDefault
+                });
+                let rs = await rq.json();
+                $('#list-bank-desktop').html('');
+                $('#list-bank-mobile').html('');
+                if (CheckErrorResponse(rs) === false) return;
+                if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                    for (let index = 0; index < rs.data.length; index++) {
+                        var x = rs.data[index]
+                        let html = '<tr>';
+                        if (x.IsDefault === true) {
+                            html += '<td> ' + x.BankName + '<p class="isDefault">Tài khoản mặc định</p> </td>';
+                        } else {
+                            html += '<td> ' + x.BankName + ' </td>';
+                        }
+                        html += '<td>' + x.BankOwnerName + '</td>';
+                        html += '<td>' + x.BankAccountNumber + '</td>';
+                        html += '<td>';
+                        html += '<a data-id="' + x.UserBankInfoId + '" onclick="openUpdateModal(this);"><button class="btn btn-primary"><i class="fa-solid fa-pen-to-square"></i></button></a>';
+                        html += '<a data-id="' + x.UserBankInfoId + '" onclick="deleteBankAccount(this);"><button class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></button></a> </td> </tr>';
+
+                        $('#list-bank-desktop').append(html);
+
+                        let html2 = '<tr>';
+                        html2 += '<td> <div>' + x.BankName + '</div>';
+                        html2 += '<div style="background-color:#eee">' + x.BankOwnerName + '</div>';
+                        html2 += '<div>' + x.BankAccountNumber + '</span></div>';
+                        if (x.IsDefault === true) {
+                            html2 += '<div><p class="isDefault" > Tài khoản mặc định</p ></span></div></td>';
+                        } else {
+                            html2 += '</td>';
+                        }
+
+                        html2 += '<td><a data-id="' + x.UserBankInfoId + '" onclick="openUpdateModal(this);"><button class="btn btn-primary btn-sm"><i class="fa-solid fa-pen-to-square"></i></button></a>';
+                        html2 += '<a data-id="' + x.UserBankInfoId + '" onclick="deleteBankAccount(this);"><button class="btn btn-danger btn-sm"><i class="fa fa-trash" aria-hidden="true"></i></button></a> </td> </tr>';
+
+                        $('#list-bank-mobile').append(html2);
+                    }
+                }
+            }
+
+            const creatBankAccount = async function () {
+                let model = {
+                    BankName: $('#bankName').val(),
+                    BankOwnerName: $('#nameOwner').val(),
+                    BankAccountNumber: $('#bankNum').val(),
+                    isDefault: $('#bank-default').is(':checked')
+                }
+                if (model.BankName === '') {
+                    alert('Tên ngân hàng không được để trống');
+                    return;
+                }
+                let rq = await fetch(Enum.ApiUrl + '/api/UserBankInfo/InsertUserBankInfo', {
+                    method: 'post',
+                    headers: Enum.OptionHeaderDefault,
+                    body: JSON.stringify(model)
+                });
+                let rs = await rq.json();
+
+                if (CheckErrorResponse(rs) === false) return;
+                if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Tạo thông tin thanh toán thành công",
+                        preConfirm: function () { window.location.reload() },
+                    })
+                }
+            }
+
+            const updateBankAccount = async function (el) {
+                const id = $(el).data('id');
+                let model = {
+                    BankName: $('#bankName').val(),
+                    BankOwnerName: $('#nameOwner').val(),
+                    BankAccountNumber: $('#bankNum').val(),
+                    isDefault: $('#bank-default').is(':checked'),
+                    UserBankInfoId: $('#userBankInfoId').val(),
+                }
+                if (model.BankName === '') {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Tên ngân hàng không được để trống",
+                    })
+                    return;
+                }
+                let rq = await fetch(Enum.ApiUrl + '/api/UserBankInfo/UpdateUserBankInfo?userBankInfoId' + id, {
+                    method: 'post',
+                    headers: Enum.OptionHeaderDefault,
+                    body: JSON.stringify(model)
+                });
+                let rs = await rq.json();
+
+                if (CheckErrorResponse(rs) === false) return;
+                if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Cập nhật thông tin thanh toán thành công",
+                        preConfirm: function () { window.location.reload() },
+                    })
+                }
+            }
+
+
+            const deleteBankAccount = async function (el) {
+                const id = $(el).data('id');
+                Swal.fire({
+                    icon: "question",
+                    title: "Bạn có chắc muốn xoá thông tin thanh toán này?",
+                    showCancelButton: true,
+                    preConfirm: async function () {
+                        let rq = await fetch(Enum.ApiUrl + '/api/UserBankInfo/DeleteUserBankInfo?userBankInfoId=' + id, {
+                            method: 'get',
+                            headers: Enum.OptionHeaderDefault
+                        });
+                        let rs = await rq.json();
+
+                        if (CheckErrorResponse(rs) === false) return;
+                        if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                            Swal.fire({
+                                icon: "success",
+                                title: "Xoá thông tin thanh toán thành công",
+                                preConfirm: function () { window.location.reload() },
+                            })
+                        }
+                    },
+                    didClose: function () {
+                        return;
+                    }
+                })
+
+            }
+
+            const initPage = async function () {
+                await getBankInfo();
+
+                $(".modal-container").click(function (event) {
+                    event.stopPropagation();
+                });
+            }
+
+            initPage();
+    </script>
+}
+
+
+

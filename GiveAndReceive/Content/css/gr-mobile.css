@@ -29,6 +29,10 @@ a {
     font-weight: bold;
     color:black;
 }
+
+#main #main-content{
+    padding-top:0;
+}
 /*HomePage*/
 
 .home-page .system-general-parameter {
