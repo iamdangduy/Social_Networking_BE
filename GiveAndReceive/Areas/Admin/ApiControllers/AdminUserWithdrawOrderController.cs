@@ -81,12 +81,14 @@ namespace GiveAndReceive.Areas.Admin.ApiControllers
                         UserAdmin userAdmin = SecurityProvider.GetUserAdminByToken(Request);
                         if (userAdmin == null) return Unauthorized();
 
+                        AdminUserWalletService adminUserWalletService = new AdminUserWalletService(connect);
                         AdminUserWithdrawOrderService adminUserWithdrawOrderService = new AdminUserWithdrawOrderService(connect);
                         UserWithdrawOrder userWithdrawOrder = adminUserWithdrawOrderService.GetUserWithdrawOrderById(userWithdrawOrderId);
                         if (userWithdrawOrder == null) return Error();
 
                         //if (userWithdrawOrder.Status != UserWithdrawOrder.EnumStatus.PENDING) return Error("Giao dịch này hiện tại không thể xử lý. Vui lòng thử lại sau.");
 
+                        // Cập nhật trạng thái
                         userWithdrawOrder.Status = UserWithdrawOrder.EnumStatus.SYSTEM_DECLINE;
                         adminUserWithdrawOrderService.UpdateUserWithdrawOrderStatus(userWithdrawOrder);
 
@@ -97,6 +99,8 @@ namespace GiveAndReceive.Areas.Admin.ApiControllers
                         userWithdrawOrderStatus.CreateTime = HelperProvider.GetSeconds();
                         adminUserWithdrawOrderService.InsertUserWithdrawOrderStatus(userWithdrawOrderStatus, transaction);
 
+                        // Cập nhật lại tiền trong ví người dùng
+                        //adminUserWalletService.UpdateBalanceByUserId(userWithdrawOrder.UserId, userWithdrawOrder.Amount, transaction);
 
 
                         transaction.Commit();

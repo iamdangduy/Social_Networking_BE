@@ -3681,6 +3681,7 @@
     <Compile Include="Areas\Admin\Services\AdminProductService.cs" />
     <Compile Include="Areas\Admin\Services\AdminUserPropertiesService.cs" />
     <Compile Include="Areas\Admin\Services\AdminUserService.cs" />
+    <Compile Include="Areas\Admin\Services\AdminUserWalletService.cs" />
     <Compile Include="Areas\Admin\Services\AdminUserWithdrawOrderService.cs" />
     <Compile Include="Controllers\ConnectMemberController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminUserController.cs" />
