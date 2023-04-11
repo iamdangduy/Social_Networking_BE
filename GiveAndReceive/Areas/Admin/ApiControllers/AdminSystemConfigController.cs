@@ -67,10 +67,7 @@ namespace GiveAndReceive.Areas.Admin.ApiControllers
                         transaction.Commit();
                         return Success(null, "Sửa thành công!");
                     }
-
                 }
-
-
             }
             catch (Exception ex)
             {

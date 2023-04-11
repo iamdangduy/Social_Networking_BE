@@ -4103,6 +4103,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminProductController.cs" />
+    <Compile Include="Areas\Admin\ApiControllers\AdminSystemConfigController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminSystemController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminUserPropertiesController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminUserWithdrawOrderController.cs" />
@@ -4116,11 +4117,13 @@
     <Compile Include="Areas\Admin\Controllers\UserWithdrawOrderController.cs" />
     <Compile Include="Areas\Admin\Services\AdminProductService.cs" />
     <Compile Include="Areas\Admin\Services\AdminShareFundUserMonthService.cs" />
+    <Compile Include="Areas\Admin\Services\AdminSystemConfigService.cs" />
     <Compile Include="Areas\Admin\Services\AdminUserPropertiesService.cs" />
     <Compile Include="Areas\Admin\Services\AdminUserService.cs" />
     <Compile Include="Areas\Admin\Services\AdminUserTransactionService.cs" />
     <Compile Include="Areas\Admin\Services\AdminUserWalletService.cs" />
     <Compile Include="Areas\Admin\Services\AdminUserWithdrawOrderService.cs" />
+    <Compile Include="Areas\Admin\Services\SystemConfig.cs" />
     <Compile Include="Controllers\ConnectMemberController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminUserController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
