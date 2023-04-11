@@ -1,7 +1,7 @@
 ﻿
 @{
-    ViewBag.Title = "Thông tin ngân hàng của hệ thống";
-    ViewBag.Menu = "manage-bank";
+    ViewBag.Title = "Quản lý hạng";
+    ViewBag.Menu = "manage-rank";
 }
 
 @section styles{
@@ -145,13 +145,13 @@
                         <table class="table table-hover">
                             <thead>
                                 <tr>
-                                    <th scope="col">Ngân hàng</th>
-                                    <th scope="col">Tên chủ tài khoản</th>
-                                    <th scope="col">Số tài khoản</th>
+                                    <th scope="col">Tên hạng</th>
+                                    <th scope="col">Số vé tối đa</th>
+                                    <th scope="col">Phần trăm hoa hồng</th>
                                     <th scope="col">Thao tác</th>
                                 </tr>
                             </thead>
-                            <tbody id="list-bank-desktop">
+                            <tbody id="list-rank">
                             </tbody>
                         </table>
                     </div>
@@ -169,30 +169,23 @@
         <div class="modal-header">Cập nhật thông tin</div>
         <div class="modal-body">
             <div class="form-group">
-                <label class="font-weight-semibold" for="bankName">Ngân hàng:</label>
-                <input type="text" class="form-control" id="bankName" placeholder="Ngân hàng">
+                <label class="font-weight-semibold" for="rankName">Tên hạng:</label>
+                <input type="text" class="form-control" id="rankName" placeholder="Tên hạng">
             </div>
 
             <div class="form-group">
-                <label class="font-weight-semibold" for="nameOwner">Tên chủ tài khoản</label>
-                <input type="text" class="form-control" id="nameOwner" placeholder="Tên chủ tài khoản">
+                <label class="font-weight-semibold" for="maxPin">Số vé tối đa</label>
+                <input type="text" class="form-control" id="maxPin" placeholder="Số vé tối đa" onkeyup="ValidateInputOnlyNumber(event,this)">
             </div>
 
             <div class="form-group">
-                <label class="font-weight-semibold" for="bankNum">Số tài khoản</label>
-                <input type="text" class="form-control" id="bankNum" placeholder="Số tài khoản">
-            </div>
-            <input type="text" id="userBankInfoId" value="" style="display:none" />
-
-            <div class="form-check">
-                <div class="custom-control custom-checkbox">
-                    <input type="checkbox"
-                           class="form-check-input form-check-success"
-                           name="customCheck" id="bank-default">
-                    <label class="form-check-label"
-                           for="bank-default">Đặt làm tài khoản mặc định</label>
+                <label class="font-weight-semibold" for="comPercent">Phần trăm hoa hồng</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="comPercent"  placeholder="Phần trăm hoa hồng" onkeyup="ValidateInputOnlyNumber(event,this)">
+                    <span class="input-group-text">%</span>
                 </div>
             </div>
+            <input type="text" id="rankId" value="" style="display:none" />
         </div>
 
         <div class="modal-footer">
@@ -393,6 +386,8 @@
             initPage();
     </script>
 }
+
+
 
 
 
