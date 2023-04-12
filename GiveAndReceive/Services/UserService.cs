@@ -64,17 +64,17 @@ namespace GiveAndReceive.Services
             if(status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
         }
 
-        public void CheckAccountExist(string account, IDbTransaction transaction = null)
+        public void CheckAccountExist(string account, string userId, IDbTransaction transaction = null)
         {
-            string query = "select count(*) where Account=@account and Account <> ''";
-            int count = this._connection.Query<int>(query, new { account }, transaction).FirstOrDefault();
+            string query = "select count(*) from [user] where Account=@account and Account <> ''and UserId <> @userId";
+            int count = this._connection.Query<int>(query, new { account, userId }, transaction).FirstOrDefault();
             if(count > 0) throw new Exception("Account đã tồn tại.");
         }
 
-        public void CheckEmailExist(string email, IDbTransaction transaction = null)
+        public void CheckEmailExist(string email, string userId, IDbTransaction transaction = null)
         {
-            string query = "select count(*) where Email=@email and Email <> ''";
-            int count = this._connection.Query<int>(query, new {email}, transaction).FirstOrDefault();
+            string query = "select count(*) from [user] where Email=@email and Email <> ''and UserId <> @userId";
+            int count = this._connection.Query<int>(query, new {email, userId}, transaction).FirstOrDefault();
             if (count > 0) throw new Exception("Email đã tồn tại.");
         }
         public bool CheckPhoneExist(string phone, IDbTransaction transaction = null)
@@ -121,6 +121,12 @@ namespace GiveAndReceive.Services
             string query = "update [user_token] set Token=NULL where Token=@token";
             int status = this._connection.Execute(query, new { token = token }, transaction);
             if (status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
+        }
+
+        public User GetUserInfo(string userId, IDbTransaction transaction = null)
+        {
+            string query = "select Name, Avatar, Account, Email, Phone from [user] where UserId=@userId";
+            return this._connection.Query<User>(query, new {userId = userId }, transaction).FirstOrDefault();
         }
     }
 }

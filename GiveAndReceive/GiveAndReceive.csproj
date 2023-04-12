@@ -4110,6 +4110,7 @@
     <Compile Include="Areas\Admin\ApiControllers\AdminProductController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminRankController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminSystemConfigController.cs" />
+    <Compile Include="Areas\Admin\ApiControllers\AdminQueueGiveController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminQueueReceiveController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminSystemController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminUserPropertiesController.cs" />
@@ -4123,6 +4124,7 @@
     <Compile Include="Areas\Admin\Controllers\ProductController.cs" />
     <Compile Include="Areas\Admin\Controllers\SystemConfigController.cs" />
     <Compile Include="Areas\Admin\Services\AdminProductService.cs" />
+    <Compile Include="Areas\Admin\Services\AdminQueueGiveService.cs" />
     <Compile Include="Areas\Admin\Services\AdminQueueReceiveService.cs" />
     <Compile Include="Areas\Admin\Services\AdminShareFundUserMonthService.cs" />
     <Compile Include="Areas\Admin\Services\AdminSystemConfigService.cs" />

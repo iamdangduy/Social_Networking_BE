@@ -49,6 +49,9 @@ namespace GiveAndReceive.Models
 
             public const string PRODUCT_THUMBNAIL_URL = "/files/product/thumbnail/";
             public const string PRODUCT_THUMBNAIL_PATH = "~/files/product/thumbnail/";
+
+            public const string AVATAR_USER_URL = "/files/avatar/";
+            public const string AVATAR_USER_PATH = "~/files/avatar/";
         }
     }
 }

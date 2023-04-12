@@ -57,5 +57,17 @@ namespace GiveAndReceive.Services
             string query = "select * from [user_properties] where CitizenIdentificationNumber = @CitizenIdentificationNumber";
             return this._connection.Query<string>(query, new { CitizenIdentificationNumber }, transaction).FirstOrDefault();
         }
+
+        public long GetTotalAmountGive(string UserId)
+        {
+            string query = "select TotalAmountGive from [user_properties] where UserId = @UserId";
+            return this._connection.Query<long>(query, new { UserId }).FirstOrDefault();
+        }
+
+        public long GetTotalAmountReceive(string UserId)
+        {
+            string query = "select TotalAmountReceive from [user_properties] where UserId = @UserId";
+            return this._connection.Query<long>(query, new { UserId }).FirstOrDefault();
+        }
     }
 }
