@@ -10,6 +10,18 @@
             flex-direction:column;
         }
 
+        .verify-email-code i{
+            color: green;
+            background: none;
+            border: none;
+        }
+
+        .verify-phone-code i {
+            color: green;
+            background: none;
+            border: none;
+        }
+
     </style>
 }
 
@@ -36,15 +48,28 @@
                 </div>
             </div>
             <div class="form-group">
-                <input type="text" style="width:50%;" class="form-control" id="Account" placeholder="Mã xác thực">
+                <div class="d-flex mb-3">
+                    <input type="text" style="width:50%;" class="form-control" id="EmailCode" placeholder="Mã xác thực">
+                    <button class="input-group-text verify-email-code" style="margin-left: 10px;" onclick="VerifyEmailCode();" id="Code">Xác minh</button>
+                </div>
             </div>
+
             <div class="form-group">
                 <label for="Phone">Điện thoại</label>
-                <input type="text" class="form-control" id="Phone" placeholder="Số điện thoại">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" id="Phone" placeholder="Số điện thoại">
+                    <button class="input-group-text" onclick="GetPhoneCode();" id="Code">Nhận mã <br> xác thực</button>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="d-flex mb-3">
+                    <input type="text" style="width:50%;" class="form-control" id="PhoneCode" placeholder="Mã xác thực">
+                    <button class="input-group-text verify-phone-code" style="margin-left: 10px;" onclick="VerifyPhoneCode();" id="Code">Xác minh</button>
+                </div>
             </div>
 
             <div class="confirm-button" style="text-align:right;margin-top:20px;">
-                <button class="btn btn-primary btn-sm" onclick="updateInfoUser();">Cập nhật</button> 
+                <button class="btn btn-primary btn-sm" onclick="updateInfoUser();">Cập nhật</button>
             </div>
         </div>
     </div>
@@ -118,16 +143,13 @@
                 })
                 return;
             }
-
             if (!validateEmail(email)) {
                 Swal.fire({
                     icon: "error",
                     title: "Email không đúng định dạng",
                 })
                 return;
-            }
-
-           
+            }           
             let rq = await fetch('/api/user/GetVerifyCodeEmail?email=' + email, {
                 method: 'get',
                 headers: {
@@ -136,8 +158,100 @@
             });
             let rs = await rq.json();
             if (CheckErrorResponse(rs) === false) return;
+            /*if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {                
+            }*/
+        }
+
+        const VerifyEmailCode = async function () {
+            let emailCode = $('#EmailCode').val();
+            let email = $('#Email').val();
+            if (emailCode === '' || emailCode === null || typeof emailCode === 'undefined') {
+                Swal.fire({
+                    icon: "error",
+                    title: "Mã xác nhận không được để trống",
+                })
+                return;
+            }
+            if (email === '' || email === null || typeof email === 'undefined') {
+                Swal.fire({
+                    icon: "error",
+                    title: "Email không được để trống",
+                })
+                return;
+            }
+            let rq = await fetch('/api/user/ConfirmEmailCode?email=' + email + '&code=' + emailCode, {
+                method: 'get',
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            });
+            let rs = await rq.json();
+            if (CheckErrorResponse(rs) === false) return;
             if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
-                
+                $('.verify-email-code').html('');                
+                $('.verify-email-code').append('<i class="fas fa-check"></i>');
+            }
+        } 
+
+        const GetPhoneCode = async function () {
+            let phone = $('#Phone').val();
+
+            if (phone === '' || phone === null || typeof phone === 'undefined') {
+                Swal.fire({
+                    icon: "error",
+                    title: "Số điện thoại không được để trống",
+                })
+                return;
+            }
+            if (phone.length !== 10 && phone[0] !== '') {
+                Swal.fire({
+                    icon: "error",
+                    title: "Số điện thoại không đúng định dạng",
+                })
+                return;
+            }
+
+            phone = '%2B84%20' + phone.substr(1, 9);
+            let rq = await fetch('/api/user/GetVerifyCode?phone=' + phone, {
+                method: 'get',
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            });
+            let rs = await rq.json();
+            if (CheckErrorResponse(rs) === false) return;
+        }
+
+        const VerifyPhoneCode = async function () {
+            let phoneCode = $('#PhoneCode').val();
+            let phone = $('#Phone').val();
+            phone = '%2B84%20' + phone.substr(1, 9);
+            if (phoneCode === '' || phoneCode === null || typeof phoneCode === 'undefined') {
+                Swal.fire({
+                    icon: "error",
+                    title: "Mã xác nhận không được để trống",
+                })
+                return;
+            }
+
+            if (phone === '' || phone === null || typeof phone === 'undefined') {
+                Swal.fire({
+                    icon: "error",
+                    title: "Số điện thoại không được để trống",
+                })
+                return;
+            }
+            let rq = await fetch('/api/user/ConfirmCode?phone=' + phone + '&code=' + phoneCode, {
+                method: 'get',
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            });
+            let rs = await rq.json();
+            if (CheckErrorResponse(rs) === false) return;
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                $('.verify-phone-code').html('');
+                $('.verify-phone-code').append('<i class="fas fa-check"></i>');
             }
         }
 
@@ -147,7 +261,9 @@
                 Avatar: $('#Avatar').val(),
                 Account: $('#Account').val(),
                 Email: $('#Email').val(),
-                Phone: $('#Phone').val()
+                EmailCode: $('#EmailCode').val(),
+                Phone: $('#Phone').val(),
+                PhoneCode: $('#PhoneCode').val()
             }
 
             let accountProcess = RemoveVietnameseTones(model.Account);

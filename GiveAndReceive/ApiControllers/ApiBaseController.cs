@@ -1,4 +1,5 @@
-﻿using GiveAndReceive.Models;
+﻿using GiveAndReceive.Filters;
+using GiveAndReceive.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,7 @@ using System.Web.Http;
 
 namespace GiveAndReceive.ApiControllers
 {
+    [APIAuthenticationFilter]
     public class ApiBaseController : ApiController
     {
         [HttpGet]
