@@ -4107,6 +4107,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminProductController.cs" />
+    <Compile Include="Areas\Admin\ApiControllers\AdminQueueReceiveController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminSystemController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminUserPropertiesController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminUserWithdrawOrderController.cs" />
@@ -4118,6 +4119,7 @@
     <Compile Include="Areas\Admin\Controllers\ManageWithdrawController.cs" />
     <Compile Include="Areas\Admin\Controllers\ProductController.cs" />
     <Compile Include="Areas\Admin\Services\AdminProductService.cs" />
+    <Compile Include="Areas\Admin\Services\AdminQueueReceiveService.cs" />
     <Compile Include="Areas\Admin\Services\AdminShareFundUserMonthService.cs" />
     <Compile Include="Areas\Admin\Services\AdminUserPropertiesService.cs" />
     <Compile Include="Areas\Admin\Services\AdminUserService.cs" />
