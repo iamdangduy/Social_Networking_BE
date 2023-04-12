@@ -338,7 +338,7 @@
         const GetTotalBalance = async function () {
             const userAdminToken = GetCookie('UserAdminToken');
             if (userAdminToken == '') return;
-            let rq = await fetch(Enum.ApiUrl + '/api/AdminHome/GetTotalBalance', {
+            let rq = await fetch(Enum.ApiUrl + '/api/AdminUserWallet/GetTotalBalanceUser', {
                 method: 'get',
                 headers: Enum.OptionAdminHeaderDefault,
             });
