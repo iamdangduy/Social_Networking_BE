@@ -4122,6 +4122,7 @@
     <Compile Include="Areas\Admin\Controllers\ManageRankController.cs" />
     <Compile Include="Areas\Admin\Controllers\ManageSystemBankController.cs" />
     <Compile Include="Areas\Admin\Controllers\ManageUserController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ManageWaitingLineController.cs" />
     <Compile Include="Areas\Admin\Controllers\ManageWithdrawController.cs" />
     <Compile Include="Areas\Admin\Controllers\ProductController.cs" />
     <Compile Include="Areas\Admin\Controllers\SystemConfigController.cs" />
@@ -4358,6 +4359,7 @@
     <Content Include="Areas\Admin\Views\ManageUser\PinHistory.cshtml" />
     <Content Include="Areas\Admin\Views\ManageRank\Index.cshtml" />
     <Content Include="Areas\Admin\Views\SystemConfig\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\ManageWaitingLine\Index.cshtml" />
     <None Include="packages.config" />
     <Content Include="Views\Home\Login.cshtml" />
     <Content Include="Views\Home\Register.cshtml" />
