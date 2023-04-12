@@ -10,47 +10,6 @@
             flex-direction:column;
         }
 
-        .user-info {
-            border: solid 0.5px #bebebe;
-            padding: 1.5rem;
-            border-radius: 30px;
-        }
-
-        .user-info .user-avatar{
-            margin-bottom: 10px;
-        }
-
-        .user-info .user-avatar .user-avt {
-            background-position: center;
-            background-repeat: no-repeat;
-            background-size: cover;
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            border: solid 0.5px;
-            margin: auto;
-        }
-
-        .user-info>button {
-            float: right;
-            margin-top: 25px;
-        }
-
-        .user-info .info .b-none{
-            border: none;
-            background: none !important;
-            font-size: 12px;
-            color: blue;
-            
-        }
-        .user-info .info .btn-verificationcode{
-            width: 70px;
-            position: absolute;
-        }
-
-        .fs-14{
-            font-size: 14px;
-        }
     </style>
 }
 
@@ -107,32 +66,6 @@
         <div class="confirm-button" style="text-align:right;margin-top:20px;">
             <button class="btn btn-primary btn-sm">Cập nhật</button>
         </div>
-        <div class="info">
-            <form>
-                <div class="row">
-                    <div class="mb-3">
-                        <label class="font-bold fs-14">Tài khoản</label>
-                        <input class="form-control fs-14" type="text" placeholder="Nhập tài khoản" />
-                    </div>
-                    <div class="mb-3">
-                        <label class="font-bold fs-14">Email</label>
-                        <div class="d-flex justify-content-end mb-2">
-                            <input class="form-control fs-14" type="text" placeholder="Nhập email" />
-                            <button class="b-none btn-verificationcode">Nhập mã xác minh</button>
-                        </div>
-                        <div class="d-flex">
-                            <input type="text" class="form-control fs-14" style="width:60%;" placeholder="Nhập mã xác minh" />
-                            <button class="b-none">Xác minh</button>
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label class="font-bold fs-14">Điện thoại</label>
-                        <input type="tel" class="form-control fs-14" placeholder="Nhập số điện thoại" />
-                    </div>
-                </div>                
-            </form>
-        </div>
-        <button class="d-block btn btn-primary">Cập nhật</button>
     </div>
 </section>
 

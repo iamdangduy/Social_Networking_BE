@@ -14,7 +14,7 @@ namespace GiveAndReceive.Services
         public UserPinTransferService(IDbConnection db) : base(db) { }
         public List<UserPinTransfer> GetListPinTransferByUser(string userId, IDbTransaction transaction = null)
         {
-            string query = "select * from [user_pin_transfer] where UserId = @userId";
+            string query = "select * from [user_pin_transfer] where UserGiveId = @userId or UserReceiveId = @userId";
             return this._connection.Query<UserPinTransfer> (query, new {userId}, transaction).ToList();
         }
     }
