@@ -15,11 +15,17 @@ namespace GiveAndReceive.Areas.Admin.Services
         public AdminUserWalletService() : base() { }
         public AdminUserWalletService(IDbConnection db) : base(db) { }
 
-        public void UpdateBalanceByUserId (string userId, long balance, IDbTransaction transaction = null)
+        public void UpdateBalanceByUserId(string userId, long balance, IDbTransaction transaction = null)
         {
             string query = "UPDATE [dbo].[user_wallet] SET [Balance] = [Balance] + @balance WHERE [UserId] = @userId";
-            int status = this._connection.Execute(query, new {userId, balance}, transaction);
+            int status = this._connection.Execute(query, new { userId, balance }, transaction);
             if (status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
+        }
+
+        public long GetTotalBalanceUser()
+        {
+            string query = "select SUM(Balance) from [user_wallet] where Balance > 0";
+            return this._connection.Query<long>(query).FirstOrDefault();
         }
     }
 }
