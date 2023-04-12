@@ -51,5 +51,25 @@ namespace GiveAndReceive.ApiControllers
                 return Error(ex.Message);
             }
         }
+
+        [HttpGet]
+        [ApiTokenRequire]
+        public JsonResult GetUserWalletByUser()
+        {
+            try
+            {
+                string token = Request.Headers.Authorization.ToString();
+                UserService userService = new UserService();
+                User user = userService.GetUserByToken(token);
+                if (user == null) return Unauthorized();
+
+                UserWalletService userWalletService = new UserWalletService();
+                return Success(userWalletService.GetUserWalletByUser(user.UserId));
+            }
+            catch (Exception ex)
+            {
+                return Error(ex.Message);
+            }
+        }
     }
 }

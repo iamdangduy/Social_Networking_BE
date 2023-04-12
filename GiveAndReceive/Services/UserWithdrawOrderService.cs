@@ -21,7 +21,7 @@ namespace GiveAndReceive.Services
 
         public List<UserWithdrawOrder> GetListWithdrawPendingByUser (string userId, IDbTransaction transaction = null)
         {
-            string query = "select * from [dbo].[user_withdraw_order] where [Status] = PENDING and UserId = @userId";
+            string query = "select * from [dbo].[user_withdraw_order] where [Status] = 'PENDING' and UserId = @userId";
             return this._connection.Query<UserWithdrawOrder>(query, new { userId }, transaction).ToList();
         }
         #endregion

@@ -40,49 +40,28 @@
                 <div class="tab-pane fade show active" id="balance" role="tabpanel"
                      aria-labelledby="balance-tab">
                     <div class="balance-header">
-                        <div class="wallet-balance"> 12,000,000 VNĐ</div>
+                        <div class="wallet-balance" id="wallet-balance"> 12,000,000 VNĐ</div>
                         <div class="withdraw-button" style="text-align:right">
                             <button class="btn btn-sm rounded-pill btn-primary" style="padding:3px 15px;"> Rút </button>
                         </div>
                     </div>
-                    <div class="withdraw">
-                        <div class="withdraw-label"> Lệnh rút </div>
-                        <div class="withdraw-detail">
-                            <div class="detail-left">
-                                <div class="withdraw-code">[A15TD12]</div>
-                                <div class="withdraw-content">Bạn đã đặt lệnh rút 3,500,000 VNĐ</div>
-                                <div class="withdraw-time"> 10/04/2023 16:22:00 </div>
-                            </div>
-                            <div class="detail-right">
-                                <button class="btn btn-sm rounded-pill btn-danger">Huỷ</button>
-                            </div>
-                        </div>
+                    <div class="withdraw" id="withdraw-pending">
                     </div>
-                    <div class="history">
-                        <div class="history-detail">
-                            <div class="content">Bạn vừa nhận 1,000,000 VNĐ từ Nguyễn Đăng Duy</div>
-                            <div class="time"> 10/04/2023 16:22:00 </div>
-                        </div>
-                        <div class="history-detail">
-                            <div class="content">Bạn vừa nhận 1,000,000 VNĐ từ Nguyễn Đăng Duy</div>
-                            <div class="time"> 10/04/2023 16:22:00 </div>
-                        </div>
+                    <div class="history" id="history-balance">
                     </div>
                 </div>
                 <div class="tab-pane fade" id="pin" role="tabpanel"
                      aria-labelledby="pin-tab">
                     <div class="balance-header">
-                        <div class="wallet-balance"> 3 Vé</div>
+                        <div class="wallet-balance" id="wallet-pin"> 3 Vé</div>
                     </div>
-                    <div class="history">
+                    <div class="history" id="history-pin">
                         <div class="history-detail">
                             <div class="content">Bạn đã dùng 01 Vé để vào hàng chờ cho</div>
                             <div class="time"> 10/04/2023 16:22:00 </div>
                         </div>
-                        <div class="history-detail">
-                            <div class="content">Bạn nhận được 03 Vé</div>
-                            <div class="time"> 10/04/2023 16:22:00 </div>
-                        </div>
+                        <div class="history-detail"><div class="content">Bạn nhận được 03 Vé</div>
+                            <div class="time"> 10/04/2023 16:22:00 </div></div>
                     </div>
                 </div>
             </div>
@@ -93,7 +72,7 @@
 @section scripts{
     <script>
         const getListWithdrawPending = async function () {
-            $('.withdraw').html('');
+            $('#withdraw-pending').html('');
 
             const rp = await fetch('/api/UserWallet/GetListWithdrawPendingByUser', {
                 method: 'get',
@@ -104,14 +83,89 @@
             if (rs.status === 'error') if (rs.message !== '' && rs.message !== null) alert(rs.message);
             if (rs.status === 'success') {
                 if (rs.message !== '' && rs.message !== null) alert(rs.message);
-                //for (let index = 0; index < rs.data.List.length; index++)
+                let html = '';
+                html += '<div class="withdraw-label"> Lệnh rút </div>';
+                for (let index = 0; index < rs.data.length; index++) {
+                    html += '<div class="withdraw-detail">';
+                    html += '<div class="detail-left">';
+                    html += '<div class="withdraw-code">' + rs.data[index].Code + '</div>';
+                    html += '<div class="withdraw-content">Bạn đã đặt lệnh rút ' + NumberFormat(rs.data[index].Amount) + ' VNĐ</div>';
+                    html += '<div class="withdraw-time"> ' + DateStringFormat({ stringDate: new Date(rs.data[index].CreateTime), newFormat: 'dd/mm/yyyy hh:mi:ss' }) + ' </div>';
+                    html += '</div> <div class="detail-right">';
+                    html += `<button class="btn btn-sm rounded-pill btn-danger" data-id="${rs.data[index].UserWithdrawOrderId}" onclick="UserCancelWithdraw(this);">Huỷ</button></div></div>`;                        
+                }
+                $('#withdraw-pending').append(html);
 
                 console.log(rs);
             }
         }
 
-        const InitPage = function () {
-            getListWithdrawPending();
+        const getListUserTransaction = async function () {
+            $('#history-balance').html('');
+            const rp = await fetch('/api/UserTransaction/GetListUserTransactionByUser', {
+                method: 'get',
+                headers: Enum.OptionHeaderDefault
+            });
+            let rs = await rp.json();
+            if (CheckErrorResponse(rs) === false) return;
+            if (rs.status === 'error') if (rs.message !== '' && rs.message !== null) alert(rs.message);
+            if (rs.status === 'success') {
+                if (rs.message !== '' && rs.message !== null) alert(rs.message);
+                let html = '';
+                for (let index = 0; index < rs.data.length; index++) {
+                    html += `<div class="history-detail"><div class="content">${rs.data[index].Note} </div>`;
+                    html += `<div class="time">${DateStringFormat({ stringDate: new Date(rs.data[index].CreateTime), newFormat: 'dd/mm/yyyy hh:mi:ss' })}</div></div>`;
+                }
+                $('#history-balance').append(html);
+
+                console.log(rs);
+            }
+        }
+
+        const getUserWallet = async function () {
+            $('#wallet-balance').html('');
+            $('#wallet-pin').html('');
+            const rp = await fetch('/api/UserWallet/GetUserWalletByUser', {
+                method: 'get',
+                headers: Enum.OptionHeaderDefault
+            });
+            let rs = await rp.json();
+            if (CheckErrorResponse(rs) === false) return;
+            if (rs.status === 'error') if (rs.message !== '' && rs.message !== null) alert(rs.message);
+            if (rs.status === 'success') {
+                if (rs.message !== '' && rs.message !== null) alert(rs.message);
+                $('#wallet-balance').append(`${rs.data.Balance} VNĐ`);
+                $('#wallet-pin').append(`${rs.data.Pin} Vé`);
+            }
+        }
+
+        const getListPinTransfer = async function () {
+            $('#history-pin').html('');
+            const rp = await fetch('/api/UserPinTransfer/GetListPinTransferByUser', {
+                method: 'get',
+                headers: Enum.OptionHeaderDefault
+            });
+            let rs = await rp.json();
+            if (CheckErrorResponse(rs) === false) return;
+            if (rs.status === 'error') if (rs.message !== '' && rs.message !== null) alert(rs.message);
+            if (rs.status === 'success') {
+                if (rs.message !== '' && rs.message !== null) alert(rs.message);
+                let html = '';
+                for (let index = 0; index < rs.data.length; index++) {
+                    html += `<div class="history-detail"><div class="content">${rs.data[index].Message}</div>`;
+                    html += `<div class="time">${DateStringFormat({ stringDate: new Date(rs.data[index].CreateTime), newFormat: 'dd/mm/yyyy hh:mi:ss' })}</div></div>`;
+                }
+                $('#history-pin').append(html);
+
+                console.log(rs);
+            }
+        }
+
+        const InitPage = async function () {
+            await getUserWallet();
+            await getListWithdrawPending();
+            await getListUserTransaction();
+            await getListPinTransfer();
         }
 
         InitPage();
