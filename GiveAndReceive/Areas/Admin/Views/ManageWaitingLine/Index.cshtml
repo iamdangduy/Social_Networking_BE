@@ -1,0 +1,97 @@
+﻿
+@{
+    ViewBag.Title = "Quản lý hàng chờ";
+    ViewBag.Menu = "waiting-line";
+}
+
+@section styles{
+    <style>
+        .card{
+            padding:20px;
+            flex-direction:row;
+        }
+        .card-left{
+            width:50%;
+            border-right:solid 1px #dedede;
+        }
+        .card-right {
+            width: 50%;
+            border-left: solid 1px #dedede;
+        }
+    </style>    
+}
+
+    <div class="card">
+        <div class="card-left">
+            <div class="list-give">
+                <div class="table-responsive desktop">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th style="text-align:center">Danh sách thành viên cho</th>
+                            </tr>
+                        </thead>
+                        <tbody id="list-user-give">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="product-page-list">
+                </div>
+            </div>
+        </div>
+        <div class="card-right">
+            <div class="list-receive">
+                <div class="table-responsive desktop">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th style="text-align:center">Danh sách thành viên nhận</th>
+                            </tr>
+                        </thead>
+                        <tbody id="list-user-receive">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="product-page-list">
+                </div>
+            </div>
+        </div>
+    </div>
+
+@section scripts{
+    <script>
+        let _currentPage1 = 1;
+        const GetListQueueGive = async function (page = 1) {
+            _currentPage = page;
+            let rq = await fetch(Enum.ApiUrl + '/api/AdminQueueGive/GetListQueueGive?PageIndex=' + page, {
+                method: 'get',
+                headers: Enum.OptionAdminHeaderDefault,
+
+            });
+            let rs = await rq.json();
+
+            if (AdminCheckErrorResponse(rs) === false) return;
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                $('.card-left .product-page-list').html('');
+                for (let page = 1; page <= rs.data.TotalPage; page++) {
+                    $('.card-left .product-page-list').append(`<a onclick="GetListQueueGive(${page});" data-page="${page}" class="product-page ${_currentPage === page ? 'active' : ''}" id="page-num">${page}</a>`);
+                }
+
+                for (let i = 0; i < rs.data.ListData.length; i++) {
+                    let item = rs.data.ListData[i];
+                    let html = '<tr>';
+                    html += '<td>' + item.Name + '</td>';
+                    html += '</tr>';
+
+                    $('#list-user-give').append(html);
+                }
+            }
+        }
+
+        const InitPage = async function () {
+            await GetListQueueGive();
+        }
+
+        InitPage();
+    </script>
+}
