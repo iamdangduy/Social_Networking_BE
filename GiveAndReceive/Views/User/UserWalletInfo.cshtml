@@ -10,12 +10,14 @@
         section {
             flex-direction: column;
         }
-        .wallet-page ul li{
-            width:50%;
-            text-align:center;
+
+        .wallet-page ul li {
+            width: 50%;
+            text-align: center;
         }
-        .card .card-body{
-            padding:1rem;
+
+        .card .card-body {
+            padding: 1rem;
         }
     </style>
 }
@@ -87,3 +89,31 @@
         </div>
     </div>
 </section>
+
+@section scripts{
+    <script>
+        const getListWithdrawPending = async function () {
+            $('.withdraw').html('');
+
+            const rp = await fetch('/api/UserWallet/GetListWithdrawPendingByUser', {
+                method: 'get',
+                headers: Enum.OptionHeaderDefault
+            });
+            let rs = await rp.json();
+            if (CheckErrorResponse(rs) === false) return;
+            if (rs.status === 'error') if (rs.message !== '' && rs.message !== null) alert(rs.message);
+            if (rs.status === 'success') {
+                if (rs.message !== '' && rs.message !== null) alert(rs.message);
+                //for (let index = 0; index < rs.data.List.length; index++)
+
+                console.log(rs);
+            }
+        }
+
+        const InitPage = function () {
+            getListWithdrawPending();
+        }
+
+        InitPage();
+    </script>
+}

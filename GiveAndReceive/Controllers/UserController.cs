@@ -25,7 +25,7 @@ namespace GiveAndReceive.Controllers
         }
 
         [Route("nguoi-dung/vi")]
-        public ActionResult UserWalletInfo() {
+        public ActionResult UserWalletInfo() {            
             return View();
         }
 

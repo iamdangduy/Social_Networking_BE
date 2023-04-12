@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using GiveAndReceive.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -12,10 +13,16 @@ namespace GiveAndReceive.Services
         public UserWalletService() : base() { }
         public UserWalletService(IDbConnection db) : base(db) { }
 
-        public long GetBalanceByUserId(string UserId)
+        public long GetBalanceByUserId(string UserId, IDbTransaction transaction = null)
         {
             string query = "select Balance from [user_wallet] where UserId = @UserId";
-            return this._connection.Query<long>(query, new { UserId }).FirstOrDefault();
+            return this._connection.Query<long>(query, new { UserId }, transaction).FirstOrDefault();
+        }
+
+        public UserWallet GetUserWalletByUser(string userId, IDbTransaction transaction = null)
+        {
+            string query = "select * from [user_wallet] where UserId = @userId";
+            return this._connection.Query<UserWallet>(query, new { userId }, transaction).FirstOrDefault(); 
         }
     }
 }
