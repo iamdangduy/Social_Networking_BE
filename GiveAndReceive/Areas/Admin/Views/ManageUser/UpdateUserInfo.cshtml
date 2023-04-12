@@ -566,7 +566,7 @@
         $('.preview').addClass('img-enlargable').click(function () {
             var src = $(this).css('background-image');
             src = src.replace(/(url\(|\)|")/g, '');
-            console.log(src);
+
             $('<div>').css({
                 background: 'RGBA(0,0,0,.5) url(' + src + ') no-repeat center',
                 backgroundSize: 'contain',

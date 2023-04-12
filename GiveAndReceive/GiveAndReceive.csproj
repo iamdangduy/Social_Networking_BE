@@ -4097,16 +4097,18 @@
   <ItemGroup>
     <Compile Include="ApiControllers\ApiBaseController.cs" />
     <Compile Include="ApiControllers\HomeController.cs" />
-    <Compile Include="ApiControllers\NotificationController.cs" />
     <Compile Include="ApiControllers\UserBankInfoController.cs" />
     <Compile Include="ApiControllers\UserController.cs" />
+    <Compile Include="ApiControllers\UserPinTransferController.cs" />
     <Compile Include="ApiControllers\UserPropertiesController.cs" />
+    <Compile Include="ApiControllers\UserTransactionController.cs" />
     <Compile Include="ApiControllers\UserWalletController.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminProductController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminSystemConfigController.cs" />
+    <Compile Include="Areas\Admin\ApiControllers\AdminQueueReceiveController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminSystemController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminUserPropertiesController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminUserWithdrawOrderController.cs" />
@@ -4120,6 +4122,7 @@
     <Compile Include="Areas\Admin\Controllers\SystemConfigController.cs" />
     <Compile Include="Areas\Admin\Controllers\UserWithdrawOrderController.cs" />
     <Compile Include="Areas\Admin\Services\AdminProductService.cs" />
+    <Compile Include="Areas\Admin\Services\AdminQueueReceiveService.cs" />
     <Compile Include="Areas\Admin\Services\AdminShareFundUserMonthService.cs" />
     <Compile Include="Areas\Admin\Services\AdminSystemConfigService.cs" />
     <Compile Include="Areas\Admin\Services\AdminUserPropertiesService.cs" />
@@ -4173,12 +4176,13 @@
     <Compile Include="Providers\UserProvider.cs" />
     <Compile Include="Services\BaseService.cs" />
     <Compile Include="Services\CodeConfirmService.cs" />
-    <Compile Include="Services\NotificationService.cs" />
     <Compile Include="Services\SystemWalletService.cs" />
     <Compile Include="Services\UserAdminService.cs" />
     <Compile Include="Services\UserBankInfoService.cs" />
+    <Compile Include="Services\UserPinTransferService.cs" />
     <Compile Include="Services\UserPropertiesService.cs" />
     <Compile Include="Services\UserService.cs" />
+    <Compile Include="Services\UserTransactionService.cs" />
     <Compile Include="Services\UserWalletService.cs" />
     <Compile Include="Services\UserWithdrawOrderService.cs" />
   </ItemGroup>

@@ -12,7 +12,7 @@ using System.Web.Http;
 
 namespace GiveAndReceive.Areas.Admin.ApiControllers
 {
-    public class AdminSystemController : ApiAdminBaseController
+    public class AdminSystemController : ApiBaseController
     {
         [AllowAnonymous]
         [HttpPost]

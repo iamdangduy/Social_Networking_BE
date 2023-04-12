@@ -15,20 +15,10 @@
 <section class="notification-page">
     <div class="section-header">Thông báo</div>
     <div class="list-noti">
-        <div class="noti-detail">
-            <div class="unread"><i class="fa-solid fa-circle" style="color: #5896ff;font-size:10px"></i></div>
-            <div class="content">
-                <div class="message" style="color:black">Bạn vừa thăng cấp tài khoản lên hạng <span style="color:lawngreen">S1</span></div>
-                <div class="time">10/04/2023 15:22:22</div>
-            </div>
-        </div>
-        <div class="noti-detail">
-            <div class="unread"><i class="fa-solid fa-circle" style="color: #5896ff;font-size:10px;display:none"></i></div>
-            <div class="content">
-                <div class="message">Bạn vừa thăng cấp tài khoản lên hạng <span style="color:lawngreen">S1</span></div>
-                <div class="time">10/04/2023 15:22:22</div>
-            </div>
-        </div>
+
+    </div>
+    <div class="see-more-notification">
+        <button class="btn btn-secondary btn-sm m-r-5" onclick="seeMoreNoti();">Xem thêm</button>
     </div>
 </section>
 
@@ -36,18 +26,68 @@
 @section scripts{
     <script>
         var _page = 1;
-
-        const getNotificationList = async function () {
-            let rq = await fetch('/api/Notification/GetListNotification?page=' + _page, {
+        
+        const getNotificationList = async function (_page = 1) {
+            let page = _page;
+            let rq = await fetch('/api/Notification/GetListNotification?page=' + page, {
                 method: 'get',
                 headers: Enum.OptionHeaderDefault
             });
             let rs = await rq.json();
             if (CheckErrorResponse(rs) === false) return;
             if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
-                              
+                $('.list-noti').html('');
+                if (rs.data.length <= 0) {
+                    $('.see-more-notification').remove();
+                }
+                if (rs.data.length <= 0 && page == 1) {
+                    $('.list-noti').append(`
+                        <div class="notNoti">Bạn không có thông báo nào</div> 
+                    `)
+                    return;
+                }
+                for (let i = 0; i < rs.data.length; i++) {
+                    let item = rs.data[i];
+                    if (item.IsRead === true) {
+                        let html = `<div class="noti-detail">
+                                        <div class="unread"><i class="fa-solid fa-circle" style="color: #5896ff;font-size:10px;display:none"></i></div>
+                                        <div class="content">
+                                            <div class="message">${item.Message}</div>
+                                            <div class="time">${DateStringFormat({ stringDate: new Date(item.CreateTime), newFormat: 'dd/mm/yyyy hh:mi:ss' }) }</div>
+                                        </div>
+                                    </div>`;
+                        $('.list-noti').append(html);
+                    }
+                    if (item.IsRead === false) {
+                        let html = `<div class="noti-detail" onclick="SeeNotification(${item.NotificationId})">
+                                        <div class="unread"><i class="fa-solid fa-circle" style="color: #5896ff;font-size:10px"></i></div>
+                                        <div class="content">
+                                            <div class="message" style="color:black">${item.Message}</div>
+                                            <div class="time">${DateStringFormat({ stringDate: new Date(item.CreateTime), newFormat: 'dd/mm/yyyy hh:mi:ss' }) }</div>
+                                        </div>
+                                    </div>`;
+                        $('.list-noti').append(html);
+                    }
+                }
             }
-            _page++
+        }
+
+        const seeMoreNoti = function () {
+            _page++;
+            getNotificationList(_page);
+        }
+
+        const SeeNotification = async function (el) {
+            let id = el;
+            let rq = await fetch('/api/Notification/UpdateNotificationRead?id=' + id, {
+                method: 'get',
+                headers: Enum.OptionHeaderDefault
+            });
+            let rs = await rq.json();
+            if (CheckErrorResponse(rs) === false) return;
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                InitPage();
+            }
         }
 
         const InitPage = async function () {

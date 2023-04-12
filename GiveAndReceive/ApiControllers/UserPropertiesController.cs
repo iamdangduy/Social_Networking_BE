@@ -64,6 +64,8 @@ namespace GiveAndReceive.ApiControllers
 
                         userProperties.CitizenIdentificationName = model.CitizenIdentificationName;
                         userProperties.CitizenIdentificationNumber = model.CitizenIdentificationNumber;
+                        if (userPropertiesService.CheckExistIdentity(model.CitizenIdentificationNumber, transaction) != null) return Error("Căn cước đã được sử dụng!");
+                        
                         userProperties.CitizenIdentificationAddress = model.CitizenIdentificationAddress;
                         userProperties.CitizenIdentificationDateOf = model.CitizenIdentificationDateOf;
                         userProperties.CitizenIdentificationPlaceOf = model.CitizenIdentificationPlaceOf;
@@ -157,6 +159,8 @@ namespace GiveAndReceive.ApiControllers
 
                         userProperties.CitizenIdentificationName = model.CitizenIdentificationName;
                         userProperties.CitizenIdentificationNumber = model.CitizenIdentificationNumber;
+                        if (userPropertiesService.CheckExistIdentity(model.CitizenIdentificationNumber, transaction) != null) return Error("Căn cước đã được sử dụng!");
+
                         userProperties.CitizenIdentificationAddress = model.CitizenIdentificationAddress;
                         userProperties.CitizenIdentificationDateOf = model.CitizenIdentificationDateOf;
                         userProperties.CitizenIdentificationPlaceOf = model.CitizenIdentificationPlaceOf;
