@@ -88,13 +88,13 @@ namespace GiveAndReceive.ApiControllers
                         if (!string.IsNullOrEmpty(model.Account))
                         {
                             user.Account = model.Account.Trim();
-                            userService.CheckAccountExist(user.Account, transaction);
+                            userService.CheckAccountExist(user.Account, user.UserId, transaction);
                         }
 
                         if (!string.IsNullOrEmpty(model.Email))
                         {
                             user.Email = model.Email.Trim();
-                            userService.CheckEmailExist(user.Email, transaction);
+                            userService.CheckEmailExist(user.Email, user.UserId, transaction);
                         }
 
                         user.Phone = model.Phone.Trim();
@@ -139,7 +139,7 @@ namespace GiveAndReceive.ApiControllers
 
                         if (!SMSProvider.SendOTPViaEmail(email, codeConfirm.Code, "Mã xác nhận","" )) return Error("Quá trình gửi gặp lỗi. Vui lòng thử lại sau");
                         transaction.Commit();
-                        return Success();
+                        return Success(codeConfirm.Code);
                     }
                 }
             }

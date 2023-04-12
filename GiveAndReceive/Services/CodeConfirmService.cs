@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Security.Policy;
 using System.Web;
 
 namespace GiveAndReceive.Services
@@ -27,6 +28,12 @@ namespace GiveAndReceive.Services
         {
             string query = "select count(*) from code_confirm where Phone = @phone and CreateTime between DATEADD(hh,-24,GETDATE()) and GETDATE()";
             return this._connection.Query<int>(query, new { phone = phone }, transaction).FirstOrDefault();
+        }
+
+        public CodeConfirm GetCodeConfirmByEmail(string Email, IDbTransaction transaction = null)
+        {
+            string query = "select top 1 * from code_confirm where Email = @Email order by CreateTime desc";
+            return this._connection.Query<CodeConfirm>(query, new { Email = Email }, transaction).FirstOrDefault();
         }
     }
 }
