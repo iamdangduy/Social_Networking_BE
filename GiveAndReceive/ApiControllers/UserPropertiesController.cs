@@ -179,6 +179,42 @@ namespace GiveAndReceive.ApiControllers
             }
         }
 
-        
+        [HttpGet]
+        public JsonResult GetTotalAmountGive()
+        {
+            try
+            {
+                string token = Request.Headers.Authorization.ToString();
+                UserService userService = new UserService();
+                User user = userService.GetUserByToken(token);
+                if (user == null) return Unauthorized();
+
+                UserPropertiesService userPropertiesService = new UserPropertiesService();
+                return Success(userPropertiesService.GetTotalAmountGive(user.UserId), "Lấy dữ liệu thành công!");
+            }
+            catch (Exception ex)
+            {
+                return Error(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        public JsonResult GetTotalAmountReceive()
+        {
+            try
+            {
+                string token = Request.Headers.Authorization.ToString();
+                UserService userService = new UserService();
+                User user = userService.GetUserByToken(token);
+                if (user == null) return Unauthorized();
+
+                UserPropertiesService userPropertiesService = new UserPropertiesService();
+                return Success(userPropertiesService.GetTotalAmountReceive(user.UserId), "Lấy dữ liệu thành công!");
+            }
+            catch (Exception ex)
+            {
+                return Error(ex.Message);
+            }
+        }
     }
 }
