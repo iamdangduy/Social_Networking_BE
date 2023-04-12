@@ -4343,7 +4343,6 @@
     <Content Include="Areas\Admin\Views\ManageSystemBank\Index.cshtml" />
     <Content Include="Areas\Admin\Views\ManageUser\TransactionHistory.cshtml" />
     <Content Include="Areas\Admin\Views\ManageUser\PinHistory.cshtml" />
-    <Content Include="Areas\Admin\Views\UserWithdrawOrder\Index.cshtml" />
     <Content Include="Areas\Admin\Views\ManageRank\Index.cshtml" />
     <Content Include="Areas\Admin\Views\SystemConfig\Index.cshtml" />
     <None Include="packages.config" />

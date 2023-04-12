@@ -14,6 +14,7 @@ namespace GiveAndReceive.ApiControllers
     public class UserController : ApiBaseController
     {
         [HttpPost]
+        [ApiTokenRequire]
         public JsonResult ChangePassword(UserRequest model)
         {
             try
@@ -49,6 +50,7 @@ namespace GiveAndReceive.ApiControllers
         }
 
         [HttpPost]
+        [ApiTokenRequire]
         public JsonResult UpdateInfoUser(User model)
         {
             try
