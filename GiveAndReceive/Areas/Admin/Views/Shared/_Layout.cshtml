@@ -14,6 +14,8 @@
     <link href="/Content/css/gr-admin-mobile.css" rel="stylesheet" media="screen and (max-width:767px)" />
     <link href="/Content/css/gr-admin-desktop.css" rel="stylesheet" media="screen and (min-width:768px)" />
     <link href="/Content/assets/datepicker.min.css" rel="stylesheet" />
+    <link href="/Content/assets/vendors/sweetalert2/sweetalert2.min.css" rel="stylesheet" />
+    <link href="/Content/assets/vendors/toastify/toastify.css" rel="stylesheet" />
     <style>
         .burger-btn {
             width: 30px;
@@ -21,15 +23,17 @@
             align-items: center;
             justify-content: center;
         }
+
         #main #main-content {
             padding-top: 0;
         }
+
         .product-page-list {
             display: flex;
             justify-content: center;
             gap: 10px;
-            background-color:white;
-            padding:20px;
+            background-color: white;
+            padding: 20px;
         }
 
             .product-page-list > a {
@@ -108,6 +112,13 @@
 
                             </a>
                         </li>
+                        <li class="sidebar-item @(ViewBag.Menu == "system-config" ? "active" : "")">
+                            <a href="/admin/SystemConfig" class="sidebar-link">
+                                <i class="fa-solid fa-gears"></i>
+                                <span class="title">Cập nhật thông số hệ thống</span>
+
+                            </a>
+                        </li>
                         <li class="sidebar-item ">
                             <a onclick="LogOut()" class='sidebar-link' style="color: #d42020;">
                                 <i class="fa-solid fa-arrow-right-from-bracket" style="color: #d42020!important"></i>
@@ -178,6 +189,8 @@
     <script src="/Content/js/datepicker.min.js"></script>
     <script src="/Content/assets/js/main.js"></script>
     <script src="/Content/js/helper.js"></script>
+    <script src="/Content/assets/vendors/toastify/toastify.js"></script>
+    <script src="/Content/assets/vendors/sweetalert2/sweetalert2.all.min.js"></script>
     <script>
         const LogOut = async () => {
             if (confirm('Bạn có chắc muốn đăng xuất khỏi hệ thống') === false) return;
