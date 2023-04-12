@@ -7,7 +7,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Security.Policy;
 using System.Web.Http;
+using static GiveAndReceive.Models.JsonResult;
 
 namespace GiveAndReceive.ApiControllers
 {
@@ -24,28 +26,36 @@ namespace GiveAndReceive.ApiControllers
                     connect.Open();
                     using (var transaction = connect.BeginTransaction())
                     {
-                        string token = Request.Headers.Authorization.ToString();
-
-                        UserService userService = new UserService(connect);
-                        User user = userService.GetUserByToken(token, transaction);
-                        if (user == null) return Unauthorized();
-
-                        string password = SecurityProvider.EncodePassword(user.UserId, model.Password);
-                        if (!user.Password.Equals(password)) return Error("Mật khẩu cũ không đúng");
-                        else
+                        try
                         {
-                            model.NewPassword = SecurityProvider.EncodePassword(user.UserId, model.NewPassword);
-                            //userService.ChangePassword(user.UserId, model.NewPassword, transaction);
+                            string token = Request.Headers.Authorization.ToString();
 
-                            transaction.Commit();
-                            return Success();
+                            UserService userService = new UserService(connect);
+                            User user = userService.GetUserByToken(token, transaction);
+                            if (user == null) return Error("Người dùng không tồn tại");
+
+                            string password = SecurityProvider.EncodePassword(user.UserId, model.Password);
+                            if (!user.Password.Equals(password)) return Error("Mật khẩu cũ không đúng");
+                            else
+                            {
+                                model.NewPassword = SecurityProvider.EncodePassword(user.UserId, model.NewPassword);
+                                userService.ChangePassword(user.UserId, model.NewPassword, transaction);
+
+                                transaction.Commit();
+                                return Success();
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            transaction.Rollback();
+                            return Error(ex.Message);
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                return Error(ex.Message);
+                return Error();
             }
         }
 
@@ -66,14 +76,13 @@ namespace GiveAndReceive.ApiControllers
                         User user = userService.GetUserByToken(token, transaction);
                         if (user == null) return Unauthorized();
 
-                        user.Name = model.Name.Trim();
                         if (!string.IsNullOrEmpty(model.Avatar))
                         {
                             string filename = Guid.NewGuid().ToString() + ".jpg";
-                            /*var path = System.Web.HttpContext.Current.Server.MapPath(Constant.AVATAR_USER_PATH + filename);
+                            var path = System.Web.HttpContext.Current.Server.MapPath(Constant.AVATAR_USER_PATH + filename);
                             HelperProvider.Base64ToImage(model.Avatar, path);
                             if (!HelperProvider.DeleteFile(user.Avatar)) return Error();
-                            user.Avatar = Constant.AVATAR_USER_URL + filename;*/
+                            user.Avatar = Constant.AVATAR_USER_URL + filename;
                         }
 
                         if (!string.IsNullOrEmpty(model.Account))
@@ -92,6 +101,43 @@ namespace GiveAndReceive.ApiControllers
 
                         userService.UpdateUser(user, transaction);
 
+                        transaction.Commit();
+                        return Success();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return Error(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public JsonResult GetVerifyCodeEmail(string email)
+        {
+
+            if (string.IsNullOrEmpty(email)) return Error("Email không được để trống.");
+
+            try
+            {
+                using (var connect = BaseService.Connect())
+                {
+                    connect.Open();
+                    using (var transaction = connect.BeginTransaction())
+                    {
+                        UserService userService = new UserService(connect);
+                        CodeConfirmService codeConfirmService = new CodeConfirmService(connect);
+
+                        Random rnd = new Random();
+                        int code = rnd.Next(100000, 999999);
+                        CodeConfirm codeConfirm = new CodeConfirm();
+                        codeConfirm.CodeConfirmId = Guid.NewGuid().ToString();
+                        codeConfirm.Email = email;
+                        codeConfirm.Code = code.ToString();
+                        codeConfirmService.InsertCodeConfirm(codeConfirm, transaction);
+
+                        if (!SMSProvider.SendOTPViaEmail(email, codeConfirm.Code, "Mã xác nhận","" )) return Error("Quá trình gửi gặp lỗi. Vui lòng thử lại sau");
                         transaction.Commit();
                         return Success();
                     }
@@ -396,6 +442,24 @@ namespace GiveAndReceive.ApiControllers
             }
         }
 
+        [HttpGet]
+        [ApiTokenRequire]
+        public JsonResult GetInforUser()
+        {
+            try
+            {
+                string token = Request.Headers.Authorization.ToString();
+                UserService userService = new UserService();
+                User user = userService.GetUserByToken(token);
+                if (user == null) return Unauthorized();
 
+                User userInfor = userService.GetUserInfo(user.UserId);
+                return Success(userInfor);
+            }
+            catch (Exception ex)
+            {
+                return Error(ex.Message);
+            }
+        }
     }
 }

@@ -16,7 +16,7 @@
 <section class="account-page">
     <div class="section-header">Tài khoản</div>
 
-    <div class="user-info">
+    <div class="user-info" id="user-info">
         <div class="user-avatar">
             <div class="user-avt preview" onclick="ChooseThumbnail(this);"></div>
             <input type="file" style="display:none;" onchange="ChooseThumbnail_OnChange(this);" required />
@@ -32,7 +32,7 @@
                 <label for="Email">Email</label>
                 <div class="input-group mb-3">
                     <input type="text" class="form-control" id="Email" placeholder="Email">
-                    <button class="input-group-text" style=" font-size: 10px; padding: 2px 10px;" id="Code">Nhận mã <br> xác thực</button>
+                    <button class="input-group-text" style=" font-size: 10px; padding: 2px 10px;" id="Code" onclick="GetEmailCode();">Nhận mã <br> xác thực</button>
                 </div>
             </div>
             <div class="form-group">
@@ -44,7 +44,7 @@
             </div>
 
             <div class="confirm-button" style="text-align:right;margin-top:20px;">
-                <button class="btn btn-primary btn-sm">Cập nhật</button> 
+                <button class="btn btn-primary btn-sm" onclick="updateInfoUser();">Cập nhật</button> 
             </div>
         </div>
     </div>
@@ -64,12 +64,13 @@
             <span id='message'></span>
         </div>
         <div class="confirm-button" style="text-align:right;margin-top:20px;">
-            <button class="btn btn-primary btn-sm">Cập nhật</button>
+            <button class="btn btn-primary btn-sm" onclick="ChangePassword();">Cập nhật</button>
         </div>
     </div>
 </section>
 
 @section scripts{
+    <script src="~/Content/js/base64.js"></script>
     <script>
         var ChooseThumbnail = function (el) { $(el).closest('.user-avatar').find('input[type=file]').click(); }
         var ChooseThumbnail_OnChange = function (el) {
@@ -88,5 +89,133 @@
                 $('#message').html('Xác nhận mật khẩu chưa khớp').css('color', 'red');
         });
 
+        const getUserInfo = async function () {
+            let rq = await fetch(Enum.ApiUrl + '/api/User/GetInforUser', {
+                method: 'get',
+                headers: Enum.OptionHeaderDefault
+            });
+            let rs = await rq.json();
+
+            if (CheckErrorResponse(rs) === false) return;
+
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                console.log(rs.data);
+                rs.data.Phone = '0' + rs.data.Phone.substring(4);
+                $('.preview').css('background-image', `url(${rs.data.Avatar})`)
+                $('#Account').val(rs.data.Account);
+                $('#Email').val(rs.data.Email);
+                $('#Phone').val(rs.data.Phone);
+            }
+        }
+
+        const GetEmailCode = async function () {
+            let email = $('#Email').val();
+
+            if (email === '' || email === null || typeof email === 'undefined') {
+                Swal.fire({
+                    icon: "error",
+                    title: "Email không được để trống",
+                })
+                return;
+            }
+
+            if (!validateEmail(email)) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Email không đúng định dạng",
+                })
+                return;
+            }
+
+           
+            let rq = await fetch('/api/user/GetVerifyCodeEmail?email=' + email, {
+                method: 'get',
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            });
+            let rs = await rq.json();
+            if (CheckErrorResponse(rs) === false) return;
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                
+            }
+        }
+
+        const updateInfoUser = async function () {
+
+            let model = {
+                Avatar: $('#Avatar').val(),
+                Account: $('#Account').val(),
+                Email: $('#Email').val(),
+                Phone: $('#Phone').val()
+            }
+
+            let accountProcess = RemoveVietnameseTones(model.Account);
+            accountProcess = accountProcess.replace(/[^a-z,^A-Z,^0-9]/g, '');
+            if (accountProcess !== model.Account) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Tên đăng nhập không được có kí tự đặc biệt, khoảng trắng",
+                });
+                return;
+            }
+
+            model.Phone = '+84 ' + model.Phone.substr(1, 9);
+
+            let rq = await fetch(Enum.ApiUrl + '/api/User/UpdateInfoUser', {
+                method: 'post',
+                headers: Enum.OptionHeaderDefault,
+                body: JSON.stringify(model)
+            });
+            let rs = await rq.json();
+
+            if (CheckErrorResponse(rs) === false) return;
+
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                Swal.fire({
+                    icon: "success",
+                    title: "Đã cập nhật thành công",
+                    preConfirm: function () { window.location.reload() },
+                })
+            }
+        }
+
+        const ChangePassword = async function () {
+            let userData = (GetCookie('UserToken'));
+            let model = {
+                Password: $('#oldPassword').val(),
+                NewPassword: $('#newPassword').val()
+            }
+            model.Password = MD5(base64.encode(model.Password));
+            model.NewPassword = MD5(base64.encode(model.NewPassword));
+            let rq = await fetch(Enum.ApiUrl + '/api/User/ChangePassword', {
+                method: 'post',
+                headers: Enum.OptionHeaderDefault,
+                body: JSON.stringify(model)
+            });
+
+            let rs = await rq.json();
+
+            if (CheckErrorResponse(rs) === false) return;
+
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                Swal.fire({
+                    icon: "success",
+                    title: "Đã cập nhật mật khẩu thành công",
+                    preConfirm: function () { window.location.reload() },
+                })
+            }
+        }
+
+        function validateEmail($email) {
+            var emailReg = /^([\w-\.]+@@([\w-]+\.)+[\w-]{2,4})?$/;
+            return emailReg.test($email);
+        }
+
+
+        const initPage = function () {
+            getUserInfo();
+        }
+        initPage();
     </script>
 }
