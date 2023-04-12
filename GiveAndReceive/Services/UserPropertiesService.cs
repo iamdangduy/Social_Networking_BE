@@ -51,5 +51,11 @@ namespace GiveAndReceive.Services
             int Status = this._connection.Execute(query, model, transaction);
             if (Status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
         }
+
+        public string CheckExistIdentity(string CitizenIdentificationNumber, IDbTransaction transaction = null)
+        {
+            string query = "select * from [user_properties] where CitizenIdentificationNumber = @CitizenIdentificationNumber";
+            return this._connection.Query<string>(query, new { CitizenIdentificationNumber }, transaction).FirstOrDefault();
+        }
     }
 }
