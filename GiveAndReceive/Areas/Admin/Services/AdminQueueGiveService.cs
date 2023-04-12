@@ -17,8 +17,8 @@ namespace GiveAndReceive.Areas.Admin.Services
         public object GetListQueueGive(int PageIndex = 1)
         {
             string queryCount = "select COUNT(*) ";
-            string querySelect = "select * ";
-            string queryWhere = "from [queue_give] where Status = 'PENDING' or Status = 'IN-DUTY' ";
+            string querySelect = "select qg.*, u.Name ";
+            string queryWhere = "from [queue_give] qg left join [user] u on u.UserId = qg.UserId where qg.Status = 'PENDING' or qg.Status = 'IN-DUTY' ";
 
             
             int TotalRow = this._connection.Query<int>(queryCount + queryWhere).FirstOrDefault();
@@ -29,7 +29,7 @@ namespace GiveAndReceive.Areas.Admin.Services
             }
             int skip = (PageIndex - 1) * Constant.PAGE_SIZE;
 
-            queryWhere += " order by CreateTime desc offset " + skip + " rows fetch next " + Constant.PAGE_SIZE + " rows only";
+            queryWhere += " order by qg.CreateTime desc offset " + skip + " rows fetch next " + Constant.PAGE_SIZE + " rows only";
             List<object> ListData = this._connection.Query<object>(querySelect + queryWhere, new { PageIndex }).ToList();
             return new
             {
