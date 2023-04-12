@@ -61,7 +61,7 @@ namespace GiveAndReceive.ApiControllers
 
         [HttpPost]
         [ApiTokenRequire]
-        public JsonResult UpdateInfoUser(User model)
+        public JsonResult UpdateInfoUser(UpdateUser model)
         {
             try
             {
@@ -72,6 +72,7 @@ namespace GiveAndReceive.ApiControllers
                     {
                         string token = Request.Headers.Authorization.ToString();
 
+                        CodeConfirmService codeConfirmService = new CodeConfirmService(connect);
                         UserService userService = new UserService(connect);
                         User user = userService.GetUserByToken(token, transaction);
                         if (user == null) return Unauthorized();
@@ -95,9 +96,24 @@ namespace GiveAndReceive.ApiControllers
                         {
                             user.Email = model.Email.Trim();
                             userService.CheckEmailExist(user.Email, user.UserId, transaction);
+                            if (model.Email != user.Email)
+                            {
+                                if (string.IsNullOrEmpty(model.EmailCode)) throw new Exception("Bạn chưa nhập mã xác thực email");
+                                CodeConfirm emailCode = codeConfirmService.GetCodeConfirmByEmail(user.Email, transaction);
+                                if (emailCode.Code != model.EmailCode) throw new Exception("Mã xác thực không chính xác");
+                            }
                         }
-
-                        user.Phone = model.Phone.Trim();
+                        if (!string.IsNullOrEmpty(model.Phone))
+                        {
+                            user.Phone = model.Phone.Trim();
+                            userService.CheckUserPhoneExist(user.Phone, user.UserId, transaction);
+                            if (model.Phone != user.Phone)
+                            {
+                                if (string.IsNullOrEmpty(model.PhoneCode)) throw new Exception("Bạn chưa nhập mã xác thực số điện thoại");
+                                CodeConfirm phoneCode = codeConfirmService.GetCodeConfirmByPhone(user.Phone, transaction);
+                                if (phoneCode.Code != model.PhoneCode) throw new Exception("Mã xác thực không chính xác");
+                            }
+                        }
 
                         userService.UpdateUser(user, transaction);
 
@@ -126,7 +142,7 @@ namespace GiveAndReceive.ApiControllers
                     connect.Open();
                     using (var transaction = connect.BeginTransaction())
                     {
-                        UserService userService = new UserService(connect);
+                       
                         CodeConfirmService codeConfirmService = new CodeConfirmService(connect);
 
                         Random rnd = new Random();
@@ -140,6 +156,36 @@ namespace GiveAndReceive.ApiControllers
                         if (!SMSProvider.SendOTPViaEmail(email, codeConfirm.Code, "Mã xác nhận","" )) return Error("Quá trình gửi gặp lỗi. Vui lòng thử lại sau");
                         transaction.Commit();
                         return Success(codeConfirm.Code);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return Error(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public JsonResult ConfirmEmailCode(string email, string code)
+        {
+            if (string.IsNullOrEmpty(code)) return Error("Mã xác nhận không được để trống!");
+            if (string.IsNullOrEmpty(email)) return Error("Email không được để trống!");
+            try
+            {
+                using (var connect = BaseService.Connect())
+                {
+                    connect.Open();
+                    using (var transaction = connect.BeginTransaction())
+                    {
+                        UserService userService = new UserService(connect);
+                        CodeConfirmService codeConfirmService = new CodeConfirmService(connect);
+                        CodeConfirm codeConfirm = codeConfirmService.GetCodeConfirmByEmail(email, transaction);
+                        if (codeConfirm == null) return Error("Mã xác nhận không chính xác.");
+                        if (!codeConfirm.Code.Equals(code)) return Error("Mã xác nhận không chính xác.");
+                        if (codeConfirm.ExpiryTime < DateTime.Now) return Error("Mã xác nhận đã hết hạn.");
+                        transaction.Commit();
+                        return Success();
                     }
                 }
             }

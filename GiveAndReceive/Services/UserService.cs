@@ -64,16 +64,23 @@ namespace GiveAndReceive.Services
             if(status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
         }
 
+        public bool CheckUserPhoneExist(string phone, string userId, IDbTransaction transaction = null)
+        {
+            string query = "select count(*) from [user] where Phone = @phone and Phone <> '' and UserId <> @userId";
+            int count = this._connection.Query<int>(query, new { phone, userId }, transaction).FirstOrDefault();
+            return count > 0;
+        }
+
         public void CheckAccountExist(string account, string userId, IDbTransaction transaction = null)
         {
-            string query = "select count(*) from [user] where Account=@account and Account <> ''and UserId <> @userId";
+            string query = "select count(*) from [user] where Account=@account and Account <> '' and UserId <> @userId";
             int count = this._connection.Query<int>(query, new { account, userId }, transaction).FirstOrDefault();
             if(count > 0) throw new Exception("Account đã tồn tại.");
         }
 
         public void CheckEmailExist(string email, string userId, IDbTransaction transaction = null)
         {
-            string query = "select count(*) from [user] where Email=@email and Email <> ''and UserId <> @userId";
+            string query = "select count(*) from [user] where Email=@email and Email <> '' and UserId <> @userId";
             int count = this._connection.Query<int>(query, new {email, userId}, transaction).FirstOrDefault();
             if (count > 0) throw new Exception("Email đã tồn tại.");
         }
