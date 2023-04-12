@@ -169,7 +169,7 @@
         <div class="modal-header">Cập nhật thông tin</div>
         <div class="modal-body">
             <div class="form-group">
-                <label class="font-weight-semibold" for="rankName">Tên hạng:</label>
+                <label class="font-weight-semibold" for="rankName">Tên hạng</label>
                 <input type="text" class="form-control" id="rankName" placeholder="Tên hạng">
             </div>
 
@@ -181,7 +181,7 @@
             <div class="form-group">
                 <label class="font-weight-semibold" for="comPercent">Phần trăm hoa hồng</label>
                 <div class="input-group">
-                    <input type="text" class="form-control" id="comPercent"  placeholder="Phần trăm hoa hồng" onkeyup="ValidateInputOnlyNumber(event,this)">
+                    <input type="text" min=0 class="form-control" id="comPercent" placeholder="Phần trăm hoa hồng" onkeyup="ValidateInputOnlyNumber(event,this)">
                     <span class="input-group-text">%</span>
                 </div>
             </div>
@@ -190,8 +190,7 @@
 
         <div class="modal-footer">
             <button class="close-modal" onclick="closeModal()">Đóng</button>
-            <button class="update-btn" id="updateBank-btn">Lưu</button>
-
+            <button class="update-btn" data-id="0" id="updateRank-btn">Lưu</button>
         </div>
 
     </div>
@@ -199,191 +198,189 @@
 </div>
 
 @section scripts{
-    <script>
+    <script src="/Content/assets/vendors/toastify/toastify.js"></script>
+    <script src="/Content/assets/vendors/sweetalert2/sweetalert2.all.min.js"></script>
 
-            const openCreateModal = function () {
-                $('#updateBank-btn').attr('onclick', 'creatBankAccount()');
+    <script>
+        const openCreateModal = function () {
+            $('#updateRank-btn').attr('onclick', 'createRank()');
+            $('#modal').css('display', 'flex');
+        }
+
+        const openUpdateModal = async function (el) {
+            const id = $(el).data('id');
+            $('#userBankInfoId').val(id);
+
+            let rq = await fetch(Enum.ApiUrl + '/api/AdminRank/GetRankByRankId?RankId=' + id, {
+                method: 'get',
+                headers: Enum.OptionAdminHeaderDefault
+            });
+            let rs = await rq.json();
+
+            if (AdminCheckErrorResponse(rs) === false) return;
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                $('#rankName').val(rs.data.Name);
+                $('#maxPin').val(rs.data.MaximumPinLimit);
+                $('#comPercent').val(rs.data.CommissionPercent);
+                $('#updateRank-btn').attr('onclick', 'updateRank()');
+                $('#updateRank-btn').attr('data-id', id);
+
                 $('#modal').css('display', 'flex');
             }
+        }
 
-            const openUpdateModal = async function (el) {
-                const id = $(el).data('id');
-                $('#userBankInfoId').val(id);
+        const closeModal = function () {
+            $('#modal').css('display', 'none');
+            $('#bankName').val('');
+            $('#nameOwner').val('');
+            $('#bankNum').val('');
+            $("#bank-default").prop("checked", false);
+        }
 
-                let rq = await fetch(Enum.ApiUrl + '/api/UserBankInfo/GetUserBankInfoDetail?userBankInfoId=' + id, {
-                    method: 'get',
-                    headers: Enum.OptionHeaderDefault
-                });
-                let rs = await rq.json();
-
-                if (CheckErrorResponse(rs) === false) return;
-                if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
-                    $('#bankName').val(rs.data.BankName);
-                    $('#nameOwner').val(rs.data.BankOwnerName);
-                    $('#bankNum').val(rs.data.BankAccountNumber);
-                    $('#updateBank-btn').attr('onclick', 'updateBankAccount()');
-                    if (rs.data.IsDefault === true) {
-                        $("#bank-default").prop("checked", true);
+        const getRankInfo = async function () {
+            let rq = await fetch(Enum.ApiUrl + '/api/AdminRank/GetListAllRank', {
+                method: 'get',
+                headers: Enum.OptionAdminHeaderDefault
+            });
+            let rs = await rq.json();
+            $('#list-rank').html('');
+            $('#list-bank-mobile').html('');
+            if (AdminCheckErrorResponse(rs) === false) return;
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                for (let index = 0; index < rs.data.length; index++) {
+                    var x = rs.data[index]
+                    let html = '<tr>';
+                    if (x.IsDefault === true) {
+                        html += '<td> ' + x.Name + '<p class="isDefault">Tài khoản mặc định</p> </td>';
                     } else {
-                        $("#bank-default").prop("checked", false);
+                        html += '<td> ' + x.Name + ' </td>';
+                    }
+                    html += '<td>' + x.MaximumPinLimit + '</td>';
+                    html += '<td>' + x.CommissionPercent + '</td>';
+                    html += '<td>';
+                    html += '<a data-id="' + x.RankId + '" onclick="openUpdateModal(this);"><button class="btn btn-primary"><i class="fa-solid fa-pen-to-square"></i></button></a>';
+                    html += '<a data-id="' + x.RankId + '" onclick="deleteBankAccount(this);"><button class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></button></a> </td> </tr>';
+
+                    $('#list-rank').append(html);
+
+                    let html2 = '<tr>';
+                    html2 += '<td> <div>' + x.BankName + '</div>';
+                    html2 += '<div style="background-color:#eee">' + x.BankOwnerName + '</div>';
+                    html2 += '<div>' + x.BankAccountNumber + '</span></div>';
+                    if (x.IsDefault === true) {
+                        html2 += '<div><p class="isDefault" > Tài khoản mặc định</p ></span></div></td>';
+                    } else {
+                        html2 += '</td>';
                     }
 
-                    $('#modal').css('display', 'flex');
+                    html2 += '<td><a data-id="' + x.UserBankInfoId + '" onclick="openUpdateModal(this);"><button class="btn btn-primary btn-sm"><i class="fa-solid fa-pen-to-square"></i></button></a>';
+                    html2 += '<a data-id="' + x.UserBankInfoId + '" onclick="deleteBankAccount(this);"><button class="btn btn-danger btn-sm"><i class="fa fa-trash" aria-hidden="true"></i></button></a> </td> </tr>';
+
+                    $('#list-bank-mobile').append(html2);
                 }
             }
+        }
 
-            const closeModal = function () {
-                $('#modal').css('display', 'none');
-                $('#bankName').val('');
-                $('#nameOwner').val('');
-                $('#bankNum').val('');
-                $("#bank-default").prop("checked", false);
+        const createRank = async function () {
+            let model = {
+                Name: $('#rankName').val(),
+                CommissionPercent: $('#maxPin').val(),
+                MaximumPinLimit: $('#comPercent').val(),
             }
-
-            const getBankInfo = async function () {
-                let rq = await fetch(Enum.ApiUrl + '/api/UserBankInfo/GetListUserBankInfo', {
-                    method: 'get',
-                    headers: Enum.OptionHeaderDefault
-                });
-                let rs = await rq.json();
-                $('#list-bank-desktop').html('');
-                $('#list-bank-mobile').html('');
-                if (CheckErrorResponse(rs) === false) return;
-                if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
-                    for (let index = 0; index < rs.data.length; index++) {
-                        var x = rs.data[index]
-                        let html = '<tr>';
-                        if (x.IsDefault === true) {
-                            html += '<td> ' + x.BankName + '<p class="isDefault">Tài khoản mặc định</p> </td>';
-                        } else {
-                            html += '<td> ' + x.BankName + ' </td>';
-                        }
-                        html += '<td>' + x.BankOwnerName + '</td>';
-                        html += '<td>' + x.BankAccountNumber + '</td>';
-                        html += '<td>';
-                        html += '<a data-id="' + x.UserBankInfoId + '" onclick="openUpdateModal(this);"><button class="btn btn-primary"><i class="fa-solid fa-pen-to-square"></i></button></a>';
-                        html += '<a data-id="' + x.UserBankInfoId + '" onclick="deleteBankAccount(this);"><button class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></button></a> </td> </tr>';
-
-                        $('#list-bank-desktop').append(html);
-
-                        let html2 = '<tr>';
-                        html2 += '<td> <div>' + x.BankName + '</div>';
-                        html2 += '<div style="background-color:#eee">' + x.BankOwnerName + '</div>';
-                        html2 += '<div>' + x.BankAccountNumber + '</span></div>';
-                        if (x.IsDefault === true) {
-                            html2 += '<div><p class="isDefault" > Tài khoản mặc định</p ></span></div></td>';
-                        } else {
-                            html2 += '</td>';
-                        }
-
-                        html2 += '<td><a data-id="' + x.UserBankInfoId + '" onclick="openUpdateModal(this);"><button class="btn btn-primary btn-sm"><i class="fa-solid fa-pen-to-square"></i></button></a>';
-                        html2 += '<a data-id="' + x.UserBankInfoId + '" onclick="deleteBankAccount(this);"><button class="btn btn-danger btn-sm"><i class="fa fa-trash" aria-hidden="true"></i></button></a> </td> </tr>';
-
-                        $('#list-bank-mobile').append(html2);
-                    }
-                }
-            }
-
-            const creatBankAccount = async function () {
-                let model = {
-                    BankName: $('#bankName').val(),
-                    BankOwnerName: $('#nameOwner').val(),
-                    BankAccountNumber: $('#bankNum').val(),
-                    isDefault: $('#bank-default').is(':checked')
-                }
-                if (model.BankName === '') {
-                    alert('Tên ngân hàng không được để trống');
-                    return;
-                }
-                let rq = await fetch(Enum.ApiUrl + '/api/UserBankInfo/InsertUserBankInfo', {
-                    method: 'post',
-                    headers: Enum.OptionHeaderDefault,
-                    body: JSON.stringify(model)
-                });
-                let rs = await rq.json();
-
-                if (CheckErrorResponse(rs) === false) return;
-                if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
-                    Swal.fire({
-                        icon: "success",
-                        title: "Tạo thông tin thanh toán thành công",
-                        preConfirm: function () { window.location.reload() },
-                    })
-                }
-            }
-
-            const updateBankAccount = async function (el) {
-                const id = $(el).data('id');
-                let model = {
-                    BankName: $('#bankName').val(),
-                    BankOwnerName: $('#nameOwner').val(),
-                    BankAccountNumber: $('#bankNum').val(),
-                    isDefault: $('#bank-default').is(':checked'),
-                    UserBankInfoId: $('#userBankInfoId').val(),
-                }
-                if (model.BankName === '') {
-                    Swal.fire({
-                        icon: "error",
-                        title: "Tên ngân hàng không được để trống",
-                    })
-                    return;
-                }
-                let rq = await fetch(Enum.ApiUrl + '/api/UserBankInfo/UpdateUserBankInfo?userBankInfoId' + id, {
-                    method: 'post',
-                    headers: Enum.OptionHeaderDefault,
-                    body: JSON.stringify(model)
-                });
-                let rs = await rq.json();
-
-                if (CheckErrorResponse(rs) === false) return;
-                if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
-                    Swal.fire({
-                        icon: "success",
-                        title: "Cập nhật thông tin thanh toán thành công",
-                        preConfirm: function () { window.location.reload() },
-                    })
-                }
-            }
-
-
-            const deleteBankAccount = async function (el) {
-                const id = $(el).data('id');
+            if (model.Name === '' || model.CommissionPercent === '' || model.MaximumPinLimit === '') {
                 Swal.fire({
-                    icon: "question",
-                    title: "Bạn có chắc muốn xoá thông tin thanh toán này?",
-                    showCancelButton: true,
-                    preConfirm: async function () {
-                        let rq = await fetch(Enum.ApiUrl + '/api/UserBankInfo/DeleteUserBankInfo?userBankInfoId=' + id, {
-                            method: 'get',
-                            headers: Enum.OptionHeaderDefault
-                        });
-                        let rs = await rq.json();
-
-                        if (CheckErrorResponse(rs) === false) return;
-                        if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
-                            Swal.fire({
-                                icon: "success",
-                                title: "Xoá thông tin thanh toán thành công",
-                                preConfirm: function () { window.location.reload() },
-                            })
-                        }
-                    },
-                    didClose: function () {
-                        return;
-                    }
-                })
-
+                    icon: "error",
+                    title: "Vui lòng nhập đầy đủ thông tin",
+                });
+                return;
             }
+            let rq = await fetch(Enum.ApiUrl + '/api/AdminRank/AdminCreateRank', {
+                method: 'post',
+                headers: Enum.OptionAdminHeaderDefault,
+                body: JSON.stringify(model)
+            });
+            let rs = await rq.json();
 
-            const initPage = async function () {
-                await getBankInfo();
-
-                $(".modal-container").click(function (event) {
-                    event.stopPropagation();
+            if (AdminCheckErrorResponse(rs) === false) return;
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                Swal.fire({
+                    icon: "success",
+                    title: "Tạo thông tin hạng thành công",
+                    preConfirm: function () { window.location.reload() },
                 });
             }
+        }
 
-            initPage();
+        const updateRank = async function (el) {
+            let id = $('#updateRank-btn').data('id');
+            let model = {
+                RankId:id,
+                Name: $('#rankName').val(),
+                CommissionPercent: $('#maxPin').val(),
+                MaximumPinLimit: $('#comPercent').val(),
+            }
+            if (model.Name === '' || model.CommissionPercent === '' || model.MaximumPinLimit === '') {
+                Swal.fire({
+                    icon: "error",
+                    title: "Vui lòng nhập đầy đủ thông tin",
+                });
+                return;
+            }
+            let rq = await fetch(Enum.ApiUrl + '/api/AdminRank/AdminUpdateRank', {
+                method: 'post',
+                headers: Enum.OptionAdminHeaderDefault,
+                body: JSON.stringify(model)
+            });
+            let rs = await rq.json();
+
+            if (AdminCheckErrorResponse(rs) === false) return;
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                Swal.fire({
+                    icon: "success",
+                    title: "Cập nhật thông tin hạng thành công",
+                    preConfirm: function () { window.location.reload() },
+                })
+            }
+        }
+
+
+        const deleteBankAccount = async function (el) {
+            const id = $(el).data('id');
+            Swal.fire({
+                icon: "question",
+                title: "Bạn có chắc muốn xoá hạng này?",
+                showCancelButton: true,
+                preConfirm: async function () {
+                    let rq = await fetch(Enum.ApiUrl + '/api/AdminRank/AdminDeleteRank?rankId=' + id, {
+                        method: 'get',
+                        headers: Enum.OptionAdminHeaderDefault
+                    });
+                    let rs = await rq.json();
+
+                    if (AdminCheckErrorResponse(rs) === false) return;
+                    if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                        Swal.fire({
+                            icon: "success",
+                            title: "Xoá hạng thành công",
+                            preConfirm: function () { window.location.reload() },
+                        })
+                    }
+                },
+                didClose: function () {
+                    return;
+                }
+            })
+
+        }
+
+        const initPage = async function () {
+            await getRankInfo();
+        }
+        $(".modal-container").click(function (event) {
+            event.stopPropagation();
+        });
+
+        initPage();
     </script>
 }
 
