@@ -4097,6 +4097,7 @@
   <ItemGroup>
     <Compile Include="ApiControllers\ApiBaseController.cs" />
     <Compile Include="ApiControllers\HomeController.cs" />
+    <Compile Include="ApiControllers\NotificationController.cs" />
     <Compile Include="ApiControllers\UserBankInfoController.cs" />
     <Compile Include="ApiControllers\UserController.cs" />
     <Compile Include="ApiControllers\UserPropertiesController.cs" />
@@ -4172,6 +4173,7 @@
     <Compile Include="Providers\UserProvider.cs" />
     <Compile Include="Services\BaseService.cs" />
     <Compile Include="Services\CodeConfirmService.cs" />
+    <Compile Include="Services\NotificationService.cs" />
     <Compile Include="Services\SystemWalletService.cs" />
     <Compile Include="Services\UserAdminService.cs" />
     <Compile Include="Services\UserBankInfoService.cs" />

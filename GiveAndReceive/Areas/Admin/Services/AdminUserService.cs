@@ -17,7 +17,7 @@ namespace GiveAndReceive.Areas.Admin.Services
         public object GetListUser(int PageIndex = 1, string Keyword = "")
         {
             string queryCount = "select COUNT(*) ";
-            string querySelect = "select UserId, Name, Avatar ";
+            string querySelect = "select UserId, Name, Avatar, Email, Account ";
             string queryWhere = "from [user] where 1=1";
             if (!string.IsNullOrEmpty(Keyword))
             {
@@ -31,7 +31,7 @@ namespace GiveAndReceive.Areas.Admin.Services
                 TotalPage = (int)Math.Ceiling((decimal)TotalRow / Constant.PAGE_SIZE);
             }
             int skip = (PageIndex - 1) * Constant.PAGE_SIZE;
-            queryWhere += " order by u.CreateTime desc offset " + skip + " rows fetch next " + Constant.PAGE_SIZE + " rows only";
+            queryWhere += " order by CreateTime desc offset " + skip + " rows fetch next " + Constant.PAGE_SIZE + " rows only";
             List<object> ListData = this._connection.Query<object>(querySelect + queryWhere, new { PageIndex, Keyword }).ToList();
             return new
             {

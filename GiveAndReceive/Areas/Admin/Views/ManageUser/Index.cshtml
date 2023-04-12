@@ -78,7 +78,7 @@
                                 <input type="text" class="form-control" id="keyword" placeholder="Nhập từ khoá tìm kiếm" onkeyup="enterGetListUser(event)">
                             </div>
 
-                            <div class="search-rank" style="width:200px;">
+                            @*<div class="search-rank" style="width:200px;">
                                 <select id="rank" class="form-control " onchange="getListUser()">
                                     <option value="0">Tất cả chức danh</option>
                                     <option value="1">Khách hàng</option>
@@ -95,7 +95,7 @@
                                     <option value="true">Đang kích hoạt</option>
                                     <option value="false">Chưa kích hoạt</option>
                                 </select>
-                            </div>
+                            </div>*@
                         </div>
                         <div class="table-responsive" style="padding:15px;">
                             <table class="table table-hover">
@@ -146,12 +146,10 @@
         const getListUser = async function (page = 1) {
             _currentPage = page;
             let keyword = $('#keyword').val();
-            let enable = $('#isEnable').val();
-            let rank = $('#rank').val();
             if (keyword != '') keyword = RemoveVietnameseTones(keyword);
 
             //gọi api ở admin
-            let rq = await fetch(Enum.ApiUrl + '/api/ManageUser/GetListUser?keyword=' + keyword + '&enable=' + enable + '&page=' + page + '&rank=' + rank, {
+            let rq = await fetch(Enum.ApiUrl + '/api/AdminUser/GetListUser?PageIndex=' + page +'&Keyword=' + keyword, {
                 method: 'get',
                 headers: Enum.OptionAdminHeaderDefault
             });
@@ -167,10 +165,10 @@
                     $('.product-page-list').append(`<a onclick="getListUser(${page});" data-page="${page}" class="product-page ${_currentPage === page ? 'active-custom' : ''}" id="page-num">${page}</a>`);
                 }
 
-                for (let index = 0; index < rs.data.ListUser.length; index++) {
-                    var x = rs.data.ListUser[index];
+                for (let index = 0; index < rs.data.ListData.length; index++) {
+                    var x = rs.data.ListData[index];
                     let html = '<tr>';
-                    html += '<td> <div class="user-info"><div class="name">' + GetObjectProperty(x, 'Name') + '</div><div class="rank">' + Enum.Rank[GetObjectProperty(x, 'RankId')] + '</div></div> </td>';
+                    html += '<td> <div class="user-info"><div class="name">' + GetObjectProperty(x, 'Name')+ '</div></div> </td>';
                     html += '<td>' + GetObjectProperty(x, 'Email') + '</td>';
                     html += '<td>' + GetObjectProperty(x, 'Account') + '</td>';
                     html += '<td>';

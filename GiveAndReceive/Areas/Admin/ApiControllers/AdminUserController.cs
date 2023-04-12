@@ -16,7 +16,7 @@ namespace GiveAndReceive.Areas.Admin.ApiControllers
     public class AdminUserController : ApiBaseController
     {
         [HttpGet]
-        public JsonResult GetListUser(int PageIndex, string Keyword)
+        public JsonResult GetListUser(int PageIndex = 1, string Keyword = "")
         {
             try
             {
