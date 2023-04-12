@@ -19,7 +19,7 @@
             </div>
             <div class="parameter-info">
                 <div class="parameter-description">Số dư</div>
-                <div class="parameter-value">112.000</div>
+                <div class="parameter-value" id="userBalance"></div>
             </div>
         </div>
         <div class="general-parameter-box">
@@ -37,7 +37,7 @@
             </div>
             <div class="parameter-info">
                 <div class="parameter-description">Tổng đã cho</div>
-                <div class="parameter-value">112.000</div>
+                <div class="parameter-value" id="amountGive"></div>
             </div>
         </div>
         <div class="general-parameter-box">
@@ -46,7 +46,7 @@
             </div>
             <div class="parameter-info">
                 <div class="parameter-description">Tổng đã nhận</div>
-                <div class="parameter-value">112.000</div>
+                <div class="parameter-value" id="amountReceive"></div>
             </div>
         </div>
     </div>
@@ -103,10 +103,48 @@
             $(el).prop('disabled', false);
         }
 
-
-        const InitPage = async function () {
+        const GetBalanceByUserId = async function () {
+            const rp = await fetch('/api/UserWallet/GetBalanceByUserId', {
+                method: 'get',
+                headers: Enum.OptionHeaderDefault
+            });
+            let rs = await rp.json();
+            if (CheckErrorResponse(rs) === false) return;
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                $('#userBalance').html(NumberFormat(GetObjectProperty(rs, 'data',)));
+            }
         }
 
-        //InitPage();
+        const GetTotalAmountReceive = async function () {
+            const rp = await fetch('/api/UserProperties/GetTotalAmountReceive', {
+                method: 'get',
+                headers: Enum.OptionHeaderDefault
+            });
+            let rs = await rp.json();
+            if (CheckErrorResponse(rs) === false) return;
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                $('#amountReceive').html(NumberFormat(GetObjectProperty(rs, 'data',)));
+            }
+        }
+
+        const GetTotalAmountGive = async function () {
+            const rp = await fetch('/api/UserProperties/GetTotalAmountGive', {
+                method: 'get',
+                headers: Enum.OptionHeaderDefault
+            });
+            let rs = await rp.json();
+            if (CheckErrorResponse(rs) === false) return;
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                $('#amountGive').html(NumberFormat(GetObjectProperty(rs, 'data',)));
+            }
+        }
+
+        const InitPage = async function () {
+            await GetBalanceByUserId();
+            await GetTotalAmountReceive();
+            await GetTotalAmountGive();
+        }
+
+        InitPage();
     </script>
 }

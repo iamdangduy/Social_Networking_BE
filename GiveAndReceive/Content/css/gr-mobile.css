@@ -259,6 +259,10 @@ a {
     .account-page .user-info .info-detail input{
         font-size:14px;
     }
+        .account-page .user-info .info-detail #Code {
+            font-size: 10px;
+            padding: 2px 10px;
+        }
 
 .account-page .user-password {
     background-color: white;
