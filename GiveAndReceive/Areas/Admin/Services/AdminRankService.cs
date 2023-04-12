@@ -41,7 +41,7 @@ namespace GiveAndReceive.Areas.Admin.Services
         }
         public List<Rank> GetListAllRank(IDbTransaction transaction = null)
         {
-            string query = "select* from [rank] order by RankId desc";
+            string query = "select * from [rank] order by RankId desc";
             return this._connection.Query<Rank>(query, null, transaction).ToList();
         }
     }

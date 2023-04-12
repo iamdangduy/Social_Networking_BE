@@ -217,17 +217,17 @@
                 const id = $(el).data('id');
                 $('#userBankInfoId').val(id);
 
-                let rq = await fetch(Enum.ApiUrl + '/api/UserBankInfo/GetUserBankInfoDetail?userBankInfoId=' + id, {
+                let rq = await fetch(Enum.ApiUrl + '/api/AdminSystemBankInfo/GetSystemBankInfoById?SystemBankInfoId=' + id, {
                     method: 'get',
-                    headers: Enum.OptionHeaderDefault
+                    headers: Enum.OptionAdminHeaderDefault
                 });
                 let rs = await rq.json();
 
-                if (CheckErrorResponse(rs) === false) return;
+                if (AdminCheckErrorResponse(rs) === false) return;
                 if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
                     $('#bankName').val(rs.data.BankName);
                     $('#nameOwner').val(rs.data.BankOwnerName);
-                    $('#bankNum').val(rs.data.BankAccountNumber);
+                    $('#bankNum').val(rs.data.BankNumber);
                     $('#updateBank-btn').attr('onclick', 'updateBankAccount()');
                     if (rs.data.IsDefault === true) {
                         $("#bank-default").prop("checked", true);
@@ -248,14 +248,14 @@
             }
 
             const getBankInfo = async function () {
-                let rq = await fetch(Enum.ApiUrl + '/api/UserBankInfo/GetListUserBankInfo', {
+                let rq = await fetch(Enum.ApiUrl + '/api/AdminSystemBankInfo/GetListAllSystemBankInfo', {
                     method: 'get',
-                    headers: Enum.OptionHeaderDefault
+                    headers: Enum.OptionAdminHeaderDefault
                 });
                 let rs = await rq.json();
                 $('#list-bank-desktop').html('');
                 $('#list-bank-mobile').html('');
-                if (CheckErrorResponse(rs) === false) return;
+                if (AdminCheckErrorResponse(rs) === false) return;
                 if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
                     for (let index = 0; index < rs.data.length; index++) {
                         var x = rs.data[index]
@@ -266,27 +266,12 @@
                             html += '<td> ' + x.BankName + ' </td>';
                         }
                         html += '<td>' + x.BankOwnerName + '</td>';
-                        html += '<td>' + x.BankAccountNumber + '</td>';
+                        html += '<td>' + x.BankNumber + '</td>';
                         html += '<td>';
-                        html += '<a data-id="' + x.UserBankInfoId + '" onclick="openUpdateModal(this);"><button class="btn btn-primary"><i class="fa-solid fa-pen-to-square"></i></button></a>';
-                        html += '<a data-id="' + x.UserBankInfoId + '" onclick="deleteBankAccount(this);"><button class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></button></a> </td> </tr>';
+                        html += '<a data-id="' + x.SystemBankInfoId + '" onclick="openUpdateModal(this);"><button class="btn btn-primary"><i class="fa-solid fa-pen-to-square"></i></button></a>';
+                        html += '<a data-id="' + x.SystemBankInfoId + '" onclick="deleteBankAccount(this);"><button class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></button></a> </td> </tr>';
 
                         $('#list-bank-desktop').append(html);
-
-                        let html2 = '<tr>';
-                        html2 += '<td> <div>' + x.BankName + '</div>';
-                        html2 += '<div style="background-color:#eee">' + x.BankOwnerName + '</div>';
-                        html2 += '<div>' + x.BankAccountNumber + '</span></div>';
-                        if (x.IsDefault === true) {
-                            html2 += '<div><p class="isDefault" > Tài khoản mặc định</p ></span></div></td>';
-                        } else {
-                            html2 += '</td>';
-                        }
-
-                        html2 += '<td><a data-id="' + x.UserBankInfoId + '" onclick="openUpdateModal(this);"><button class="btn btn-primary btn-sm"><i class="fa-solid fa-pen-to-square"></i></button></a>';
-                        html2 += '<a data-id="' + x.UserBankInfoId + '" onclick="deleteBankAccount(this);"><button class="btn btn-danger btn-sm"><i class="fa fa-trash" aria-hidden="true"></i></button></a> </td> </tr>';
-
-                        $('#list-bank-mobile').append(html2);
                     }
                 }
             }
@@ -295,21 +280,21 @@
                 let model = {
                     BankName: $('#bankName').val(),
                     BankOwnerName: $('#nameOwner').val(),
-                    BankAccountNumber: $('#bankNum').val(),
+                    BankNumber: $('#bankNum').val(),
                     isDefault: $('#bank-default').is(':checked')
                 }
                 if (model.BankName === '') {
                     alert('Tên ngân hàng không được để trống');
                     return;
                 }
-                let rq = await fetch(Enum.ApiUrl + '/api/UserBankInfo/InsertUserBankInfo', {
+                let rq = await fetch(Enum.ApiUrl + '/api/AdminSystemBankInfo/AdminCreateSystemBankInfo', {
                     method: 'post',
-                    headers: Enum.OptionHeaderDefault,
+                    headers: Enum.OptionAdminHeaderDefault,
                     body: JSON.stringify(model)
                 });
                 let rs = await rq.json();
 
-                if (CheckErrorResponse(rs) === false) return;
+                if (AdminCheckErrorResponse(rs) === false) return;
                 if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
                     Swal.fire({
                         icon: "success",
@@ -320,13 +305,12 @@
             }
 
             const updateBankAccount = async function (el) {
-                const id = $(el).data('id');
                 let model = {
+                    SystemBankInfoId: $('#userBankInfoId').val(),
                     BankName: $('#bankName').val(),
                     BankOwnerName: $('#nameOwner').val(),
-                    BankAccountNumber: $('#bankNum').val(),
-                    isDefault: $('#bank-default').is(':checked'),
-                    UserBankInfoId: $('#userBankInfoId').val(),
+                    BankNumber: $('#bankNum').val(),
+                    IsDefault: $('#bank-default').is(':checked'),
                 }
                 if (model.BankName === '') {
                     Swal.fire({
@@ -335,14 +319,14 @@
                     })
                     return;
                 }
-                let rq = await fetch(Enum.ApiUrl + '/api/UserBankInfo/UpdateUserBankInfo?userBankInfoId' + id, {
+                let rq = await fetch(Enum.ApiUrl + '/api/AdminSystemBankInfo/AdminUpdateSystemBankInfo', {
                     method: 'post',
-                    headers: Enum.OptionHeaderDefault,
+                    headers: Enum.OptionAdminHeaderDefault,
                     body: JSON.stringify(model)
                 });
                 let rs = await rq.json();
 
-                if (CheckErrorResponse(rs) === false) return;
+                if (AdminCheckErrorResponse(rs) === false) return;
                 if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
                     Swal.fire({
                         icon: "success",
@@ -360,13 +344,13 @@
                     title: "Bạn có chắc muốn xoá thông tin thanh toán này?",
                     showCancelButton: true,
                     preConfirm: async function () {
-                        let rq = await fetch(Enum.ApiUrl + '/api/UserBankInfo/DeleteUserBankInfo?userBankInfoId=' + id, {
+                        let rq = await fetch(Enum.ApiUrl + '/api/AdminSystemBankInfo/AdminDeleteSystemBankInfo?SystemBankInfoId=' + id, {
                             method: 'get',
-                            headers: Enum.OptionHeaderDefault
+                            headers: Enum.OptionAdminHeaderDefault
                         });
                         let rs = await rq.json();
 
-                        if (CheckErrorResponse(rs) === false) return;
+                        if (AdminCheckErrorResponse(rs) === false) return;
                         if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
                             Swal.fire({
                                 icon: "success",

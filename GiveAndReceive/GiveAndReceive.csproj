@@ -4107,6 +4107,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
+    <Compile Include="Areas\Admin\ApiControllers\AdminSystemBankInfoController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminProductController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminRankController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminSystemConfigController.cs" />
@@ -4123,6 +4124,7 @@
     <Compile Include="Areas\Admin\Controllers\ManageWithdrawController.cs" />
     <Compile Include="Areas\Admin\Controllers\ProductController.cs" />
     <Compile Include="Areas\Admin\Controllers\SystemConfigController.cs" />
+    <Compile Include="Areas\Admin\Services\AdminSystemBankInfoService.cs" />
     <Compile Include="Areas\Admin\Services\AdminProductService.cs" />
     <Compile Include="Areas\Admin\Services\AdminQueueGiveService.cs" />
     <Compile Include="Areas\Admin\Services\AdminQueueReceiveService.cs" />
@@ -4158,6 +4160,7 @@
     <Compile Include="Models\ShareFund.cs" />
     <Compile Include="Models\ShareFundMonth.cs" />
     <Compile Include="Models\ShareFundUserMonth.cs" />
+    <Compile Include="Models\SystemBankInfo.cs" />
     <Compile Include="Models\SystemTransaction.cs" />
     <Compile Include="Models\SystemWallet.cs" />
     <Compile Include="Models\User.cs" />
