@@ -8,7 +8,7 @@ using System.Web.Http;
 
 namespace GiveAndReceive.Areas.Admin.ApiControllers
 {
-    public class ApiAdminBaseController : ApiBaseController
+    public class ApiAdminBaseController : ApiController
     {
     }
 }

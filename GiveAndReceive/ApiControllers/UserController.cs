@@ -234,6 +234,7 @@ namespace GiveAndReceive.ApiControllers
                     {
 
                         UserService userService = new UserService(connect);
+                        UserWalletService userWalletService = new UserWalletService(connect);
                         UserPropertiesService userPropertiesService = new UserPropertiesService(connect);
                         if (string.IsNullOrEmpty(userRequest.Name)) return Error("Họ và tên không được để trống.");
                         if (string.IsNullOrEmpty(userRequest.Password)) return Error("Mật khẩu không được để trống.");
@@ -268,6 +269,12 @@ namespace GiveAndReceive.ApiControllers
                         userToken.CreateTime = HelperProvider.GetSeconds();
                         userService.InsertUserToken(userToken, transaction);
 
+                        UserWallet userWallet = new UserWallet();
+                        userWallet.UserId = user.UserId;
+                        userWallet.Balance = 0;
+                        userWallet.Pin = 0;
+                        userWalletService.InsertUserWallet(userWallet, transaction);
+
                         transaction.Commit();
                         return Success();
                     }
@@ -280,6 +287,7 @@ namespace GiveAndReceive.ApiControllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public JsonResult Login(UserLoginPost model)
         {
             try
