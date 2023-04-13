@@ -144,8 +144,21 @@ namespace GiveAndReceive.Services
 
         public User GetUserInfo(string userId, IDbTransaction transaction = null)
         {
-            string query = "select Name, Avatar, Account, Email, Phone from [user] where UserId=@userId";
+            string query = "select Name, Avatar, Account, Email, Phone, ShareCode, ParentCode from [user] where UserId=@userId";
             return this._connection.Query<User>(query, new { userId = userId }, transaction).FirstOrDefault();
+        }
+
+        public List<User> GetListUserByShareCode(string code, IDbTransaction transaction = null)
+        {
+            string query = "select * from [user] where ParentCode=@code";
+            return this._connection.Query<User>(query, new {code = code }, transaction).ToList();
+        }
+
+        public void UpdateUserCode(User user, IDbTransaction transaction = null)
+        {
+            string query = "UPDATE [dbo].[user] SET [ParentCode] = @ParentCode, [ShareCode] = @ShareCode WHERE [UserId] = @UserId";
+            int status = this._connection.Execute(query, user, transaction);
+            if (status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
         }
     }
 }

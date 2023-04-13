@@ -19,10 +19,10 @@
             <label for="connectCode">Mã giới thiệu</label>
             <input type="text" class="form-control" id="connectCode" placeholder="Nhập mã giới thiệu">
         </div>
-        <div class="connect-btn"><button class="btn btn-sm btn-info">Kết nối</button></div>
+        <div class="connect-btn"><button class="btn btn-sm btn-info" onclick="ConnectMember();">Kết nối</button></div>
     </div>
 
-    <div class="list-member">
+    <div class="list-member" id="list-member">
         <div class="member-label">Danh sách thành viên</div>
         <div class="member-detail">
             <div class="member-avatar">
@@ -44,4 +44,74 @@
         </div>
     </div>
 </section>
+
+@section scripts{
+    <script>
+        const getListUserConnect = async function () {
+            $('#list-member').html('');
+
+            const rp = await fetch('/api/User/GetListConnectMember', {
+                method: 'get',
+                headers: Enum.OptionHeaderDefault
+            });
+            let rs = await rp.json();
+            if (CheckErrorResponse(rs) === false) return;
+            if (rs.status === 'error') if (rs.message !== '' && rs.message !== null) alert(rs.message);
+            console.log(rs.data);
+            if (rs.status === 'success') {
+                if (rs.message !== '' && rs.message !== null) alert(rs.message);
+                let html = '';
+                html += '<div class="member-label">Danh sách thành viên</div>';
+                for (let index = 0; index < rs.data.length; index++) {
+                    html += `<div class="member-detail" id="list-member"><div class="member-avatar"><div class="avt-img" style="background-image:url(${rs.data[index].Avatar})"></div></div>`;
+                    html += `<div class="member-name"> ${rs.data[index].Name} </div></div>`;
+                }
+                $('#list-member').append(html);
+                console.log(rs);
+            }
+        }
+
+        const ConnectMember = async function () {
+            var code = $('#connectCode').val();
+
+            const rp = await fetch('/api/User/ConnectMember?code='+code, {
+                method: 'get',
+                headers: Enum.OptionHeaderDefault
+            });
+            let rs = await rp.json();
+            if (CheckErrorResponse(rs) === false) return;
+            if (rs.status === 'error') if (rs.message !== '' && rs.message !== null) alert(rs.message);
+            if (rs.status === 'success') {
+                if (rs.message !== '' && rs.message !== null) alert(rs.message);
+                alert("Kết nối thành công.");
+                showPage();
+            }
+        }
+
+        const showPage = async function () {
+            const rp = await fetch('/api/User/GetInforUser', {
+                method: 'get',
+                headers: Enum.OptionHeaderDefault
+            });
+            let rs = await rp.json();
+            if (CheckErrorResponse(rs) === false) return;
+            if (rs.status === 'error') if (rs.message !== '' && rs.message !== null) alert(rs.message);
+            if (rs.status === 'success') {
+                if (rs.message !== '' && rs.message !== null) alert(rs.message);
+                if (rs.data.ShareCode === '' || rs.data.ShareCode === null) {
+                    $('#connectCode').val('');
+                    $('.list-member').hide();
+                    $('.connect-code').show();
+                } else {
+                    $('.list-member').show();
+                    $('.connect-code').hide();
+                    getListUserConnect();
+                }
+            }
+        }
+
+        showPage();
+
+    </script>
+    }
 

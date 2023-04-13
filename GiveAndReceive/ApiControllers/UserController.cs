@@ -516,5 +516,60 @@ namespace GiveAndReceive.ApiControllers
                 return Error(ex.Message);
             }
         }
+
+        [HttpGet]
+        [ApiTokenRequire]
+        public JsonResult GetListConnectMember()
+        {
+            try
+            {
+                string token = Request.Headers.Authorization.ToString();
+                UserService userService = new UserService();
+                User user = userService.GetUserByToken(token);
+                if (user == null) return Unauthorized();
+
+                if (user.ShareCode == null) throw new Exception("Người dùng này không có mã giới thiệu");
+
+                return Success(userService.GetListUserByShareCode(user.ShareCode));
+            }
+            catch(Exception ex)
+            {
+                return Error(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [ApiTokenRequire]
+        public JsonResult ConnectMember(string code)
+        {
+            try
+            {
+                using(var connect = BaseService.Connect())
+                {
+                    connect.Open();
+                    using(var transaction = connect.BeginTransaction())
+                    {
+                        string token = Request.Headers.Authorization.ToString();
+                        UserService userService = new UserService(connect);
+                        User user = userService.GetUserByToken(token, transaction);
+                        if (user == null) return Unauthorized();
+
+                        user.ShareCode = HelperProvider.MakeCode();
+                        user.ParentCode = code;
+                        userService.UpdateUserCode(user, transaction);
+
+                        transaction.Commit();
+                        return Success();
+                    }
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                return Error(ex.Message);
+            }
+        }
+
+
     }
 }
