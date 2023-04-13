@@ -15,7 +15,7 @@ namespace GiveAndReceive.Services
 
         public List<UserTransaction> GetListUserTransactionByUser(string userId, IDbTransaction transaction = null)
         {
-            string query = "select * from [dbo].[user_transaction] where UserId = @userId";
+            string query = "select * from [dbo].[user_transaction] where UserId = @userId order by CreateTime desc";
             return this._connection.Query<UserTransaction>(query, new { userId }, transaction).ToList();
         }
 

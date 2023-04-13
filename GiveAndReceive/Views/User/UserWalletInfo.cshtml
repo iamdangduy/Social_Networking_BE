@@ -148,7 +148,7 @@
 
             <div class="modal-footer">
                 <button class="btn btn-sm close-modal" onclick="closeModal()">Đóng</button>
-                <button class="btn btn-sm btn-primary" onclick="">Lưu</button>
+                <button class="btn btn-sm btn-primary" onclick="CreateUserWithdrawOrder();">Lưu</button>
 
             </div>
 
@@ -276,6 +276,30 @@
         const closeModal = function () {
             $('#modal').css('display', 'none');
             $('#withDraw').val('');
+        }
+
+        const CreateUserWithdrawOrder = async function () {
+            let model = {
+                Amount: $('#withDraw').val()
+            }
+            const rp = await fetch('/api/UserWithdrawOrder/CreateUserWithdrawOrder', {
+                method: 'post',
+                headers: Enum.OptionHeaderDefault,
+                body: JSON.stringify(model)
+                
+            });
+            let rs = await rp.json();
+            if (CheckErrorResponse(rs) === false) return;
+            if (rs.status === 'error')
+                if (rs.message !== '' && rs.message !== null) {
+                    alert(rs.message);
+                    window.location.reload();
+                }
+                    
+            if (rs.status === 'success') {
+                if (rs.message !== '' && rs.message !== null) alert(rs.message);
+                window.location.reload();
+            }
         }
 
         const InitPage = async function () {

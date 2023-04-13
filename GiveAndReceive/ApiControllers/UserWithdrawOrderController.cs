@@ -13,7 +13,7 @@ namespace GiveAndReceive.ApiControllers
 {
     public class UserWithdrawOrderController : ApiBaseController
     {
-        [HttpGet]
+        [HttpPost]
         [ApiTokenRequire]
         public JsonResult CreateUserWithdrawOrder(UserWithdrawOrder model)
         {
@@ -34,7 +34,7 @@ namespace GiveAndReceive.ApiControllers
 
                         List<UserWithdrawOrder> withdrawOrdersPending = userWithdrawOrderService.GetListWithdrawStatusByUser(user.UserId, UserWithdrawOrder.EnumStatus.PENDING, transaction);
                         List<UserWithdrawOrder> withdrawOrdersProcessing = userWithdrawOrderService.GetListWithdrawStatusByUser(user.UserId, UserWithdrawOrder.EnumStatus.PROCESSING, transaction);
-                        if (withdrawOrdersPending != null || withdrawOrdersProcessing != null) throw new Exception("Bạn đang có lệnh rút đang hoạt động.");
+                        if (withdrawOrdersPending.Count > 0 || withdrawOrdersProcessing.Count > 0) throw new Exception("Vui lòng đợi hoàn thành lệnh rút trước đó.");
 
                         UserWalletService userWalletService = new UserWalletService(connect);
                         UserWallet userWallet = userWalletService.GetUserWalletByUser(user.UserId, transaction);
