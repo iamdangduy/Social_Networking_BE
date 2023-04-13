@@ -141,7 +141,7 @@ namespace GiveAndReceive.Areas.Admin.ApiControllers
                         userTransaction.UserTransactionId = Guid.NewGuid().ToString();
                         userTransaction.UserId = userWithdrawOrder.UserId;
                         userTransaction.Amount = userWithdrawOrder.Amount;
-                        userTransaction.Note = "Hệ thống hủy lệnh rút " + userWithdrawOrder.Amount.ToString() + " VND.";
+                        userTransaction.Note = "Hệ thống hủy lệnh rút " + userWithdrawOrder.Amount.ToString() + " VNĐ.";
                         userTransaction.CreateTime = HelperProvider.GetSeconds(now);
 
                         adminUserTransactionService.InsertUserTransaction(userTransaction, transaction);

@@ -94,7 +94,6 @@ namespace GiveAndReceive.ApiControllers
 
                         if (!string.IsNullOrEmpty(model.Email))
                         {
-                            user.Email = model.Email.Trim();
                             userService.CheckEmailExist(user.Email, user.UserId, transaction);
                             if (model.Email != user.Email)
                             {
@@ -102,10 +101,10 @@ namespace GiveAndReceive.ApiControllers
                                 CodeConfirm emailCode = codeConfirmService.GetCodeConfirmByEmail(user.Email, transaction);
                                 if (emailCode.Code != model.EmailCode) throw new Exception("Mã xác thực không chính xác");
                             }
+                            user.Email = model.Email.Trim();
                         }
                         if (!string.IsNullOrEmpty(model.Phone))
                         {
-                            user.Phone = model.Phone.Trim();
                             userService.CheckUserPhoneExist(user.Phone, user.UserId, transaction);
                             if (model.Phone != user.Phone)
                             {
@@ -113,6 +112,8 @@ namespace GiveAndReceive.ApiControllers
                                 CodeConfirm phoneCode = codeConfirmService.GetCodeConfirmByPhone(user.Phone, transaction);
                                 if (phoneCode.Code != model.PhoneCode) throw new Exception("Mã xác thực không chính xác");
                             }
+
+                            user.Phone = model.Phone.Trim();
                         }
 
                         userService.UpdateUser(user, transaction);
