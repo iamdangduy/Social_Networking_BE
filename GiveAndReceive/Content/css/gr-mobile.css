@@ -428,7 +428,7 @@ a {
     font-size: 14px;
 }
 
-.bank-page .modal-body input, label {
+.bank-page .modal-body input, .bank-page .modal-body label {
     font-size: 14px !important;
 }
 

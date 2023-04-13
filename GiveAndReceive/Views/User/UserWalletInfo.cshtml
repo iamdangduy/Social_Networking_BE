@@ -19,6 +19,72 @@
         .card .card-body {
             padding: 1rem;
         }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.4);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .modal-container {
+            background-color: #fff;
+            width: 900px;
+            max-width: calc(100% - 32px);
+            position: relative;
+            animation: modalFadeIn ease 0.5s;
+            transition: top 0.4s, opacity 0.4s;
+        }
+
+        .modal-header {
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center !important;
+            font-size: 20px;
+            border-bottom: solid #ccc 0.5px;
+            text-transform: uppercase;
+        }
+
+        .modal-body {
+            width: 90%;
+            margin: auto;
+        }
+
+        .modal-footer {
+            width: 90%;
+            margin: auto;
+            justify-content: end;
+            display: flex;
+            gap: 10px;
+            padding-bottom: 10px;
+        }
+
+            .modal-footer .close-modal {
+                width: 65px;
+                color: black;
+                border: solid #ccc 0.5px;
+                cursor: pointer;
+                border-radius: 5px;
+            }
+
+        @@keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-200px);
+            }
+
+            to {
+                transform: translateY(0px);
+                opacity: 1;
+            }
+        }
     </style>
 }
 
@@ -42,7 +108,7 @@
                     <div class="balance-header">
                         <div class="wallet-balance" id="wallet-balance"> 12,000,000 VNĐ</div>
                         <div class="withdraw-button" style="text-align:right">
-                            <button class="btn btn-sm rounded-pill btn-primary" style="padding:3px 15px;"> Rút </button>
+                            <button class="btn btn-sm rounded-pill btn-primary" style="padding:3px 15px;" onclick="openModal()"> Rút </button>
                         </div>
                     </div>
                     <div class="withdraw" id="withdraw-pending">
@@ -60,12 +126,34 @@
                             <div class="content">Bạn đã dùng 01 Vé để vào hàng chờ cho</div>
                             <div class="time"> 10/04/2023 16:22:00 </div>
                         </div>
-                        <div class="history-detail"><div class="content">Bạn nhận được 03 Vé</div>
-                            <div class="time"> 10/04/2023 16:22:00 </div></div>
+                        <div class="history-detail">
+                            <div class="content">Bạn nhận được 03 Vé</div>
+                            <div class="time"> 10/04/2023 16:22:00 </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+
+    <div id="modal" class="modal" onclick="closeModal()">
+        <div class="modal-container">
+            <div class="modal-header">Lệnh rút</div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="font-weight-semibold" for="withDraw">Số tiền bạn muốn rút</label>
+                    <input type="text" class="form-control" id="withDraw" placeholder="Số tiền bạn muốn rút">
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-sm close-modal" onclick="closeModal()">Đóng</button>
+                <button class="btn btn-sm btn-primary" onclick="">Lưu</button>
+
+            </div>
+
+        </div>
+
     </div>
 </section>
 
@@ -180,11 +268,25 @@
             
         }
 
+
+        const openModal = function () {
+            $('#modal').css('display', 'flex');
+        }
+
+        const closeModal = function () {
+            $('#modal').css('display', 'none');
+            $('#withDraw').val('');
+        }
+
         const InitPage = async function () {
             await getUserWallet();
             await getListWithdrawPending();
             await getListUserTransaction();
             await getListPinTransfer();
+
+            $(".modal-container").click(function (event) {
+                event.stopPropagation();
+            });
         }
 
         InitPage();
