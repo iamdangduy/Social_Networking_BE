@@ -14,10 +14,10 @@ using static GiveAndReceive.Models.JsonResult;
 
 namespace GiveAndReceive.ApiControllers
 {
+    [ApiTokenRequire]
     public class UserBankInfoController : ApiBaseController
     {
         [HttpGet]
-        [ApiAdminTokenRequire]
         public JsonResult GetListUserBankInfo()
         {
             try
@@ -37,7 +37,6 @@ namespace GiveAndReceive.ApiControllers
         }
 
         [HttpPost]
-        [ApiAdminTokenRequire]
         public JsonResult InsertUserBankInfo(UserBankInfo model)
         {
             try
@@ -88,7 +87,6 @@ namespace GiveAndReceive.ApiControllers
         }
 
         [HttpPost]
-        [ApiAdminTokenRequire]
         public JsonResult UpdateUserBankInfo(UserBankInfo model)
         {
             try
@@ -132,7 +130,6 @@ namespace GiveAndReceive.ApiControllers
         }
 
         [HttpGet]
-        [ApiAdminTokenRequire]
         public JsonResult DeleteUserBankInfo(string UserBankInfoId)
         {
             try
