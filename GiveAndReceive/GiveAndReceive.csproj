@@ -4125,6 +4125,7 @@
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminShareFundController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminShareFundMonthController.cs" />
+    <Compile Include="Areas\Admin\ApiControllers\AdminShareFundUserMonthController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminSystemBankInfoController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminProductController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminRankController.cs" />
@@ -4389,6 +4390,7 @@
     <Content Include="Areas\Admin\Views\SystemConfig\Index.cshtml" />
     <Content Include="Areas\Admin\Views\ManageWaitingLine\Index.cshtml" />
     <Content Include="Areas\Admin\Views\ManageShareFundMonth\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\ManageShareFundMonth\ShareFundUserMonth.cshtml" />
     <None Include="packages.config" />
     <Content Include="Views\Home\Login.cshtml" />
     <Content Include="Views\Home\Register.cshtml" />

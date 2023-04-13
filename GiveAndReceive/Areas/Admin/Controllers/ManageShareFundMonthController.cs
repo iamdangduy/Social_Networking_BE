@@ -13,5 +13,11 @@ namespace GiveAndReceive.Areas.Admin.Controllers
         {
             return View();
         }
+
+        public ActionResult ShareFundUserMonth(string id)
+        {
+            ViewBag.Id = id;
+            return View();
+        }
     }
 }
