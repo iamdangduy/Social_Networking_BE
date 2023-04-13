@@ -28,7 +28,7 @@ namespace GiveAndReceive.Services
 
         public void UpdateUserBankInfo(UserBankInfo model, IDbTransaction transaction = null)
         {
-            string query = "update [user_bank_info] set [BankName] = @BankName, [BankOwnerName] = @BankOwnerName, [BankNumber] = @BankNumber, [QRImage] = @QRImage where UserBankInfoId = @UserBankInfoId";
+            string query = "update [user_bank_info] set [BankName] = @BankName, [BankOwnerName] = @BankOwnerName, [BankNumber] = @BankNumber, [QRImage] = @QRImage, [IsDefault] = @IsDefault where UserBankInfoId = @UserBankInfoId";
             int Status = this._connection.Execute(query, model, transaction);
             if (Status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
         }
