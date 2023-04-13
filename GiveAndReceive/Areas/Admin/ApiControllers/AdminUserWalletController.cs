@@ -12,7 +12,7 @@ using System.Web.Http;
 namespace GiveAndReceive.Areas.Admin.ApiControllers
 {
     [ApiAdminTokenRequire]
-    public class AdminUserWalletController : ApiBaseController
+    public class AdminUserWalletController : ApiAdminBaseController
     {
         [HttpGet]
         public JsonResult GetTotalBalanceUser()

@@ -10,7 +10,7 @@ using System.Web.Http;
 
 namespace GiveAndReceive.Areas.Admin.ApiControllers
 {
-    public class AdminShareFundMonthController : ApiBaseController
+    public class AdminShareFundMonthController : ApiAdminBaseController
     {
         [HttpGet]
         [ApiAdminTokenRequire]
