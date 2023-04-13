@@ -12,7 +12,7 @@ using System.Web.Http;
 namespace GiveAndReceive.Areas.Admin.ApiControllers
 {
     [ApiAdminTokenRequire]
-    public class AdminQueueGiveController : ApiBaseController
+    public class AdminQueueGiveController : ApiAdminBaseController
     {
         [HttpGet]
         public JsonResult GetListQueueGive(int PageIndex = 1)

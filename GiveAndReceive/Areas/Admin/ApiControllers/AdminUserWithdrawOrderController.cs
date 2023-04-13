@@ -12,7 +12,7 @@ using System.Web.Http;
 
 namespace GiveAndReceive.Areas.Admin.ApiControllers
 {
-    public class AdminUserWithdrawOrderController : ApiBaseController
+    public class AdminUserWithdrawOrderController : ApiAdminBaseController
     {
         [HttpGet]
         [ApiAdminTokenRequire]

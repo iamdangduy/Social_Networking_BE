@@ -11,7 +11,7 @@ using System.Web.Http;
 
 namespace GiveAndReceive.Areas.Admin.ApiControllers
 {
-    public class AdminUserPropertiesController : ApiBaseController
+    public class AdminUserPropertiesController : ApiAdminBaseController
     {
         [HttpGet]
         [ApiAdminTokenRequire]

@@ -15,7 +15,7 @@ using System.Web.Razor.Tokenizer.Symbols;
 namespace GiveAndReceive.Areas.Admin.ApiControllers
 {
     [ApiAdminTokenRequire]
-    public class AdminUserController : ApiBaseController
+    public class AdminUserController : ApiAdminBaseController
     {
         [HttpGet]
         public JsonResult GetListUser(int PageIndex = 1, string Keyword = "")
