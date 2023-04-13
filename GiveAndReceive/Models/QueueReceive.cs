@@ -12,6 +12,9 @@ namespace GiveAndReceive.Models
         public class EnumStatus
         {
             public const string PENDING = "PENDING";
+            public const string IN_DUTY = "IN-DUTY";
+            public const string DONE = "DONE";
+            public const string CANCEL = "CANCEL";
         }
     }
 }

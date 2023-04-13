@@ -4104,9 +4104,11 @@
     <Compile Include="ApiControllers\UserPropertiesController.cs" />
     <Compile Include="ApiControllers\UserTransactionController.cs" />
     <Compile Include="ApiControllers\UserWalletController.cs" />
+    <Compile Include="ApiControllers\UserWithdrawOrderController.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
+    <Compile Include="Areas\Admin\ApiControllers\AdminShareFundMonthController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminSystemBankInfoController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminProductController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminRankController.cs" />
@@ -4126,6 +4128,7 @@
     <Compile Include="Areas\Admin\Controllers\ManageWithdrawController.cs" />
     <Compile Include="Areas\Admin\Controllers\ProductController.cs" />
     <Compile Include="Areas\Admin\Controllers\SystemConfigController.cs" />
+    <Compile Include="Areas\Admin\Services\AdminShareFundMonthService.cs" />
     <Compile Include="Areas\Admin\Services\AdminSystemBankInfoService.cs" />
     <Compile Include="Areas\Admin\Services\AdminProductService.cs" />
     <Compile Include="Areas\Admin\Services\AdminQueueGiveService.cs" />
@@ -4143,6 +4146,7 @@
     <Compile Include="Areas\Admin\ApiControllers\AdminUserController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\NotificationController.cs" />
+    <Compile Include="Controllers\UserBankInfoController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\UserQuestController.cs" />
     <Compile Include="Filters\ApiAdminTokenRequireAttribute.cs" />
@@ -4186,6 +4190,8 @@
     <Compile Include="Services\BaseService.cs" />
     <Compile Include="Services\CodeConfirmService.cs" />
     <Compile Include="Services\NotificationService.cs" />
+    <Compile Include="Services\QueueGiveService.cs" />
+    <Compile Include="Services\QueueReceiveService.cs" />
     <Compile Include="Services\SystemWalletService.cs" />
     <Compile Include="Services\UserAdminService.cs" />
     <Compile Include="Services\UserBankInfoService.cs" />
@@ -4373,6 +4379,7 @@
     <Content Include="Views\ConnectMember\Index.cshtml" />
     <Content Include="Views\User\AccountVerification.cshtml" />
     <Content Include="Views\User\ChangePassword.cshtml" />
+    <Content Include="Views\UserBankInfo\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

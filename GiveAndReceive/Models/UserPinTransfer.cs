@@ -9,5 +9,11 @@ namespace GiveAndReceive.Models
         public string Status { get; set; }
         public long CreateTime { get; set; }
         public string Message { get; set; }
+        public class EnumStatus
+        {
+            public const string DONE = "DONE";
+        }
     }
+
+    
 }

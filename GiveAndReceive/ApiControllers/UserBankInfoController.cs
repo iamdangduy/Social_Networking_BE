@@ -14,10 +14,10 @@ using static GiveAndReceive.Models.JsonResult;
 
 namespace GiveAndReceive.ApiControllers
 {
+    [ApiTokenRequire]
     public class UserBankInfoController : ApiBaseController
     {
         [HttpGet]
-        [ApiAdminTokenRequire]
         public JsonResult GetListUserBankInfo()
         {
             try
@@ -37,7 +37,6 @@ namespace GiveAndReceive.ApiControllers
         }
 
         [HttpPost]
-        [ApiAdminTokenRequire]
         public JsonResult InsertUserBankInfo(UserBankInfo model)
         {
             try
@@ -58,7 +57,7 @@ namespace GiveAndReceive.ApiControllers
                         userBankInfo.BankName = model.BankName;
                         userBankInfo.BankOwnerName = model.BankOwnerName;
                         userBankInfo.BankNumber = model.BankNumber;
-                        userBankInfo.IsDefault = true;
+                        userBankInfo.IsDefault = model.IsDefault;
 
                         if (!Directory.Exists(HttpContext.Current.Server.MapPath("~" + String.Format(Constant.SYSTEM_BANK_QR_IMAGE_PATH))))
                         {
@@ -88,7 +87,6 @@ namespace GiveAndReceive.ApiControllers
         }
 
         [HttpPost]
-        [ApiAdminTokenRequire]
         public JsonResult UpdateUserBankInfo(UserBankInfo model)
         {
             try
@@ -102,22 +100,29 @@ namespace GiveAndReceive.ApiControllers
                         UserService userService = new UserService();
                         User user = userService.GetUserByToken(token);
                         if (user == null) return Unauthorized();
+                        UserBankInfoService userBankInfoService = new UserBankInfoService(connect);
 
                         UserBankInfo userBankInfo = new UserBankInfo();
                         userBankInfo.UserBankInfoId = model.UserBankInfoId;
                         userBankInfo.BankName = model.BankName;
                         userBankInfo.BankOwnerName = model.BankOwnerName;
                         userBankInfo.BankNumber = model.BankNumber;
+                        userBankInfo.IsDefault = model.IsDefault;
+                        var UserBankInforModel = userBankInfoService.GetUserBankInfoById(model.UserBankInfoId, transaction);
 
-                        if (string.IsNullOrEmpty(model.QRImage)) return Error();
-                        //tạo file mới
-                        if (model.QRImage == null) return Error();
-                        string filename = Guid.NewGuid().ToString() + ".jpg";
-                        var path = System.Web.HttpContext.Current.Server.MapPath(Constant.SYSTEM_BANK_QR_IMAGE_PATH + filename);
-                        HelperProvider.Base64ToImage(model.QRImage, path);
-                        userBankInfo.QRImage = Constant.SYSTEM_BANK_QR_IMAGE_URL + filename;
+                        if (!string.IsNullOrEmpty(model.QRImage))
+                        {
+                            //xóa file cũ
+                            if (!HelperProvider.DeleteFile(UserBankInforModel.QRImage)) return Error(JsonResult.Message.ERROR_SYSTEM);
+                            //tạo file mới
+                            if (model.QRImage == null) return Error();
+                            string filename = Guid.NewGuid().ToString() + ".jpg";
+                            var path = HttpContext.Current.Server.MapPath(Constant.SYSTEM_BANK_QR_IMAGE_PATH + filename);
+                            HelperProvider.Base64ToImage(model.QRImage, path);
+                            userBankInfo.QRImage = Constant.SYSTEM_BANK_QR_IMAGE_URL + filename;
+                        }
 
-                        UserBankInfoService userBankInfoService = new UserBankInfoService(connect);
+                        if (string.IsNullOrEmpty(model.QRImage)) userBankInfo.QRImage = UserBankInforModel.QRImage;
                         userBankInfoService.UpdateUserBankInfo(userBankInfo, transaction);
 
                         transaction.Commit();
@@ -132,7 +137,6 @@ namespace GiveAndReceive.ApiControllers
         }
 
         [HttpGet]
-        [ApiAdminTokenRequire]
         public JsonResult DeleteUserBankInfo(string UserBankInfoId)
         {
             try

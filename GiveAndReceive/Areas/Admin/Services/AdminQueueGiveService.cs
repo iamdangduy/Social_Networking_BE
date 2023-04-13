@@ -37,5 +37,11 @@ namespace GiveAndReceive.Areas.Admin.Services
                 ListData,
             };
         }
+
+        public int GetTotalQueueGive()
+        {
+            string query = "select COUNT(*) from [queue_give] where Status = 'PENDING' or Status = 'IN-DUTY' ";
+            return this._connection.Query<int>(query).FirstOrDefault();
+        }
     }
 }

@@ -42,5 +42,11 @@ namespace GiveAndReceive.Areas.Admin.Services
                 ListData,
             };
         }
+
+        public int GetTotalQueueReceive()
+        {
+            string query = "select COUNT(UserId) from [queue_receive] where Status = 'PENDING'";
+            return this._connection.Query<int>(query).FirstOrDefault();
+        }
     }
 }

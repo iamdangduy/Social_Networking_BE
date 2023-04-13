@@ -161,6 +161,25 @@
             }
         }
 
+        const UserCancelWithdraw = async function (el) {
+            if (confirm("Xác nhận hoàn thành lệnh rút của người dùng?")) {
+                var id = $(el).data('id');
+                console.log(id);
+                const rp = await fetch('/api/UserWithdrawOrder/UserCancelWithdrawOrder?userWithdrawId=' + id, {
+                    method: 'get',
+                    headers: Enum.OptionHeaderDefault
+                });
+                let rs = await rp.json();
+                if (CheckErrorResponse(rs) === false) return;
+                if (rs.status === 'error') if (rs.message !== '' && rs.message !== null) alert(rs.message);
+                if (rs.status === 'success') {
+                    if (rs.message !== '' && rs.message !== null) alert(rs.message);
+                    window.location.reload();
+                }
+            }
+            
+        }
+
         const InitPage = async function () {
             await getUserWallet();
             await getListWithdrawPending();

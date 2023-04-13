@@ -99,6 +99,7 @@ namespace GiveAndReceive.ApiControllers
                         UserService userService = new UserService();
                         User user = userService.GetUserByToken(token);
                         if (user == null) return Unauthorized();
+
                         UserPropertiesService userPropertiesService = new UserPropertiesService(connect);
                         var UserPropertiesModel = userPropertiesService.GetUserPropertiesByUserId(user.UserId, transaction);
                         UserProperties userProperties = new UserProperties();

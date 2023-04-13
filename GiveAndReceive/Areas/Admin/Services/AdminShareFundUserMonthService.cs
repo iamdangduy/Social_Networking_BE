@@ -23,9 +23,9 @@ namespace GiveAndReceive.Areas.Admin.Services
             listShareFundUserMonthView.List = new List<ShareFundUserMonth>();
             listShareFundUserMonthView.TotalPage = 0;
 
-            string querySelect = "select u.Name, u.Phone, u.Email, sfum.Amount, sfum.Month, sfum.Year, sfum.Status";
+            string querySelect = "select sfum.ShareFundUserMonthId, sfum.ShareFundMonthId, sfum.UserId, u.Name, u.Phone, u.Email, sfum.Amount, sfum.Month, sfum.Year, sfum.Status";
             string queryCount = "select count(*)";
-            string query = " from [share_fund_user_month] sfum left join [user] u on sfum.UserId = u.UserId where 1=1";
+            string query = " from [share_fund_user_month] sfum left join [user] u on sfum.UserId = u.UserId where Month=@month and Year=@year";
 
             if (!string.IsNullOrEmpty(keyword))
             {
@@ -33,7 +33,7 @@ namespace GiveAndReceive.Areas.Admin.Services
                 query += " and (u.Phone like @keyword or u.Email like @keyword)";
             }
 
-            int totalRow = _connection.Query<int>(queryCount + query, new { keyword = keyword }, transaction).FirstOrDefault();
+            int totalRow = _connection.Query<int>(queryCount + query, new { keyword = keyword, month = month, year = year }, transaction).FirstOrDefault();
             if (totalRow > 0)
             {
                 listShareFundUserMonthView.TotalPage = (int)Math.Ceiling((decimal)totalRow / Constant.ADMIN_PAGE_SIZE);
@@ -41,7 +41,7 @@ namespace GiveAndReceive.Areas.Admin.Services
 
             int skip = (page - 1) * Constant.ADMIN_PAGE_SIZE;
             query += " order by sfum.Month desc, sfum.Year desc offset " + skip + " rows fetch next " + Constant.ADMIN_PAGE_SIZE + " rows only";
-            listShareFundUserMonthView.List = this._connection.Query<ShareFundUserMonth>(querySelect + query, new { keyword = keyword }, transaction).ToList();
+            listShareFundUserMonthView.List = this._connection.Query<ShareFundUserMonth>(querySelect + query, new { keyword = keyword, month = month, year = year }, transaction).ToList();
             return listShareFundUserMonthView;
         }
     }
