@@ -19,6 +19,12 @@ namespace GiveAndReceive.Services
             return this._connection.Query<object>(query, new { UserId }).ToList();
         }
 
+        public UserBankInfo GetUserBankInfoById(string UserBankInfoId, IDbTransaction transaction = null)
+        {
+            string query = "select * from [user_bank_info] where UserBankInfoId = @UserBankInfoId";
+            return this._connection.Query<UserBankInfo>(query, new { UserBankInfoId }, transaction).FirstOrDefault();
+        }
+
         public void InsertUserBankInfo(UserBankInfo model, IDbTransaction transaction = null)
         {
             string query = "insert into [user_bank_info] ([UserBankInfoId], [UserId], [BankName], [BankOwnerName], [BankNumber], [QRImage], [IsDefault]) values (@UserBankInfoId, @UserId, @BankName, @BankOwnerName, @BankNumber, @QRImage, @IsDefault)";
