@@ -103,8 +103,8 @@
                     <table class="table table-hover">
                         <thead>
                             <tr>
-                                <th scope="col" style="width:60%">Mô tả</th>
-                                <th scope="col" style="width:40%">Thao tác</th>
+                                <th>Mô tả</th>
+                                <th style="width:94px">Thao tác</th>
                             </tr>
                         </thead>
                         <tbody id="list-bank-mobile">
@@ -189,9 +189,10 @@
         const openUpdateModal = async function (el) {
             var data = JSON.parse(unescape($(el).data('object')));
 
+            $('#userBankInfoId').val(data.UserBankInfoId);
             $('#bankName').val(data.BankName);
             $('#nameOwner').val(data.BankOwnerName);
-            $('#bankNum').val(data.BankAccountNumber);
+            $('#bankNum').val(data.BankNumber);
             $('.preview').css('background-image', `url(${data.QRImage})`);
             $('#updateBank-btn').attr('onclick', 'updateBankAccount()');
             if (data.IsDefault === true) {
@@ -232,7 +233,7 @@
                         html += '<td> ' + x.BankName + ' </td>';
                     }
                     html += '<td>' + x.BankOwnerName + '</td>';
-                    html += '<td>' + x.BankAccountNumber + '</td>';
+                    html += '<td>' + x.BankNumber + '</td>';
                     html += '<td>';
                     html += `<a data-object="${escape(JSON.stringify(x))} " onclick="openUpdateModal(this);"><button class="btn btn-primary"><i class="fa-solid fa-pen-to-square"></i></button></a>`;
                     html += '<a data-id="' + x.UserBankInfoId + '" onclick="deleteBankAccount(this);"><button class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></button></a> </td> </tr>';
@@ -242,7 +243,7 @@
                     let html2 = '<tr>';
                     html2 += '<td> <div>' + x.BankName + '</div>';
                     html2 += '<div style="background-color:#eee">' + x.BankOwnerName + '</div>';
-                    html2 += '<div>' + x.BankAccountNumber + '</span></div>';
+                    html2 += '<div>' + x.BankNumber + '</span></div>';
                     if (x.IsDefault === true) {
                         html2 += '<div><p class="isDefault" > Tài khoản mặc định</p ></span></div></td>';
                     } else {
