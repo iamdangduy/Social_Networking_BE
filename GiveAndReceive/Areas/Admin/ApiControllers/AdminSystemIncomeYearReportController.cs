@@ -12,7 +12,7 @@ using System.Web.Http;
 namespace GiveAndReceive.Areas.Admin.ApiControllers
 {
     [ApiAdminTokenRequire]
-    public class AdminSystemIncomeYearReportController : ApiBaseController
+    public class AdminSystemIncomeYearReportController : ApiAdminBaseController
     {
         [HttpGet]
         public JsonResult GetTotalRevenue()

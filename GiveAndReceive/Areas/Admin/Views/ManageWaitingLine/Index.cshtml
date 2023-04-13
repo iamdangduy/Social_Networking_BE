@@ -88,6 +88,33 @@
             }
         }
 
+        @*const GetListQueueGive = async function (page = 1) {
+            _currentPage = page;
+            let rq = await fetch(Enum.ApiUrl + '/api/AdminQueueGive/GetListQueueGive?PageIndex=' + page, {
+                method: 'get',
+                headers: Enum.OptionAdminHeaderDefault,
+
+            });
+            let rs = await rq.json();
+
+            if (AdminCheckErrorResponse(rs) === false) return;
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                $('.card-left .product-page-list').html('');
+                for (let page = 1; page <= rs.data.TotalPage; page++) {
+                    $('.card-left .product-page-list').append(`<a onclick="GetListQueueGive(${page});" data-page="${page}" class="product-page ${_currentPage === page ? 'active' : ''}" id="page-num">${page}</a>`);
+                }
+
+                for (let i = 0; i < rs.data.ListData.length; i++) {
+                    let item = rs.data.ListData[i];
+                    let html = '<tr>';
+                    html += '<td>' + item.Name + '</td>';
+                    html += '</tr>';
+
+                    $('#list-user-give').append(html);
+                }
+            }
+        }*@
+
         const InitPage = async function () {
             await GetListQueueGive();
         }

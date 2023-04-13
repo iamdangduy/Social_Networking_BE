@@ -12,7 +12,7 @@ using System.Web.Http;
 namespace GiveAndReceive.Areas.Admin.ApiControllers
 {
     [ApiAdminTokenRequire]
-    public class AdminShareFundController : ApiBaseController
+    public class AdminShareFundController : ApiAdminBaseController
     {
         [HttpGet]
         public JsonResult GetBalanceShareFund()
