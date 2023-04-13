@@ -25,6 +25,12 @@ namespace GiveAndReceive.Services
             return this._connection.Query<UserWithdrawOrder>(query, new { userId }, transaction).ToList();
         }
 
+        public List<UserWithdrawOrder> GetListWithdrawStatusByUser(string userId, string status, IDbTransaction transaction = null)
+        {
+            string query = "select * from [dbo].[user_withdraw_order] where [Status] = @status and UserId = @userId";
+            return this._connection.Query<UserWithdrawOrder>(query, new { status, userId }, transaction).ToList();
+        }
+
         public UserWithdrawOrder GetUserWithdrawOrderById(string id, IDbTransaction transaction = null)
         {
             string query = "select * from [dbo].[user_withdraw_order] where UserWithdrawOrderId = @id";

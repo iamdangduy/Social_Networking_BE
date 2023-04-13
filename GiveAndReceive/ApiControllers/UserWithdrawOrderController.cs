@@ -29,13 +29,18 @@ namespace GiveAndReceive.ApiControllers
                         User user = userService.GetUserByToken(token, transaction);
                         if (user == null) return Unauthorized();
 
+                        UserWithdrawOrderService userWithdrawOrderService = new UserWithdrawOrderService(connect);
+                        UserTransactionService userTransactionService = new UserTransactionService(connect);
+
+                        List<UserWithdrawOrder> withdrawOrdersPending = userWithdrawOrderService.GetListWithdrawStatusByUser(user.UserId, UserWithdrawOrder.EnumStatus.PENDING, transaction);
+                        List<UserWithdrawOrder> withdrawOrdersProcessing = userWithdrawOrderService.GetListWithdrawStatusByUser(user.UserId, UserWithdrawOrder.EnumStatus.PROCESSING, transaction);
+                        if (withdrawOrdersPending != null || withdrawOrdersProcessing != null) throw new Exception("Bạn đang có lệnh rút đang hoạt động.");
+
                         UserWalletService userWalletService = new UserWalletService(connect);
                         UserWallet userWallet = userWalletService.GetUserWalletByUser(user.UserId, transaction);
                         // Kiểm tra số tiền rút với số tiền trong ví người dùng
                         if (userWallet.Balance < model.Amount) throw new Exception("Số tiền không đủ để rút");
 
-                        UserWithdrawOrderService userWithdrawOrderService = new UserWithdrawOrderService(connect);
-                        UserTransactionService userTransactionService = new UserTransactionService(connect); 
                         
                         // Tạo lệnh rút
                         UserWithdrawOrder userWithdrawOrder = new UserWithdrawOrder();
