@@ -11,6 +11,8 @@ namespace GiveAndReceive.Models
         {
             public const string PENDING = "PENDING";
             public const string IN_DUTY = "IN-DUTY";
+            public const string DONE = "DONE";
+            public const string CANCEL = "CANCEL";
         }
     }
 }

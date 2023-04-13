@@ -60,6 +60,7 @@ namespace GiveAndReceive.ApiControllers
                         userWalletService.UpdateBalanceByUserId(user.UserId, -model.Amount, transaction);
 
                         UserTransaction userTransaction = new UserTransaction();
+                        userTransaction.UserTransactionId = Guid.NewGuid().ToString();
                         userTransaction.UserId = user.UserId;
                         userTransaction.Amount = - model.Amount;
                         userTransaction.Note = "Người dùng đã tạo lệnh rút " + model.Amount + " VNĐ.";
@@ -116,6 +117,7 @@ namespace GiveAndReceive.ApiControllers
                         userWalletService.UpdateBalanceByUserId(user.UserId, userWithdrawOrder.Amount, transaction);
 
                         UserTransaction userTransaction = new UserTransaction();
+                        userTransaction.UserTransactionId = Guid.NewGuid().ToString();
                         userTransaction.UserId = user.UserId;
                         userTransaction.Amount = userWithdrawOrder.Amount;
                         userTransaction.Note = "Người dùng đã hủy lệnh rút " + userWithdrawOrder.Amount + " VNĐ.";

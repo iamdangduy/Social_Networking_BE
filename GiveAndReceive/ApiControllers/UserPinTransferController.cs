@@ -1,5 +1,6 @@
 ﻿using GiveAndReceive.Filters;
 using GiveAndReceive.Models;
+using GiveAndReceive.Providers;
 using GiveAndReceive.Services;
 using System;
 using System.Collections.Generic;
@@ -24,6 +25,65 @@ namespace GiveAndReceive.ApiControllers
 
                 UserPinTransferService userPinTransferService = new UserPinTransferService();
                 return Success(userPinTransferService.GetListPinTransferByUser(user.UserId));
+            }
+            catch (Exception ex)
+            {
+                return Error(ex.Message);
+            }
+        }
+
+
+        [HttpGet]
+        [ApiTokenRequire]
+        public JsonResult ActivatePin()
+        {
+            try
+            {
+                using(var connect = BaseService.Connect())
+                {
+                    connect.Open();
+                    using(var transaction =  connect.BeginTransaction())
+                    {
+                        string token = Request.Headers.Authorization.ToString();
+                        UserService userService = new UserService();
+                        User user = userService.GetUserByToken(token);
+                        if (user == null) return Unauthorized();
+
+                        QueueGiveService queueGiveService = new QueueGiveService(connect);
+                        QueueReceiveService queueReceiveService = new QueueReceiveService(connect);
+                        UserWalletService userWalletService = new UserWalletService(connect);
+                        UserPinTransferService userPinTransferService = new UserPinTransferService(connect);
+
+                        QueueGive queueGive = queueGiveService.GetQueueGiveByUserId(user.UserId, transaction);
+                        if (queueGive.Status == QueueGive.EnumStatus.PENDING || queueGive.Status == QueueGive.EnumStatus.IN_DUTY) throw new Exception("Bạn đã đang ở trong phòng chờ cho, không thể kích hoạt pin");
+
+                        QueueReceive queueReceive = queueReceiveService.GetQueueReceiveByUserId(user.UserId, transaction);
+                        if (queueReceive.Status == QueueReceive.EnumStatus.PENDING || queueReceive.Status == QueueReceive.EnumStatus.IN_DUTY) throw new Exception("Bạn đã đang ở trong phòng nhận cho, không thể kích hoạt pin");
+
+                        queueGive = new QueueGive();
+                        queueGive.QueueGiveId = Guid.NewGuid().ToString();
+                        queueGive.UserId = user.UserId;
+                        queueGive.Status = QueueGive.EnumStatus.PENDING;
+                        queueGive.CreateTime = HelperProvider.GetSeconds(DateTime.Now);
+                        queueGiveService.InsertQueueGive(queueGive, transaction);
+
+                        // Cập nhật pin trong ví người dùng
+                        userWalletService.UpdatePinByUserId(user.UserId, -1, transaction);
+
+                        UserPinTransfer userPinTransfer = new UserPinTransfer();
+                        userPinTransfer.UserPinTransferId = Guid.NewGuid().ToString();
+                        userPinTransfer.UserGiveId = user.UserId;
+                        userPinTransfer.Pin = 1;
+                        userPinTransfer.Status = UserPinTransfer.EnumStatus.DONE;
+                        userPinTransfer.Message = "Người dùng sử dụng để kích hoạt pin";
+                        userPinTransfer.CreateTime = HelperProvider.GetSeconds();
+                        userPinTransferService.InsertUserPinTransfer(userPinTransfer, transaction);
+
+                        transaction.Commit();
+                        return Success();
+                    }
+                }
+                
             }
             catch (Exception ex)
             {
