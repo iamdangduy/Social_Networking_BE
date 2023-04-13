@@ -15,7 +15,7 @@ namespace GiveAndReceive.Services
 
         public List<object> GetListUserBankInfo(string UserId)
         {
-            string query = "select [UserBankInfoId], [BankName], [BankOwnerName], [BankNumber], [QRImage] from [user_bank_info] where UserId = @UserId and IsDefault = 1";
+            string query = "select * from [user_bank_info] where UserId = @UserId";
             return this._connection.Query<object>(query, new { UserId }).ToList();
         }
 
@@ -35,7 +35,7 @@ namespace GiveAndReceive.Services
 
         public void DeleteUserBankInfo(string UserBankInfoId, IDbTransaction transaction = null)
         {
-            string query = "update [user_bank_info] set IsDefault = 0 where UserBankInfoId = @UserBankInfoId";
+            string query = "delete from [user_bank_info] where UserBankInfoId = @UserBankInfoId";
             int Status = this._connection.Execute(query, new { UserBankInfoId }, transaction);
             if (Status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
         }

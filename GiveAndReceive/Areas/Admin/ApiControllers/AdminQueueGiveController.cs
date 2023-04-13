@@ -27,5 +27,20 @@ namespace GiveAndReceive.Areas.Admin.ApiControllers
                 return Error(ex.Message);
             }
         }
+
+        [HttpGet]
+        public JsonResult GetTotalQueueGive()
+        {
+            try
+            {
+                AdminQueueGiveService adminQueueGiveService = new AdminQueueGiveService();
+                return Success(adminQueueGiveService.GetTotalQueueGive(), "Lấy dữ liệu thành công!");
+
+            }
+            catch (Exception ex)
+            {
+                return Error(ex.Message);
+            }
+        }
     }
 }
