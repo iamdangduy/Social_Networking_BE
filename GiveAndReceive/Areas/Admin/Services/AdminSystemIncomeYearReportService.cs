@@ -15,7 +15,7 @@ namespace GiveAndReceive.Areas.Admin.Services
 
         public long GetTotalRevenue()
         {
-            string query = "select SUM(Revenue) from [system_income_year_report]";
+            string query = "select SUM(Revenue) from [system_income_year_report] where Revenue > 0 group by Revenue";
             return this._connection.Query<long>(query).FirstOrDefault();
         }
     }
