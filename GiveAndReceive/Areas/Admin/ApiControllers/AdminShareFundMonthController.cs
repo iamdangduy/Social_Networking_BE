@@ -26,5 +26,21 @@ namespace GiveAndReceive.Areas.Admin.ApiControllers
                 return Error(ex.Message);
             }
         }
+
+        [HttpGet]
+        [ApiAdminTokenRequire]
+        public JsonResult GetCurrentBalance()
+        {
+            try
+            {
+                var date = new DateTime();
+                AdminShareFundMonthService adminShareFundMonthService = new AdminShareFundMonthService();
+                return Success(adminShareFundMonthService.GetCurrentBalance(date.Month, date.Year), "Lấy dữ liệu thành công!");
+            }
+            catch (Exception ex)
+            {
+                return Error(ex.Message);
+            }
+        }
     }
 }

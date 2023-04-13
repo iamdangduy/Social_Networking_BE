@@ -4108,6 +4108,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
+    <Compile Include="Areas\Admin\ApiControllers\AdminShareFundController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminShareFundMonthController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminSystemBankInfoController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminProductController.cs" />
@@ -4116,6 +4117,7 @@
     <Compile Include="Areas\Admin\ApiControllers\AdminQueueGiveController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminQueueReceiveController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminSystemController.cs" />
+    <Compile Include="Areas\Admin\ApiControllers\AdminSystemIncomeYearReportController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminUserPropertiesController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminUserWalletController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminUserWithdrawOrderController.cs" />
@@ -4129,12 +4131,14 @@
     <Compile Include="Areas\Admin\Controllers\ProductController.cs" />
     <Compile Include="Areas\Admin\Controllers\SystemConfigController.cs" />
     <Compile Include="Areas\Admin\Services\AdminShareFundMonthService.cs" />
+    <Compile Include="Areas\Admin\Services\AdminShareFundService.cs" />
     <Compile Include="Areas\Admin\Services\AdminSystemBankInfoService.cs" />
     <Compile Include="Areas\Admin\Services\AdminProductService.cs" />
     <Compile Include="Areas\Admin\Services\AdminQueueGiveService.cs" />
     <Compile Include="Areas\Admin\Services\AdminQueueReceiveService.cs" />
     <Compile Include="Areas\Admin\Services\AdminShareFundUserMonthService.cs" />
     <Compile Include="Areas\Admin\Services\AdminSystemConfigService.cs" />
+    <Compile Include="Areas\Admin\Services\AdminSystemIncomeYearReportService.cs" />
     <Compile Include="Areas\Admin\Services\AdminUserPropertiesService.cs" />
     <Compile Include="Areas\Admin\Services\AdminUserService.cs" />
     <Compile Include="Areas\Admin\Services\AdminUserTransactionService.cs" />
