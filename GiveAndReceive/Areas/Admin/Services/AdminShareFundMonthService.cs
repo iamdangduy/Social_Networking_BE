@@ -15,6 +15,7 @@ namespace GiveAndReceive.Areas.Admin.Services
     {
         public AdminShareFundMonthService() : base() { }
         public AdminShareFundMonthService(IDbConnection db) : base(db) { }
+
         public ListShareFundMonthView GetListShareFundMonth(int page,IDbTransaction transaction = null)
         {
             ListShareFundMonthView listShareFundMonthView = new ListShareFundMonthView();
@@ -36,6 +37,12 @@ namespace GiveAndReceive.Areas.Admin.Services
             query += " order by sfm.Month desc, sfm.Year desc offset " + skip + " rows fetch next " + Constant.ADMIN_PAGE_SIZE + " rows only";
             listShareFundMonthView.List = this._connection.Query<ShareFundMonth>(querySelect + query, transaction).ToList();
             return listShareFundMonthView;
+        }
+
+        public long GetCurrentBalance(int Month, int Year)
+        {
+            string query = "select Balance from [share_fund_month] where Month = @Month and Year = @Year";
+            return this._connection.Query<long>(query, new { Month, Year }).FirstOrDefault();
         }
     }
 }
