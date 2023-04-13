@@ -10,7 +10,7 @@ using System.Web.Http;
 
 namespace GiveAndReceive.Areas.Admin.ApiControllers
 {
-    [APIAuthenticationFilter]
+    [ApiAdminTokenRequire]
     public class ApiAdminBaseController : ApiController
     {
         [HttpGet]
