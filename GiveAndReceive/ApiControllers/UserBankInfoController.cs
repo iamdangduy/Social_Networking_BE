@@ -57,7 +57,7 @@ namespace GiveAndReceive.ApiControllers
                         userBankInfo.BankName = model.BankName;
                         userBankInfo.BankOwnerName = model.BankOwnerName;
                         userBankInfo.BankNumber = model.BankNumber;
-                        userBankInfo.IsDefault = true;
+                        userBankInfo.IsDefault = model.IsDefault;
 
                         if (!Directory.Exists(HttpContext.Current.Server.MapPath("~" + String.Format(Constant.SYSTEM_BANK_QR_IMAGE_PATH))))
                         {
@@ -106,6 +106,7 @@ namespace GiveAndReceive.ApiControllers
                         userBankInfo.BankName = model.BankName;
                         userBankInfo.BankOwnerName = model.BankOwnerName;
                         userBankInfo.BankNumber = model.BankNumber;
+                        userBankInfo.IsDefault = model.IsDefault;
 
                         if (string.IsNullOrEmpty(model.QRImage)) return Error();
                         //tạo file mới

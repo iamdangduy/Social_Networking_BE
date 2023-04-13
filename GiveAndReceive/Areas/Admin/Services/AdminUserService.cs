@@ -45,5 +45,11 @@ namespace GiveAndReceive.Areas.Admin.Services
             string query = "select [Name], [Avatar], [Account], [Phone], [Email], [CreateTime], [ShareCode], [ParentCode] from [user] where UserId = @UserId";
             return this._connection.Query<object>(query, new { UserId }, transaction).FirstOrDefault();
         }
+
+        public int GetTotalUser()
+        {
+            string query = "select COUNT(UserId) from [user]";
+            return this._connection.Query<int>(query).FirstOrDefault();
+        }
     }
 }
