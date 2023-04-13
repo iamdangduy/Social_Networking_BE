@@ -117,6 +117,11 @@ namespace GiveAndReceive.Services
             int status = this._connection.Execute(query, new { token = token, userId = userId }, transaction);
             if (status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
         }
+
+        public UserToken GetUserToken(string token, IDbTransaction transaction = null) {
+            string query = "select top 1 * from [user_token] where Token=@token";
+            return this._connection.Query<UserToken>(query, new { token }, transaction).FirstOrDefault();
+        }
         public void InsertUserToken(UserToken model, IDbTransaction transaction = null)
         {
             string query = "INSERT INTO [dbo].[user_token]([UserTokenId],[UserId],[Token],[ExpireTime],[CreateTime]) VALUES (@UserTokenId,@UserId,@Token,@ExpireTime,@CreateTime)";
@@ -135,5 +140,7 @@ namespace GiveAndReceive.Services
             string query = "select Name, Avatar, Account, Email, Phone from [user] where UserId=@userId";
             return this._connection.Query<User>(query, new {userId = userId }, transaction).FirstOrDefault();
         }
+
+
     }
 }

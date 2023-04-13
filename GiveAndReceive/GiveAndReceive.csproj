@@ -4102,6 +4102,7 @@
     <Compile Include="ApiControllers\UserController.cs" />
     <Compile Include="ApiControllers\UserPinTransferController.cs" />
     <Compile Include="ApiControllers\UserPropertiesController.cs" />
+    <Compile Include="ApiControllers\UserQuestController.cs" />
     <Compile Include="ApiControllers\UserTransactionController.cs" />
     <Compile Include="ApiControllers\UserWalletController.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />

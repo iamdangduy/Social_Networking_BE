@@ -18,12 +18,19 @@ namespace GiveAndReceive.Providers
             if (string.IsNullOrEmpty(token)) return null;
 
             UserService userService = new UserService(connect);
-            User user = userService.GetUserByToken(token, transaction);
+
+            UserToken userToken = userService.GetUserToken(token,transaction);
+            if (userToken == null) return null;
+            long now = HelperProvider.GetSeconds();
+            if (userToken.ExpireTime >= now) {
+                userService.RemoveUserToken(userToken.Token, transaction);
+                return null;
+            }
+
+            User user = userService.GetUserByToken(userToken.Token, transaction);
 
             return user;
-        }
-
-        
+        }        
 
         public static void TransferMoney(string userGiveId, string userReceiveId, decimal moneyTransfer, IDbConnection connection = null, IDbTransaction transaction = null)
         {
@@ -59,7 +66,6 @@ namespace GiveAndReceive.Providers
                 UserTransactionId = Guid.NewGuid().ToString()
             }, transaction);
         }
-
 
     }
 }
