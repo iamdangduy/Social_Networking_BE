@@ -16,7 +16,7 @@ namespace GiveAndReceive.Services
         public List<object> GetListUserBankInfo(string UserId)
         {
             string query = "select [UserBankInfoId], [BankName], [BankOwnerName], [BankNumber], [QRImage] from [user_bank_info] where UserId = @UserId and IsDefault = 1";
-            return this._connection.Query<object>(query).ToList();
+            return this._connection.Query<object>(query, new { UserId }).ToList();
         }
 
         public void InsertUserBankInfo(UserBankInfo model, IDbTransaction transaction = null)
