@@ -4146,6 +4146,7 @@
     <Compile Include="Areas\Admin\ApiControllers\AdminUserController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\NotificationController.cs" />
+    <Compile Include="Controllers\UserBankInfoController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\UserQuestController.cs" />
     <Compile Include="Filters\ApiAdminTokenRequireAttribute.cs" />
@@ -4376,6 +4377,7 @@
     <Content Include="Views\ConnectMember\Index.cshtml" />
     <Content Include="Views\User\AccountVerification.cshtml" />
     <Content Include="Views\User\ChangePassword.cshtml" />
+    <Content Include="Views\UserBankInfo\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
