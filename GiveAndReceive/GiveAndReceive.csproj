@@ -4091,6 +4091,21 @@
     <Content Include="Content\js\helper.js" />
     <Content Include="Content\js\jquery-3.6.0.min.js" />
     <Content Include="Content\Site.css" />
+    <Content Include="files\product\thumbnail\0d752764-5b66-475c-b636-34b1f4b477df.jpg" />
+    <Content Include="files\product\thumbnail\de63ce30-1ab5-4a43-b8a2-70f4fc7eaf59.jpg" />
+    <Content Include="files\systembank\01a50baf-d164-4d7a-8929-4b08462109ff.jpg" />
+    <Content Include="files\systembank\32c294bb-8bba-4b80-9a43-b401ec4085fb.jpg" />
+    <Content Include="files\systembank\460037d8-9166-4dac-a551-9ab551a49601.jpg" />
+    <Content Include="files\systembank\4ece6405-529f-42fb-a312-e2e4414f0793.jpg" />
+    <Content Include="files\systembank\64261a29-9f97-444b-94aa-10e179562bb2.jpg" />
+    <Content Include="files\systembank\67375f9d-fd85-4ba0-89d8-0af91b265706.jpg" />
+    <Content Include="files\systembank\77b3b37f-505e-4490-9f8c-80a79bde3b64.jpg" />
+    <Content Include="files\systembank\7ea5b3b4-a81b-4a00-90bc-c8092991f5c7.jpg" />
+    <Content Include="files\systembank\a40f2b10-55f6-4cfd-8c08-11cbbbfe02c1.jpg" />
+    <Content Include="files\systembank\ba938107-1dbe-4874-b707-5d97e2d8708b.jpg" />
+    <Content Include="files\systembank\c98c51ec-76d6-4f4b-89d0-a534098c9494.jpg" />
+    <Content Include="files\systembank\e0133d38-f54c-4ea6-b7bc-7231072a5031.jpg" />
+    <Content Include="files\systembank\e693a50c-1654-412c-bc35-3586502fc6e8.jpg" />
     <Content Include="Global.asax" />
     <Content Include="Web.config" />
   </ItemGroup>
@@ -4118,6 +4133,7 @@
     <Compile Include="Areas\Admin\ApiControllers\AdminQueueReceiveController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminSystemController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminSystemIncomeYearReportController.cs" />
+    <Compile Include="Areas\Admin\ApiControllers\AdminSystemWalletController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminUserPropertiesController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminUserWalletController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminUserWithdrawOrderController.cs" />
@@ -4140,6 +4156,7 @@
     <Compile Include="Areas\Admin\Services\AdminShareFundUserMonthService.cs" />
     <Compile Include="Areas\Admin\Services\AdminSystemConfigService.cs" />
     <Compile Include="Areas\Admin\Services\AdminSystemIncomeYearReportService.cs" />
+    <Compile Include="Areas\Admin\Services\AdminSystemWalletService.cs" />
     <Compile Include="Areas\Admin\Services\AdminUserPropertiesService.cs" />
     <Compile Include="Areas\Admin\Services\AdminUserService.cs" />
     <Compile Include="Areas\Admin\Services\AdminUserTransactionService.cs" />

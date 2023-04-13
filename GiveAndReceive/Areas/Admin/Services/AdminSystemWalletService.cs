@@ -1,4 +1,6 @@
-﻿using GiveAndReceive.Services;
+﻿using Dapper;
+using GiveAndReceive.Models;
+using GiveAndReceive.Services;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -12,6 +14,10 @@ namespace GiveAndReceive.Areas.Admin.Services
         public AdminSystemWalletService() : base() { }
         public AdminSystemWalletService(IDbConnection db) : base(db) { }
 
-        //public long 
+        public long GetBalance()
+        {
+            string query = "select Balance from [system_wallet] where [SystemWalletId] = 'CASH'";
+            return this._connection.Query<long>(query).FirstOrDefault();
+        }
     }
 }
