@@ -4190,6 +4190,8 @@
     <Compile Include="Services\BaseService.cs" />
     <Compile Include="Services\CodeConfirmService.cs" />
     <Compile Include="Services\NotificationService.cs" />
+    <Compile Include="Services\QueueGiveService.cs" />
+    <Compile Include="Services\QueueReceiveService.cs" />
     <Compile Include="Services\SystemWalletService.cs" />
     <Compile Include="Services\UserAdminService.cs" />
     <Compile Include="Services\UserBankInfoService.cs" />
