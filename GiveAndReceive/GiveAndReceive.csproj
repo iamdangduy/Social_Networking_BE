@@ -4124,6 +4124,7 @@
     <Compile Include="Areas\Admin\ApiControllers\ApiAdminBaseController.cs" />
     <Compile Include="Areas\Admin\Controllers\HomeController.cs" />
     <Compile Include="Areas\Admin\Controllers\ManageRankController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ManageShareFundMonthController.cs" />
     <Compile Include="Areas\Admin\Controllers\ManageSystemBankController.cs" />
     <Compile Include="Areas\Admin\Controllers\ManageUserController.cs" />
     <Compile Include="Areas\Admin\Controllers\ManageWaitingLineController.cs" />
@@ -4370,6 +4371,7 @@
     <Content Include="Areas\Admin\Views\ManageRank\Index.cshtml" />
     <Content Include="Areas\Admin\Views\SystemConfig\Index.cshtml" />
     <Content Include="Areas\Admin\Views\ManageWaitingLine\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\ManageShareFundMonth\Index.cshtml" />
     <None Include="packages.config" />
     <Content Include="Views\Home\Login.cshtml" />
     <Content Include="Views\Home\Register.cshtml" />
