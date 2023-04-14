@@ -94,7 +94,7 @@ namespace GiveAndReceive.ApiControllers
 
                         if (!string.IsNullOrEmpty(model.Email))
                         {
-                            userService.CheckEmailExist(user.Email, user.UserId, transaction);
+                            userService.CheckEmailExist(model.Email, user.UserId, transaction);
                             if (model.Email != user.Email)
                             {
                                 if (string.IsNullOrEmpty(model.EmailCode)) throw new Exception("Bạn chưa nhập mã xác thực email");
@@ -105,7 +105,7 @@ namespace GiveAndReceive.ApiControllers
                         }
                         if (!string.IsNullOrEmpty(model.Phone))
                         {
-                            userService.CheckUserPhoneExist(user.Phone, user.UserId, transaction);
+                            userService.CheckUserPhoneExist(model.Phone, user.UserId, transaction);
                             if (model.Phone != user.Phone)
                             {
                                 if (string.IsNullOrEmpty(model.PhoneCode)) throw new Exception("Bạn chưa nhập mã xác thực số điện thoại");
