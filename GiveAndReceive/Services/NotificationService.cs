@@ -16,7 +16,7 @@ namespace GiveAndReceive.Services
         public List<Notification> GetListNotification(string userId, int page)
         {
 
-            string query = "select * from notification where 1 = 1 and UserId=@userId order by NotificationId desc";
+            string query = "select * from notification where 1 = 1 and UserId=@userId order by CreateTime desc";
             query += " OFFSET(" + (page - 1) * Constant.USER_PAGE_SIZE + ") ROWS FETCH NEXT(" + Constant.USER_PAGE_SIZE + ") ROWS ONLY ";
             List<Notification> ls = this._connection.Query<Notification>(query, new { userId = userId }).ToList();
             return ls;
