@@ -16,6 +16,25 @@ namespace GiveAndReceive.ApiControllers
 {
     public class UserPropertiesController : ApiBaseController
     {
+        [HttpGet]
+        public JsonResult GetUserPropertiesByUserId()
+        {
+            try
+            {
+                string token = Request.Headers.Authorization.ToString();
+                UserService userService = new UserService();
+                User user = userService.GetUserByToken(token);
+                if (user == null) return Unauthorized();
+
+                UserPropertiesService userPropertiesService = new UserPropertiesService();
+                return Success(userPropertiesService.GetUserPropertiesByUserId(user.UserId));
+            }
+            catch (Exception ex)
+            {
+                return Error(ex.Message);
+            }
+        }
+
         [HttpPost]
         public JsonResult CreateUserPropertiesForIdentity(UserProperties model)
         {
