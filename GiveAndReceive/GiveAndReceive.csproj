@@ -4148,6 +4148,7 @@
     <Compile Include="Areas\Admin\Controllers\ManageWithdrawController.cs" />
     <Compile Include="Areas\Admin\Controllers\ProductController.cs" />
     <Compile Include="Areas\Admin\Controllers\SystemConfigController.cs" />
+    <Compile Include="Areas\Admin\Services\AdminNotificationService.cs" />
     <Compile Include="Areas\Admin\Services\AdminShareFundMonthService.cs" />
     <Compile Include="Areas\Admin\Services\AdminShareFundService.cs" />
     <Compile Include="Areas\Admin\Services\AdminSystemBankInfoService.cs" />

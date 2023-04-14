@@ -116,6 +116,7 @@ a {
             .home-page .current-mission .mission-detail .status span {
                 font-size: 12px;
                 border-radius: 20px;
+                cursor:default;
             }
 
         .home-page .current-mission .mission-detail .button {
@@ -269,6 +270,7 @@ a {
             background-repeat: no-repeat;
             background-size: cover;
             border: .5px solid #d7d7d7;
+            cursor:pointer;
         }
 
     .account-page .user-info .info-detail {
@@ -426,7 +428,7 @@ a {
 }
 
 .verification-page .form-group .preview {
-    width: 100%;
+    width: 50%;
     background-position: center;
     background-repeat: no-repeat;
     background-size: contain;

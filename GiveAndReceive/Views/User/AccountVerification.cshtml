@@ -58,7 +58,7 @@
             <input type="hidden" id="Thumbnail3" />
         </div>
         <div style="text-align:right; margin-top:10px;">
-            <button class="btn btn-sm btn-primary" onclick="CreateUserPropertiesForIdentity()"> Lưu </button>
+            <button class="btn btn-sm btn-primary" id="SaveIdentity" onclick="CreateUserPropertiesForIdentity()"> Lưu </button>
         </div>
     </div>
 </section>
@@ -96,7 +96,11 @@
                 $('#place').val(rs.data.CitizenIdentificationPlaceOf);
                 $('#date').val(DateStringFormat({ stringDate: new Date(rs.data.CitizenIdentificationDateOf), newFormat: 'dd-mm-yyyy' }));
                 $('#userAddress').val(rs.data.CitizenIdentificationAddress),
-                $('#userName').val(rs.data.CitizenIdentificationName);
+                    $('#userName').val(rs.data.CitizenIdentificationName);
+
+                if (rs.data.length != '') {
+                    $('#SaveIdentity').attr('onclick', 'UpdateUserPropertiesForIdentity()');
+                }
             }
         }
 
