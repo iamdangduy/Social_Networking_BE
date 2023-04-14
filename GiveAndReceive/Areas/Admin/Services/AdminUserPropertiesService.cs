@@ -20,10 +20,10 @@ namespace GiveAndReceive.Areas.Admin.Services
             return this._connection.Query<UserProperties>(query, new { UserId }, transaction).FirstOrDefault();
         }
 
-        public void UpdateStatusUserIdentity(string UserId, bool Status, IDbTransaction transaction = null)
+        public void UpdateStatusUserIdentity(string UserId, bool IdentificationApprove, string Status, IDbTransaction transaction = null)
         {
-            string query = "update [user_properties] set IdentificationApprove = @Status where UserId = @UserId";
-            int numberOfEffectedRows = this._connection.Execute(query, new { UserId, Status }, transaction);
+            string query = "update [user_properties] set IdentificationApprove = @StIdentificationApproveatus, Status = @Status where UserId = @UserId";
+            int numberOfEffectedRows = this._connection.Execute(query, new { UserId, IdentificationApprove, Status }, transaction);
             if (numberOfEffectedRows <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
         }
     }

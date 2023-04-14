@@ -57,6 +57,8 @@ namespace GiveAndReceive.ApiControllers
                             Directory.CreateDirectory(HttpContext.Current.Server.MapPath("~" + String.Format(Constant.IDENTITY_THUMBNAIL_PATH)));
                         }
 
+                        #region Thêm mới ảnh căn cước
+
                         if (string.IsNullOrEmpty(model.CitizenIdentificationImageFront)) return Error();
                         //tạo file mới
                         if (model.CitizenIdentificationImageFront == null) return Error();
@@ -79,20 +81,21 @@ namespace GiveAndReceive.ApiControllers
                         string filename2 = Guid.NewGuid().ToString() + ".jpg";
                         var path2 = System.Web.HttpContext.Current.Server.MapPath(Constant.IDENTITY_THUMBNAIL_PATH + filename2);
                         HelperProvider.Base64ToImage(model.PhotoFace, path2);
-                        userProperties.PhotoFace = Constant.IDENTITY_THUMBNAIL_URL + filename2;
+                        userProperties.PhotoFace = Constant.IDENTITY_THUMBNAIL_URL + filename2; 
+
+                        #endregion
 
                         userProperties.CitizenIdentificationName = model.CitizenIdentificationName;
                         userProperties.CitizenIdentificationNumber = model.CitizenIdentificationNumber;
                         if (userPropertiesService.CheckExistIdentity(model.CitizenIdentificationNumber, transaction) != null) return Error("Căn cước đã được sử dụng!");
-                        
                         userProperties.CitizenIdentificationAddress = model.CitizenIdentificationAddress;
                         userProperties.CitizenIdentificationDateOf = model.CitizenIdentificationDateOf;
                         userProperties.CitizenIdentificationPlaceOf = model.CitizenIdentificationPlaceOf;
                         userProperties.IdentificationApprove = UserProperties.EnumIdentificationApprove.SYSTEM_DECLINE;
+                        userProperties.Status = UserProperties.EnumStatus.PENDING;
                         userProperties.UserId = user.UserId;
 
                         userPropertiesService.CreateUserPropertiesForIdentity(userProperties, transaction);
-
                         transaction.Commit();
                         return Success();
                     }
@@ -123,6 +126,7 @@ namespace GiveAndReceive.ApiControllers
                         var UserPropertiesModel = userPropertiesService.GetUserPropertiesByUserId(user.UserId, transaction);
                         UserProperties userProperties = new UserProperties();
 
+                        #region Chỉnh sửa ảnh căn cước
                         if (!Directory.Exists(HttpContext.Current.Server.MapPath("~" + String.Format(Constant.IDENTITY_THUMBNAIL_PATH))))
                         {
                             Directory.CreateDirectory(HttpContext.Current.Server.MapPath("~" + String.Format(Constant.IDENTITY_THUMBNAIL_PATH)));
@@ -175,16 +179,18 @@ namespace GiveAndReceive.ApiControllers
                         else
                         {
                             userProperties.PhotoFace = UserPropertiesModel.PhotoFace;
-                        }
+                        } 
+
+                        #endregion
 
                         userProperties.CitizenIdentificationName = model.CitizenIdentificationName;
                         userProperties.CitizenIdentificationNumber = model.CitizenIdentificationNumber;
                         if (userPropertiesService.CheckExistIdentity(model.CitizenIdentificationNumber, transaction) != null) return Error("Căn cước đã được sử dụng!");
-
                         userProperties.CitizenIdentificationAddress = model.CitizenIdentificationAddress;
                         userProperties.CitizenIdentificationDateOf = model.CitizenIdentificationDateOf;
                         userProperties.CitizenIdentificationPlaceOf = model.CitizenIdentificationPlaceOf;
                         userProperties.IdentificationApprove = UserProperties.EnumIdentificationApprove.SYSTEM_DECLINE;
+                        userProperties.Status = UserProperties.EnumStatus.PENDING;
                         userProperties.UserId = user.UserId;
 
                         userPropertiesService.UpdateUserPropertiesForIdentity(userProperties, transaction);
