@@ -48,10 +48,11 @@
                 </div>
             </div>
             <div class="form-group">
-                <div class="d-flex mb-3">
+                <div class="d-flex">
                     <input type="text" style="width:50%;" class="form-control" id="EmailCode" placeholder="Mã xác thực">
                     <button class="input-group-text verify-email-code" style="margin-left: 10px;" onclick="VerifyEmailCode();" id="Code">Xác minh</button>
                 </div>
+                <span id='message-email' style="font-size:12px;"></span>
             </div>
 
             <div class="form-group">
@@ -62,10 +63,11 @@
                 </div>
             </div>
             <div class="form-group">
-                <div class="d-flex mb-3">
+                <div class="d-flex">
                     <input type="text" style="width:50%;" class="form-control" id="PhoneCode" placeholder="Mã xác thực">
                     <button class="input-group-text verify-phone-code" style="margin-left: 10px;" onclick="VerifyPhoneCode();" id="Code">Xác minh</button>
                 </div>
+                <span id='message-phone' style="font-size:12px;"></span>
             </div>
 
             <div class="confirm-button" style="text-align:right;margin-top:20px;">
@@ -97,6 +99,7 @@
 @section scripts{
     <script src="~/Content/js/base64.js"></script>
     <script>
+        var dem = 0;
         var ChooseThumbnail = function (el) { $(el).closest('.user-avatar').find('input[type=file]').click(); }
         var ChooseThumbnail_OnChange = function (el) {
             let reader = new FileReader();
@@ -135,7 +138,6 @@
 
         const GetEmailCode = async function () {
             let email = $('#Email').val();
-
             if (email === '' || email === null || typeof email === 'undefined') {
                 Swal.fire({
                     icon: "error",
@@ -158,8 +160,8 @@
             });
             let rs = await rq.json();
             if (CheckErrorResponse(rs) === false) return;
-            /*if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {                
-            }*/
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {                
+            }
         }
 
         const VerifyEmailCode = async function () {
@@ -188,14 +190,14 @@
             let rs = await rq.json();
             if (CheckErrorResponse(rs) === false) return;
             if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
-                $('.verify-email-code').html('');                
-                $('.verify-email-code').append('<i class="fas fa-check"></i>');
+                $('.verify-email-code').css('display', 'none');
+                $('#message-email').html('Xác nhận thành công.').css('color', 'green');
+                dem += 1;
             }
         } 
 
         const GetPhoneCode = async function () {
             let phone = $('#Phone').val();
-
             if (phone === '' || phone === null || typeof phone === 'undefined') {
                 Swal.fire({
                     icon: "error",
@@ -250,13 +252,20 @@
             let rs = await rq.json();
             if (CheckErrorResponse(rs) === false) return;
             if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
-                $('.verify-phone-code').html('');
-                $('.verify-phone-code').append('<i class="fas fa-check"></i>');
+                $('.verify-phone-code').css('display', 'none');
+                $('#message-phone').html('Xác nhận thành công.').css('color', 'green');
+                dem += 1;
             }
         }
 
         const updateInfoUser = async function () {
-
+            if (dem < 2) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Bạn cần xác minh đầy đủ thông tin.",
+                });
+                return;
+            }
             let model = {
                 Avatar: $('#Thumbnail').val(),
                 Account: $('#Account').val(),

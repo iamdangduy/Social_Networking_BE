@@ -98,7 +98,7 @@ namespace GiveAndReceive.ApiControllers
                             if (model.Email != user.Email)
                             {
                                 if (string.IsNullOrEmpty(model.EmailCode)) throw new Exception("Bạn chưa nhập mã xác thực email");
-                                CodeConfirm emailCode = codeConfirmService.GetCodeConfirmByEmail(user.Email, transaction);
+                                CodeConfirm emailCode = codeConfirmService.GetCodeConfirmByEmail(model.Email, transaction);
                                 if (emailCode.Code != model.EmailCode) throw new Exception("Mã xác thực không chính xác");
                             }
                             user.Email = model.Email.Trim();
@@ -109,7 +109,7 @@ namespace GiveAndReceive.ApiControllers
                             if (model.Phone != user.Phone)
                             {
                                 if (string.IsNullOrEmpty(model.PhoneCode)) throw new Exception("Bạn chưa nhập mã xác thực số điện thoại");
-                                CodeConfirm phoneCode = codeConfirmService.GetCodeConfirmByPhone(user.Phone, transaction);
+                                CodeConfirm phoneCode = codeConfirmService.GetCodeConfirmByPhone(model.Phone, transaction);
                                 if (phoneCode.Code != model.PhoneCode) throw new Exception("Mã xác thực không chính xác");
                             }
 
