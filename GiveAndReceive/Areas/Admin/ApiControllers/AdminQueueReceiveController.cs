@@ -15,13 +15,11 @@ namespace GiveAndReceive.Areas.Admin.ApiControllers
     public class AdminQueueReceiveController : ApiAdminBaseController
     {
         [HttpGet]
-        public JsonResult GetListQueueReceive(int PageIndex = 1, string Status = "")
+        public JsonResult GetListQueueReceive(int PageIndex = 1)
         {
             try
             {
                 AdminQueueReceiveService adminQueueReceiveService = new AdminQueueReceiveService();
-                if (Status != QueueReceive.EnumStatus.PENDING) return Error();
-
                 return Success(adminQueueReceiveService.GetListQueueReceive(PageIndex, QueueReceive.EnumStatus.PENDING), "Lấy dữ liệu thành công!");
 
             }
