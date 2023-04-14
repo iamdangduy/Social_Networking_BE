@@ -99,7 +99,9 @@
 @section scripts{
     <script src="~/Content/js/base64.js"></script>
     <script>
-        var dem = 0;
+        var verifyEmail = true;
+        var verifyPhone = true;
+
         var ChooseThumbnail = function (el) { $(el).closest('.user-avatar').find('input[type=file]').click(); }
         var ChooseThumbnail_OnChange = function (el) {
             let reader = new FileReader();
@@ -160,7 +162,8 @@
             });
             let rs = await rq.json();
             if (CheckErrorResponse(rs) === false) return;
-            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {                
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                verifyEmail = false;
             }
         }
 
@@ -192,7 +195,7 @@
             if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
                 $('.verify-email-code').css('display', 'none');
                 $('#message-email').html('Xác nhận thành công.').css('color', 'green');
-                dem += 1;
+                verifyEmail = true;
             }
         } 
 
@@ -222,6 +225,9 @@
             });
             let rs = await rq.json();
             if (CheckErrorResponse(rs) === false) return;
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                verifyPhone = false;
+            }
         }
 
         const VerifyPhoneCode = async function () {
@@ -254,18 +260,19 @@
             if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
                 $('.verify-phone-code').css('display', 'none');
                 $('#message-phone').html('Xác nhận thành công.').css('color', 'green');
-                dem += 1;
+                verifyPhone = true;
             }
         }
 
         const updateInfoUser = async function () {
-            if (dem < 2) {
+            if (verifyEmail === false || verifyPhone === false) {
                 Swal.fire({
                     icon: "error",
-                    title: "Bạn cần xác minh đầy đủ thông tin.",
+                    title: "Bạn cần xác thực email hoặc số điện thoại.",
                 });
                 return;
             }
+
             let model = {
                 Avatar: $('#Thumbnail').val(),
                 Account: $('#Account').val(),
