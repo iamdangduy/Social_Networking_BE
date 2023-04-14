@@ -17,7 +17,7 @@ namespace GiveAndReceive.Areas.Admin.Services
 
         public object GetListQueueReceive(int PageIndex = 1, string Status = "")
         {
-            string queryCount = "select COUNT(qr.*) ";
+            string queryCount = "select COUNT(*) ";
             string querySelect = "select qr.*, u.Name ";
             string queryWhere = "from [queue_receive] qr left join [user] u on qr.UserId = u.UserId where 1=1 ";
 
