@@ -308,6 +308,7 @@ namespace GiveAndReceive.ApiControllers
                         userProperties.IdentificationApprove = false;
                         userProperties.TotalAmountGive = 0;
                         userProperties.TotalAmountReceive = 0;
+                        userProperties.Status = UserProperties.EnumStatus.CANCEL;
                         userPropertiesService.CreateUserProperties(userProperties, transaction);
 
                         UserToken userToken = new UserToken();
