@@ -16,7 +16,7 @@ namespace GiveAndReceive.Providers
             try
             {
                 var client = new HttpClient();
-                string message = "[SWAY VN] Ma xac thuc cua ban la " + code;
+                string message = "(SWAY GLOBAL) Ma OTP cua ban la " + code + ", co hieu luc trong 3 phut. Tin nhan duoc gui tu SWAY VN.";
                 var result = client.GetStringAsync("http://rest.esms.vn/MainService.svc/json/SendMultipleMessage_V4_get?Phone=" + phoneNumber + "&Content=" + message + "&ApiKey=06D5D3C5D6F6685AF97DDE5CBB31EC&SecretKey=8CAAEFC35C517D9ED878AC87E721B4&SmsType=2&Brandname=SWAY VN").Result;
                 SMSResponse smsResponse = JsonConvert.DeserializeObject<SMSResponse>(result);
                 if (smsResponse.CodeResult == "100") return true;
