@@ -23,7 +23,7 @@ a {
 
 .section-header {
     font-size: 20px;
-    padding: 0 0 30px;
+    margin: 0 0 30px;
     text-align: center;
     text-transform: uppercase;
     font-weight: bold;
@@ -254,6 +254,7 @@ a {
             background-repeat: no-repeat;
             background-size: cover;
             border: .5px solid #d7d7d7;
+            cursor:pointer;
         }
 
     .account-page .user-info .info-detail {
