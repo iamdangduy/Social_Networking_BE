@@ -1,6 +1,11 @@
 **.vs
-**/Debug
+**Debug
 *.user
 GiveAndReceive/bin/GiveAndReceive.dll
 GiveAndReceive/bin/GiveAndReceive.pdb
 **bin
+**publish
+**Release
+GiveAndReceive/obj/Release/GiveAndReceive.csproj.FileListAbsolute.txt
+GiveAndReceive/Properties/PublishProfiles/FolderProfile.pubxml
+GiveAndReceive/obj/Release/GiveAndReceive.csproj.FileListAbsolute.txt

@@ -4126,6 +4126,7 @@
     <Content Include="files\systembank\e0133d38-f54c-4ea6-b7bc-7231072a5031.jpg" />
     <Content Include="files\systembank\e693a50c-1654-412c-bc35-3586502fc6e8.jpg" />
     <Content Include="Global.asax" />
+    <Content Include="Properties\PublishProfiles\FolderProfile.pubxml.user" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -4425,6 +4426,7 @@
     <Content Include="Views\User\AccountVerification.cshtml" />
     <Content Include="Views\User\ChangePassword.cshtml" />
     <Content Include="Views\UserBankInfo\Index.cshtml" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
