@@ -103,7 +103,7 @@ namespace GiveAndReceive.Areas.Admin.ApiControllers
                         if (UserProperties == null) return Error();
                         if (UserProperties.IdentificationApprove != UserProperties.EnumIdentificationApprove.SYSTEM_DECLINE) return Error();
                         //if (!) return Error();
-                        adminUserPropertiesService.UpdateStatusUserIdentity(UserId, UserProperties.EnumIdentificationApprove.SYSTEM_ACCEPT, transaction)
+                        adminUserPropertiesService.UpdateStatusUserIdentity(UserId, UserProperties.EnumIdentificationApprove.SYSTEM_ACCEPT, transaction);
                         //tạo thông báo
                         //Notification notification = new Notification
                         //{
