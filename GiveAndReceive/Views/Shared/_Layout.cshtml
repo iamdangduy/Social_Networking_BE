@@ -44,9 +44,15 @@
                 </div>
                 <div class="sidebar-menu" style="flex: 1;">
                     <ul class="menu" style="flex:1;">
+                        <li class="sidebar-item  @(ViewBag.Menu == "intro" ? "active":"")">
+                            <a href="/" class='sidebar-link'>
+                                <i class="fa-brands fa-readme"></i>
+                                <span>Giới thiệu</span>
+                            </a>
+                        </li>
                         <li class="sidebar-item  @(ViewBag.Menu == "dashboard" ? "active":"")">
                             <a href="/" class='sidebar-link'>
-                                <i class="fa-solid fa-cubes"></i>
+                                <i class="fa-solid fa-gauge"></i>
                                 <span>Tổng quan</span>
                             </a>
                         </li>
@@ -60,9 +66,7 @@
                                 <li class="submenu-item @(ViewBag.SubMenu == "wallet" ? "active":"")">
                                     <a href="/nguoi-dung/vi">Ví</a>
                                 </li>
-                                <li class="submenu-item @(ViewBag.SubMenu == "transaction-history" ? "active":"")">
-                                    <a href="/nguoi-dung/lich-su-giao-dich">Lịch sử giao dịch</a>
-                                </li>
+
                             </ul>
                         </li>
 
@@ -149,8 +153,8 @@
                         </div>
                     </div>
                 </nav>
-                <div class="alert alert-light-danger color-danger approve">
-                    <i class="fa-solid fa-circle-exclamation"></i> Tài khoản của bạn chưa được xác thực. Vui lòng xác thực để có thể dùng được đầy đủ chức năng của hệ thống!
+                <div class="approve-status">
+
                 </div>
             </header>
 
@@ -197,6 +201,37 @@
                 }
             })
         }
+        const GetUserProperties = async function () {
+            let rq = await fetch(Enum.ApiUrl + '/api/UserProperties/GetUserPropertiesByUserId', {
+                method: 'get',
+                headers: Enum.OptionHeaderDefault,
+            });
+            let rs = await rq.json();
+            if (CheckErrorResponse(rs) === false) return;
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                if (rs.data.Status === 'CANCEL') {
+                    $('.layout-navbar .approve-status').html(`
+                    <div class="alert alert-light-danger approve">
+                        <i class="fa-solid fa-circle-exclamation"></i> 
+                        Tài khoản của bạn chưa được xác thực. Vui lòng xác thực để có thể dùng được đầy đủ chức năng của hệ thống!
+                    </div>`
+                    );
+                }
+                if (rs.data.Status === 'PENDING') {
+                    $('.layout-navbar .approve-status').html(`
+                    <div class="alert alert-light-warning approve">
+                        <i class="fa-solid fa-circle-exclamation"></i> 
+                        Tài khoản của bạn đang chờ được duyệt!
+                    </div>`
+                    );
+                }
+                if (rs.data.Status === 'DONE') {
+                    $('.layout-navbar .approve-status').html(``);
+                }
+            }
+        }
+
+        GetUserProperties();
     </script>
     @RenderSection("scripts", false)
 </body>

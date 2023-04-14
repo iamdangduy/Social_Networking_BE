@@ -56,7 +56,6 @@ namespace GiveAndReceive.Areas.Admin.ApiControllers
                         AdminUserPropertiesService adminUserPropertiesService = new AdminUserPropertiesService(connect);
                         var UserProperties = adminUserPropertiesService.GetUserPropertiesByUserId(UserId, transaction);
                         if (UserProperties == null) return Error();
-                        if (UserProperties.IdentificationApprove != UserProperties.EnumIdentificationApprove.SYSTEM_ACCEPT) return Error();
 
                         //tạo thông báo
                         Notification notification = new Notification

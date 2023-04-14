@@ -49,7 +49,13 @@ namespace GiveAndReceive.Services
 
         public void UpdateUserPropertiesForIdentity(UserProperties model, IDbTransaction transaction = null)
         {
-            string query = $"update [user_properties] set IdentityImageFront = @IdentityImageFront, IdentityImageBack = @IdentityImageBack, IdentityImagePortrait = @IdentityImagePortrait, IdentityFullName = @IdentityFullName, IdentityNumber = @IdentityNumber, IdentityBirthDate = @IdentityBirthDate, IdentityAddress = @IdentityAddress, IdentityDateOf = @IdentityDateOf, IdentityPlaceOf = @IdentityPlaceOf, IdentityApprove = 0, Status = @Status where UserId = @UserId";
+            string query = $"update [user_properties] set CitizenIdentificationImageFront = @CitizenIdentificationImageFront," +
+                $" CitizenIdentificationImageBack = @CitizenIdentificationImageBack, " +
+                $"PhotoFace = @PhotoFace, CitizenIdentificationName = @CitizenIdentificationName," +
+                $" CitizenIdentificationNumber = @CitizenIdentificationNumber, " +
+                $" CitizenIdentificationAddress = @CitizenIdentificationAddress, " +
+                $"CitizenIdentificationDateOf = @CitizenIdentificationDateOf, " +
+                $"CitizenIdentificationPlaceOf = @CitizenIdentificationPlaceOf, IdentificationApprove = 0, Status = @Status where UserId = @UserId";
             int Status = this._connection.Execute(query, model, transaction);
             if (Status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
         }
