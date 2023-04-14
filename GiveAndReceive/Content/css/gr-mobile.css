@@ -395,6 +395,24 @@ a {
     background-color: white;
     border-radius: 10px;
 }
+
+.verification-page .form-group .preview {
+    width: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    height: 110px;
+    border-radius: 10px;
+    border: .5px solid #d7d7d7;
+    cursor: pointer;
+}
+
+.verification-page .verification-info input {
+    font-size:14px;
+}
+.verification-page .verification-info label {
+    font-size: 14px;
+}
 /*EndVerificationPage*/
 
 /*BankPage*/

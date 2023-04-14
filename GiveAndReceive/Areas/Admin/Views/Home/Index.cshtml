@@ -320,8 +320,6 @@
         }
 
         const GetReportSystemRevenue = async function () {
-            const userAdminToken = GetCookie('UserAdminToken');
-            if (userAdminToken == '') return;
             let rq = await fetch(Enum.ApiUrl + '/api/AdminSystemIncomeYearReport/GetTotalRevenue', {
                 method: 'get',
                 headers: Enum.OptionAdminHeaderDefault,
