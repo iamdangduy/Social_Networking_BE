@@ -59,18 +59,18 @@ namespace GiveAndReceive.Areas.Admin.ApiControllers
                         if (UserProperties.IdentificationApprove != UserProperties.EnumIdentificationApprove.SYSTEM_ACCEPT) return Error();
 
                         //tạo thông báo
-                        //Notification notification = new Notification
-                        //{
-                        //    UserId = UserId,
-                        //    Title = "Thông báo",
-                        //    Message = "CMND của bạn đã bị từ chối vì: " + Reason,
-                        //    IsRead = false,
-                        //    CreateTime = HelperProvider.GetSeconds(),
-                        //};
-                        //AdminNotificationService adminNotificationService = new AdminNotificationService(connect);
-                        //if (!adminNotificationService.InsertNotification(notification, transaction)) return Error();
-
-                        //if (!adminUserPropertiesService.UpdateStatusUserIdentity(UserId, UserProperties.EnumApprove.SYSTEM_DECLINE, transaction)) return Error();
+                        Notification notification = new Notification
+                        {
+                            NotificationId = Guid.NewGuid().ToString(),
+                            UserId = UserId,
+                            Message = "CMND của bạn đã bị từ chối vì: " + Reason,
+                            IsRead = false,
+                            CreateTime = HelperProvider.GetSeconds(),
+                        };
+                        AdminNotificationService adminNotificationService = new AdminNotificationService(connect);
+                        if (!adminNotificationService.InsertNotification(notification, transaction)) return Error();
+                        adminUserPropertiesService.UpdateStatusUserIdentity(UserId, UserProperties.EnumIdentificationApprove.SYSTEM_DECLINE, UserProperties.EnumStatus.CANCEL,transaction);
+                        //if (!) return Error();
 
                         transaction.Commit();
                         return Success();
@@ -105,16 +105,17 @@ namespace GiveAndReceive.Areas.Admin.ApiControllers
                         //if (!) return Error();
                         adminUserPropertiesService.UpdateStatusUserIdentity(UserId, UserProperties.EnumIdentificationApprove.SYSTEM_ACCEPT, transaction);
                         //tạo thông báo
-                        //Notification notification = new Notification
-                        //{
-                        //    UserId = UserId,
-                        //    Title = "Thông báo",
-                        //    Message = "Thông tin của bạn đã được xác thực.",
-                        //    IsRead = false,
-                        //    CreateTime = HelperProvider.GetSeconds(),
-                        //};
-                        //AdminNotificationService adminNotificationService = new AdminNotificationService(connect);
-                        //if (!adminNotificationService.InsertNotification(notification, transaction)) return Error();
+                        Notification notification = new Notification
+                        {
+                            NotificationId = Guid.NewGuid().ToString(),
+                            UserId = UserId,
+                            Message = "Thông tin của bạn đã được xác thực.",
+                            IsRead = false,
+                            CreateTime = HelperProvider.GetSeconds(),
+                        };
+                        AdminNotificationService adminNotificationService = new AdminNotificationService(connect);
+                        if (!adminNotificationService.InsertNotification(notification, transaction)) return Error();
+                        adminUserPropertiesService.UpdateStatusUserIdentity(UserId, UserProperties.EnumIdentificationApprove.SYSTEM_ACCEPT, UserProperties.EnumStatus.DONE, transaction);
 
                         transaction.Commit();
                         return Success();
