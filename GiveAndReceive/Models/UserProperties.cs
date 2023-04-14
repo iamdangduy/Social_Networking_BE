@@ -13,6 +13,7 @@ namespace GiveAndReceive.Models
         public string CitizenIdentificationImageBack { get; set; }
         public string PhotoFace { get; set; }
         public bool IdentificationApprove { get; set; }
+        public string Status { get; set; }
         public long TotalAmountGive { get; set; }
         public long TotalAmountReceive { get; set; }
 
@@ -20,6 +21,13 @@ namespace GiveAndReceive.Models
         {
             public const bool SYSTEM_DECLINE = false;
             public const bool SYSTEM_ACCEPT = true;
+        }
+
+        public class EnumStatus
+        {
+            public const string PENDING = "PENDING";
+            public const string CANCEL = "CANCEL";
+            public const string DONE = "DONE";
         }
     }
 }

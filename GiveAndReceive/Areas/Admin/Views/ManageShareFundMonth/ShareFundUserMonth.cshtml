@@ -1,0 +1,101 @@
+﻿
+@{
+    ViewBag.Title = "ShareFundUserMonth";
+}
+
+@section styles{
+    <style>
+        .content {
+            background-color: white;
+            padding: 20px;
+        }
+
+        .list-data {
+            margin-top: 20px;
+        }
+
+            .list-data td {
+                padding-bottom: 10px;
+            }
+
+        #list-share-fund-user-month td {
+            padding-right: 10px;
+        }
+        .product-page-list a {
+            cursor: pointer;
+        }
+
+        .active-custom {
+            background-color: #3f87f5;
+            color: white !important;
+        }
+    </style>
+}
+
+<div class="content">
+    <div class="list-data">
+        <input id="ShareFundMonthId" value="@ViewBag.Id" type="hidden" />
+        <table class="table table-responsive table-hover">
+            <thead>
+                <tr>
+                    <th>Người dùng</th>
+                    <th>Tổng tiền</th>
+                    <th>Tháng</th>
+                    <th>Năm</th>
+                    <th>Trạng thái</th>
+                </tr>
+            </thead>
+            <tbody id="list-share-fund-user-month">
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<div class="product-page-list">
+
+</div>
+
+@section scripts{
+    <script>
+        let _currentPage = 1;
+        const getListShareFundUserMonth = async function (page = 1) {
+            _currentPage = page;
+            $('#list-share-fund-user-month').html('');
+
+            var id = $('#ShareFundMonthId').val();
+
+            let rq = await fetch(Enum.ApiUrl + '/api/AdminShareFundUserMonth/GetListShareFundUserMonth?shareFundUserMonthId='+id +'&page=' + page, {
+                method: 'get',
+                headers: Enum.OptionAdminHeaderDefault
+            });
+            let rs = await rq.json();
+
+            if (AdminCheckErrorResponse(rs) === false) return;
+
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                $('.product-page-list').html('');
+                for (let page = 1; page <= rs.data.TotalPage; page++) {
+                    $('.product-page-list').append(`<a onclick="getListShareFundUserMonth(${page});" data-page="${page}" class="product-page ${_currentPage === page ? 'active-custom' : ''}" id="page-num">${page}</a>`);
+                }
+
+                console.log(rs.data);
+                let html = '';
+                for (let index = 0; index < rs.data.List.length; index++) {
+                    var x = rs.data.List[index];
+                    html += '<tr>';
+                    html += '<td>' + GetObjectProperty(x, 'Name') + '</td>';
+                    html += '<td> <div class="user-info"><div class="name">' + NumberFormat(x.Amount) + '</div></div> </td>';
+                    html += '<td>' + GetObjectProperty(x, 'Month') + '</td>';
+                    html += '<td>' + GetObjectProperty(x, 'Year') + '</td>';
+                    html += '<td>' + GetObjectProperty(x, 'Status') + '</td>';
+                    html += '</tr>';
+                }
+                $('#list-share-fund-user-month').append(html);
+            }
+        }
+
+        getListShareFundUserMonth();
+    </script>
+    }
+

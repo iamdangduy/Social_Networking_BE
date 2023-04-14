@@ -13,7 +13,7 @@ using static GiveAndReceive.Models.JsonResult;
 
 namespace GiveAndReceive.Areas.Admin.ApiControllers
 {
-    public class AdminSystemConfigController : ApiBaseController
+    public class AdminSystemConfigController : ApiAdminBaseController
     {
         [HttpGet]
         [ApiAdminTokenRequire]

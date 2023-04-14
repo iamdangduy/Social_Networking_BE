@@ -143,27 +143,28 @@
                         <div class="name"></div>
                     </div>
                 </a>
-                <div class="parameter-box">
-                    <div class="icon badge-pill badge-purple"><i class="fa-solid fa-file-lines"></i></div>
-                    <div class="parameter total-order-pending">
+                <a href="/admin/ManageUser" class="parameter-box">
+                    <div class="icon badge-pill badge-blue"><i class="fa-solid fa-comments-dollar"></i></div>
+                    <div class="parameter share-fund-total">
                         <div class="value"></div>
-                        <div class="name">ĐƠN HÀNG MỚI</div>
+                        <div class="name">SỐ DƯ QUỸ ĐỒNG CHIA</div>
                     </div>
-                </div>
+                </a>
+                <a href="/admin/ManageUser" class="parameter-box">
+                    <div class="icon badge-pill badge-blue"><i class="fa-solid fa-handshake"></i></div>
+                    <div class="parameter share-fund-month">
+                        <div class="value"></div>
+                        <div class="name"></div>
+                    </div>
+                </a>
+
+            </div>
+            <div>
                 <a href="/admin/ManageUser" class="parameter-box">
                     <div class="icon badge-pill badge-blue"><i class="fa-solid fa-users"></i></div>
                     <div class="parameter total-user">
                         <div class="value"></div>
                         <div class="name">NGƯỜI DÙNG</div>
-                    </div>
-                </a>
-            </div>
-            <div>
-                <a class="parameter-box">
-                    <div class="icon badge-magenta"><span style=" font-size: 15px; font-weight: bold;">UTAO</span></div>
-                    <div class="parameter system-apl-total">
-                        <div class="value"></div>
-                        <div class="name">UTAO HỆ THỐNG</div>
                     </div>
                 </a>
                 <a href="/admin/SystemReport/BalanceDebt" class="parameter-box" style="cursor:pointer">
@@ -173,8 +174,20 @@
                         <div class="name">TỔNG NỢ LƯƠNG</div>
                     </div>
                 </a>
-                <a class="parameter-box" style="border: .5px solid #00000000; background-color: transparent; "></a>
-                <a class="parameter-box" style="border: .5px solid #00000000; background-color: transparent; "></a>
+                <a href="/admin/managewaitingline" class="parameter-box" style="cursor:pointer;">
+                    <div class="icon badge-magenta"><i class="fa-solid fa-arrows-up-to-line"></i></div>
+                    <div class="parameter total-queue-give">
+                        <div class="value"></div>
+                        <div class="name">HÀNG CHỜ CHO</div>
+                    </div>
+                </a>
+                <a href="/admin/managewaitingline" class="parameter-box" style="cursor:pointer;">
+                    <div class="icon badge-magenta"><i class="fa-solid fa-arrows-down-to-line"></i></div>
+                    <div class="parameter total-queue-receive">
+                        <div class="value"></div>
+                        <div class="name">HÀNG CHỜ NHẬN</div>
+                    </div>
+                </a>
             </div>
         </div>
     </div>
@@ -242,14 +255,18 @@
     <script>
         const now = new Date();
         var initPage = async function () {
-            await GetReportSystemRevenueThisMonth();
-            await GetCashOfSystem();
+            await GetReportSystemRevenue();
+            await GetBalanceShareFund();
             await GetTotalUserActive();
-            await GetTotalOrder();
-            await GetTotalPointMemberOfAllUser();
+            @*await GetTotalOrder();*@
+            await AdminSystemWallet();
+            @*await GetTotalPointMemberOfAllUser();*@
             await GetTotalBalance();
+            await GetTotalQueueGive();
+            await GetTotalQueueReceive();
             await RenderMonthAndYear();
             await RevenueInMonth();
+            await GetCurrentBalanceMonth();
         }
         var ChoseMonthProfit = function (el) {
             let month = $(el).val();
@@ -302,10 +319,8 @@
             }
         }
 
-        const GetReportSystemRevenueThisMonth = async function () {
-            const userAdminToken = GetCookie('UserAdminToken');
-            if (userAdminToken == '') return;
-            let rq = await fetch(Enum.ApiUrl + '/api/ReportSystemRevenue/GetReportSystemRevenueThisMonth', {
+        const GetReportSystemRevenue = async function () {
+            let rq = await fetch(Enum.ApiUrl + '/api/AdminSystemIncomeYearReport/GetTotalRevenue', {
                 method: 'get',
                 headers: Enum.OptionAdminHeaderDefault,
             });
@@ -314,7 +329,7 @@
             if (AdminCheckErrorResponse(rs) === false) return;
 
             if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
-                $('.system-general-parameter .system-revenue-total  .name').text('DOANH THU THÁNG NÀY');
+                $('.system-general-parameter .system-revenue-total  .name').text('DOANH THU');
                 $('.system-general-parameter .system-revenue-total  .value').text(NumberFormat(GetObjectProperty(rs.data, 'TotalAmount', 0)) + ' VNĐ');
             }
         }
@@ -351,10 +366,42 @@
             }
         }
 
+        const GetTotalQueueGive = async function () {
+            const userAdminToken = GetCookie('UserAdminToken');
+            if (userAdminToken == '') return;
+            let rq = await fetch(Enum.ApiUrl + '/api/AdminQueueGive/GetTotalQueueGive', {
+                method: 'get',
+                headers: Enum.OptionAdminHeaderDefault,
+            });
+            let rs = await rq.json();
+
+            if (AdminCheckErrorResponse(rs) === false) return;
+
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                $('.system-general-parameter .total-queue-give  .value').text(NumberFormat(GetObjectProperty(rs, 'data', 0)) + ' người');
+            }
+        }
+
+        const GetTotalQueueReceive = async function () {
+            const userAdminToken = GetCookie('UserAdminToken');
+            if (userAdminToken == '') return;
+            let rq = await fetch(Enum.ApiUrl + '/api/AdminQueueReceive/GetTotalQueueReceive', {
+                method: 'get',
+                headers: Enum.OptionAdminHeaderDefault,
+            });
+            let rs = await rq.json();
+
+            if (AdminCheckErrorResponse(rs) === false) return;
+
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                $('.system-general-parameter .total-queue-receive .value').text(NumberFormat(GetObjectProperty(rs, 'data', 0)) + ' người');
+            }
+        }
+
         const GetTotalUserActive = async function () {
             const userAdminToken = GetCookie('UserAdminToken');
             if (userAdminToken == '') return;
-            let rq = await fetch(Enum.ApiUrl + '/api/AdminHome/GetTotalUserActive', {
+            let rq = await fetch(Enum.ApiUrl + '/api/AdminUser/GetTotalUser', {
                 method: 'get',
                 headers: Enum.OptionAdminHeaderDefault,
             });
@@ -383,10 +430,10 @@
             }
         }
 
-        const GetCashOfSystem = async function () {
+        const AdminSystemWallet = async function () {
             const userAdminToken = GetCookie('UserAdminToken');
             if (userAdminToken == '') return;
-            let rq = await fetch(Enum.ApiUrl + '/api/AdminHome/GetCashOfSystem', {
+            let rq = await fetch(Enum.ApiUrl + '/api/AdminSystemWallet/AdminSystemWallet', {
                 method: 'get',
                 headers: Enum.OptionAdminHeaderDefault,
             });
@@ -395,8 +442,45 @@
             if (AdminCheckErrorResponse(rs) === false) return;
 
             if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
-                $('.system-general-parameter .system-profit-total  .name').text('SỐ DƯ CỦA HỆ THỐNG');
+                $('.system-general-parameter .system-profit-total  .name').text('SỐ DƯ HỆ THỐNG');
                 $('.system-general-parameter .system-profit-total  .value').text(NumberFormat(GetObjectProperty(rs.data, 'Amount', 0)) + ' VNĐ');
+            }
+        }
+
+        const GetBalanceShareFund = async function () {
+            const userAdminToken = GetCookie('UserAdminToken');
+            if (userAdminToken == '') return;
+            let rq = await fetch(Enum.ApiUrl + '/api/AdminShareFund/GetBalanceShareFund', {
+                method: 'get',
+                headers: Enum.OptionAdminHeaderDefault,
+            });
+            let rs = await rq.json();
+
+            if (AdminCheckErrorResponse(rs) === false) return;
+
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                $('.system-general-parameter .share-fund-total .value').text(NumberFormat(GetObjectProperty(rs.data, 'Amount', 0)) + ' VNĐ');
+            }
+        }
+
+        const GetCurrentBalanceMonth = async function () {
+            const userAdminToken = GetCookie('UserAdminToken');
+            if (userAdminToken == '') return;
+            let rq = await fetch(Enum.ApiUrl + '/api/AdminShareFundMonth/GetCurrentBalance', {
+                method: 'get',
+                headers: Enum.OptionAdminHeaderDefault,
+            });
+            let rs = await rq.json();
+
+            let date = new Date();
+            let month = date.getMonth() + 1;
+            let year = date.getFullYear();
+
+            if (AdminCheckErrorResponse(rs) === false) return;
+
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                $('.system-general-parameter .share-fund-month  .name').text(`QUỸ ĐỒNG CHIA THÁNG ${month} NĂM ${year}`);
+                $('.system-general-parameter .share-fund-month  .value').text(NumberFormat(GetObjectProperty(rs.data, 'Amount', 0)) + ' VNĐ');
             }
         }
 
@@ -813,6 +897,7 @@
 
             }
         }
+
         initPage();
     </script>
 }

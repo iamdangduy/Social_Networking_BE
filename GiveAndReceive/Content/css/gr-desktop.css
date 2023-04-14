@@ -116,6 +116,7 @@ a {
             .home-page .current-mission .mission-detail .status span {
                 font-size: 12px;
                 border-radius: 20px;
+                cursor:default;
             }
 
         .home-page .current-mission .mission-detail .button {
@@ -269,6 +270,7 @@ a {
             background-repeat: no-repeat;
             background-size: cover;
             border: .5px solid #d7d7d7;
+            cursor:pointer;
         }
 
     .account-page .user-info .info-detail {
@@ -414,9 +416,79 @@ a {
 /*EndWalletPage*/
 
 /*VerificationPage*/
+.verification-page {
+    align-items:center;
+}
 .verification-page .verification-info {
     padding: 20px 20px;
     background-color: white;
     border-radius: 10px;
+    width:70%;
+    min-width:700px;
+}
+
+.verification-page .form-group .preview {
+    width: 50%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    height: 200px;
+    border-radius: 10px;
+    border: .5px solid #d7d7d7;
+    cursor: pointer;
+}
+
+.verification-page .verification-info input{
+
 }
 /*EndVerificationPage*/
+
+/*BankPage*/
+.bank-page #tab-bank-account {
+    background-color: white;
+    padding: 30px;
+    margin-top: 20px;
+    border-radius: 10px;
+    min-height: 210px;
+    width: 100%;
+}
+
+    .bank-page #tab-bank-account .create-bank-btn {
+        padding: 10px 30px;
+        border: solid #9c9c9c 0.5px;
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: 500;
+        cursor: pointer;
+    }
+
+    .bank-page #tab-bank-account .list-bank-account {
+        margin-top: 30px;
+    }
+
+.bank-page .list-bank-account td a {
+    padding-right: 10px;
+    cursor: pointer;
+}
+
+.bank-page .list-bank-account .isDefault {
+    padding: 3px;
+    background-color: #31c6ff;
+    color: white;
+    width: fit-content;
+    border-radius: 5px;
+    font-size: 10px;
+}
+
+.bank-page .preview {
+    width: 150px;
+    height: 150px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border: .5px solid #d7d7d7;
+    cursor: pointer;
+}
+
+
+/*EndBankPage*/

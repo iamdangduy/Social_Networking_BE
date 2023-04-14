@@ -11,10 +11,10 @@ using System.Web.Http;
 
 namespace GiveAndReceive.Areas.Admin.ApiControllers
 {
-    public class AdminQueueReceiveController : ApiBaseController
+    [ApiAdminTokenRequire]
+    public class AdminQueueReceiveController : ApiAdminBaseController
     {
         [HttpGet]
-        [ApiAdminTokenRequire]
         public JsonResult GetListQueueReceive(int PageIndex = 1, string Status = "")
         {
             try
@@ -24,6 +24,20 @@ namespace GiveAndReceive.Areas.Admin.ApiControllers
 
                 return Success(adminQueueReceiveService.GetListQueueReceive(PageIndex, QueueReceive.EnumStatus.PENDING), "Lấy dữ liệu thành công!");
 
+            }
+            catch (Exception ex)
+            {
+                return Error(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        public JsonResult GetTotalQueueReceive()
+        {
+            try
+            {
+                AdminQueueReceiveService adminQueueReceiveService = new AdminQueueReceiveService();
+                return Success(adminQueueReceiveService.GetTotalQueueReceive(), "Lấy dữ liệu thành công!");
             }
             catch (Exception ex)
             {

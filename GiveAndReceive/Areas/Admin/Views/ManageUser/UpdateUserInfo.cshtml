@@ -320,33 +320,28 @@
             </div>
 
             <div class="form-group">
-                <label class="font-weight-semibold" for="identityFullName">Họ và tên</label>
-                <input type="text" class="form-control" id="identityFullName" placeholder="Nhập họ và tên">
+                <label class="font-weight-semibold" for="userName">Họ và tên</label>
+                <input type="text" class="form-control" id="userName" placeholder="Nhập họ và tên">
             </div>
 
             <div class="form-group">
-                <label class="font-weight-semibold" for="identityBirthDate">Ngày sinh</label>
-                <input type="text" class="form-control" id="identityBirthDate">
+                <label class="font-weight-semibold" for="userAddress">Địa chỉ</label>
+                <input type="text" class="form-control" id="userAddress" placeholder="Địa chỉ">
             </div>
 
             <div class="form-group">
-                <label class="font-weight-semibold" for="identityAddess">Nơi thường trú</label>
-                <input type="text" class="form-control" id="identityAddess" placeholder="Nơi thường trú">
+                <label class="font-weight-semibold" for="identityId">Số căn cước công dân</label>
+                <input type="text" class="form-control" id="identityId" placeholder="Nhập số căn cước công dân">
             </div>
 
             <div class="form-group">
-                <label class="font-weight-semibold" for="identityID">Số căn cước công dân</label>
-                <input type="text" class="form-control" id="identityID" placeholder="Nhập số căn cước công dân">
+                <label class="font-weight-semibold" for="date">Ngày cấp</label>
+                <input type="text" class="form-control" id="date">
             </div>
 
             <div class="form-group">
-                <label class="font-weight-semibold" for="DateRange">Ngày cấp</label>
-                <input type="text" class="form-control" id="DateRange">
-            </div>
-
-            <div class="form-group">
-                <label class="font-weight-semibold" for="issuedBy">Nơi cấp</label>
-                <input type="text" class="form-control" id="issuedBy" placeholder="Nhập nơi cấp">
+                <label class="font-weight-semibold" for="place">Nơi cấp</label>
+                <input type="text" class="form-control" id="place" placeholder="Nhập nơi cấp">
             </div>
         </div>
 
@@ -503,12 +498,11 @@
                 $('#Thumbnail2').siblings('.preview').css('background-image', `url(${rs.data.CitizenIdentificationImageBack})`);
                 $('#Thumbnail3').siblings('.preview').css('background-image', `url(${rs.data.PhotoFace})`);
 
-                $('#identityID').val(rs.data.CitizenIdentificationNumber);
-                $('#identityAddess').val(rs.data.CitizenIdentificationAddress);
-                $('#DateRange').val(DateStringFormat({ stringDate: new Date(rs.data.CitizenIdentificationDateOf), newFormat: 'dd-mm-yyyy' }));
-                $('#issuedBy').val(rs.data.CitizenIdentificationPlaceOf);
-                $('#identityBirthDate').val(DateStringFormat({ stringDate: new Date(rs.data.IdentityBirthDate), newFormat: 'dd-mm-yyyy' }));
-                $('#identityFullName').val(rs.data.CitizenIdentificationName);
+                $('#identityId').val(rs.data.CitizenIdentificationNumber);
+                $('#place').val(rs.data.CitizenIdentificationPlaceOf);
+                $('#date').val(DateStringFormat({ stringDate: new Date(rs.data.CitizenIdentificationDateOf), newFormat: 'dd-mm-yyyy' }));
+                $('#userAddress').val(rs.data.CitizenIdentificationAddress),
+                $('#userName').val(rs.data.CitizenIdentificationName);
             }
         }
 
@@ -529,7 +523,7 @@
         }
 
         const UpdateIdentityToSystemDecline = async function () {
-            let UserId = $('#userId').val();
+            let UserId = "@ViewBag.Id";
             let reason = $('#reason').val();
 
             let rq = await fetch(Enum.ApiUrl + '/api/AdminUserProperties/UpdateIdentityToSystemDecline?UserId=' + UserId + '&Reason=' + reason, {
@@ -547,7 +541,7 @@
         }
 
         const UpdateIdentityToSuccess = async function () {
-            let UserId = $('#userId').val();
+            let UserId = "@ViewBag.Id";
 
             let rq = await fetch(Enum.ApiUrl + '/api/AdminUserProperties/UpdateIdentityToSuccess?UserId=' + UserId, {
                 method: 'get',

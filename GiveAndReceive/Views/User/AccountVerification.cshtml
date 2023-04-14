@@ -8,16 +8,6 @@
         section {
             flex-direction: column;
         }
-        .form-group .preview {
-            width: 100%;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-size: contain;
-            height: 110px;
-            border-radius: 10px;
-            border: .5px solid #d7d7d7;
-            cursor: pointer;
-        }
     </style>
 }
 
@@ -26,25 +16,25 @@
     <div class="verification-info">
         <div class="form-group">
             <label for="userName">Họ và tên</label>
-            <input type="text" style="font-size:14px;" class="form-control" id="userName" placeholder="Họ và tên">
+            <input type="text" class="form-control" id="userName" placeholder="Họ và tên">
         </div>
         <div class="form-group">
             <label for="identityId">Số CCCD</label>
-            <input type="text" style="font-size:14px;" class="form-control" id="identityId" placeholder="Số CCCD">
+            <input type="text" class="form-control" id="identityId" placeholder="Số CCCD">
         </div>
         <div class="row">
             <div class="form-group" style="width:50%">
                 <label for="place">Nơi cấp</label>
-                <input type="text" style="font-size:14px;" class="form-control" id="place" placeholder="Nơi cấp">
+                <input type="text" class="form-control" id="place" placeholder="Nơi cấp">
             </div>
             <div class="form-group" style="width:50%">
                 <label for="date">Ngày cấp</label>
-                <input type="text" style="font-size:14px;" class="form-control" id="date" placeholder="Ngày cấp">
+                <input type="text" class="form-control" id="date" placeholder="Ngày cấp">
             </div>
         </div>
         <div class="Địa chỉ">
             <label for="userAddress">Địa chỉ</label>
-            <input type="text" style="font-size:14px;" class="form-control" id="userAddress" placeholder="Địa chỉ">
+            <input type="text" class="form-control" id="userAddress" placeholder="Địa chỉ">
         </div>
 
         <div class="form-group" style="margin-top:20px;">
@@ -68,7 +58,7 @@
             <input type="hidden" id="Thumbnail3" />
         </div>
         <div style="text-align:right; margin-top:10px;">
-            <button class="btn btn-sm btn-primary"> Lưu </button>
+            <button class="btn btn-sm btn-primary" id="SaveIdentity" onclick="CreateUserPropertiesForIdentity()"> Lưu </button>
         </div>
     </div>
 </section>
@@ -89,6 +79,92 @@
             }
             reader.readAsDataURL(el.files[0])
         }
+
+        const GetUserPropertiesByUserId = async function () {
+            let rq = await fetch(Enum.ApiUrl + '/api/UserProperties/GetUserPropertiesByUserId', {
+                method: 'get',
+                headers: Enum.OptionHeaderDefault,
+            });
+            let rs = await rq.json();
+            if (CheckErrorResponse(rs) === false) return;
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                $('#Thumbnail1').siblings('.preview').css('background-image', `url(${rs.data.CitizenIdentificationImageFront})`);
+                $('#Thumbnail2').siblings('.preview').css('background-image', `url(${rs.data.CitizenIdentificationImageBack})`);
+                $('#Thumbnail3').siblings('.preview').css('background-image', `url(${rs.data.PhotoFace})`);
+
+                $('#identityId').val(rs.data.CitizenIdentificationNumber);
+                $('#place').val(rs.data.CitizenIdentificationPlaceOf);
+                $('#date').val(DateStringFormat({ stringDate: new Date(rs.data.CitizenIdentificationDateOf), newFormat: 'dd-mm-yyyy' }));
+                $('#userAddress').val(rs.data.CitizenIdentificationAddress),
+                    $('#userName').val(rs.data.CitizenIdentificationName);
+
+                if (rs.data.length != '') {
+                    $('#SaveIdentity').attr('onclick', 'UpdateUserPropertiesForIdentity()');
+                }
+            }
+        }
+
+        const CreateUserPropertiesForIdentity = async function () {
+            let model = {
+                CitizenIdentificationImageFront: $('#Thumbnail1').val(),
+                CitizenIdentificationImageBack: $('#Thumbnail2').val(),
+                PhotoFace: $('#Thumbnail3').val(),
+                CitizenIdentificationNumber: $('#identityId').val(),
+                CitizenIdentificationPlaceOf: $('#place').val(),
+                CitizenIdentificationDateOf: ConvertTime($('#date').val()),
+                CitizenIdentificationAddress: $('#userAddress').val(),
+                CitizenIdentificationName: $('#userName').val(),
+            }
+            console.log(model);
+            let rq = await fetch(Enum.ApiUrl + '/api/UserProperties/CreateUserPropertiesForIdentity', {
+                method: 'post',
+                headers: Enum.OptionHeaderDefault,
+                body: JSON.stringify(model)
+            });
+            let rs = await rq.json();
+            if (CheckErrorResponse(rs) === false) return;
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                Swal.fire({
+                    icon: "success",
+                    title: "Bạn đã gửi yều cầu thành công. Hệ thống sẽ xác nhận trong thời gian ngắn nhất!",
+                    preConfirm: function () { window.location.reload() },
+                })
+            }
+        }
+
+        const UpdateUserPropertiesForIdentity = async function () {
+            let model = {
+                CitizenIdentificationImageFront: $('#Thumbnail1').val(),
+                CitizenIdentificationImageBack: $('#Thumbnail2').val(),
+                PhotoFace: $('#Thumbnail3').val(),
+                CitizenIdentificationNumber: $('#identityId').val(),
+                CitizenIdentificationPlaceOf: $('#place').val(),
+                CitizenIdentificationDateOf: ConvertTime($('#date').val()),
+                CitizenIdentificationAddress: $('#userAddress').val(),
+                CitizenIdentificationName: $('#userName').val(),
+            }
+
+            let rq = await fetch(Enum.ApiUrl + '/api/UserProperties/UpdateUserPropertiesForIdentity', {
+                method: 'post',
+                headers: Enum.OptionHeaderDefault,
+                body: JSON.stringify(model)
+            });
+            let rs = await rq.json();
+            if (CheckErrorResponse(rs) === false) return;
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                Swal.fire({
+                    icon: "success",
+                    title: "Bạn đã gửi yều cầu thành công. Hệ thống sẽ xác nhận trong thời gian ngắn nhất!",
+                    preConfirm: function () { window.location.reload() },
+                })
+            }
+        }
+
+        const InitPage = async function () {
+            await GetUserPropertiesByUserId();
+        }
+
+        InitPage();
     </script>
     
 }

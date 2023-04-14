@@ -30,5 +30,19 @@ namespace GiveAndReceive.Services
             int status = this._connection.Execute(query, model, transaction);
             if (status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
         }
+
+        public void UpdateBalanceByUserId(string userId, long balance, IDbTransaction transaction = null)
+        {
+            string query = "UPDATE [dbo].[user_wallet] SET [Balance] = [Balance] + @balance WHERE [UserId] = @userId";
+            int status = this._connection.Execute(query, new { userId, balance }, transaction);
+            if (status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
+        }
+
+        public void UpdatePinByUserId(string userId, int pin, IDbTransaction transaction = null)
+        {
+            string query = "UPDATE [dbo].[user_wallet] SET [Pin] = [Pin] + @pin WHERE [UserId] = @userId";
+            int status = this._connection.Execute(query, new { userId, pin }, transaction);
+            if (status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
+        }
     }
 }

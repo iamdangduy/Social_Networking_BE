@@ -94,25 +94,26 @@ namespace GiveAndReceive.ApiControllers
 
                         if (!string.IsNullOrEmpty(model.Email))
                         {
-                            user.Email = model.Email.Trim();
-                            userService.CheckEmailExist(user.Email, user.UserId, transaction);
+                            userService.CheckEmailExist(model.Email, user.UserId, transaction);
                             if (model.Email != user.Email)
                             {
                                 if (string.IsNullOrEmpty(model.EmailCode)) throw new Exception("Bạn chưa nhập mã xác thực email");
                                 CodeConfirm emailCode = codeConfirmService.GetCodeConfirmByEmail(user.Email, transaction);
                                 if (emailCode.Code != model.EmailCode) throw new Exception("Mã xác thực không chính xác");
                             }
+                            user.Email = model.Email.Trim();
                         }
                         if (!string.IsNullOrEmpty(model.Phone))
                         {
-                            user.Phone = model.Phone.Trim();
-                            userService.CheckUserPhoneExist(user.Phone, user.UserId, transaction);
+                            userService.CheckUserPhoneExist(model.Phone, user.UserId, transaction);
                             if (model.Phone != user.Phone)
                             {
                                 if (string.IsNullOrEmpty(model.PhoneCode)) throw new Exception("Bạn chưa nhập mã xác thực số điện thoại");
                                 CodeConfirm phoneCode = codeConfirmService.GetCodeConfirmByPhone(user.Phone, transaction);
                                 if (phoneCode.Code != model.PhoneCode) throw new Exception("Mã xác thực không chính xác");
                             }
+
+                            user.Phone = model.Phone.Trim();
                         }
 
                         userService.UpdateUser(user, transaction);
@@ -522,5 +523,60 @@ namespace GiveAndReceive.ApiControllers
                 return Error(ex.Message);
             }
         }
+
+        [HttpGet]
+        [ApiTokenRequire]
+        public JsonResult GetListConnectMember()
+        {
+            try
+            {
+                string token = Request.Headers.Authorization.ToString();
+                UserService userService = new UserService();
+                User user = userService.GetUserByToken(token);
+                if (user == null) return Unauthorized();
+
+                if (user.ShareCode == null) throw new Exception("Người dùng này không có mã giới thiệu");
+
+                return Success(userService.GetListUserByShareCode(user.ShareCode));
+            }
+            catch(Exception ex)
+            {
+                return Error(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [ApiTokenRequire]
+        public JsonResult ConnectMember(string code)
+        {
+            try
+            {
+                using(var connect = BaseService.Connect())
+                {
+                    connect.Open();
+                    using(var transaction = connect.BeginTransaction())
+                    {
+                        string token = Request.Headers.Authorization.ToString();
+                        UserService userService = new UserService(connect);
+                        User user = userService.GetUserByToken(token, transaction);
+                        if (user == null) return Unauthorized();
+
+                        user.ShareCode = HelperProvider.MakeCode();
+                        user.ParentCode = code;
+                        userService.UpdateUserCode(user, transaction);
+
+                        transaction.Commit();
+                        return Success();
+                    }
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                return Error(ex.Message);
+            }
+        }
+
+
     }
 }
