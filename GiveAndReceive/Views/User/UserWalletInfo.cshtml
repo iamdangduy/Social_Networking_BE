@@ -120,6 +120,9 @@
                      aria-labelledby="pin-tab">
                     <div class="balance-header">
                         <div class="wallet-balance" id="wallet-pin"> 3 Vé</div>
+                        <div class="withdraw-button" style="text-align:right">
+                            <button class="btn btn-sm rounded-pill btn-primary" style="padding:3px 15px;" onclick="activatePin()"> Kích hoạt </button>
+                        </div>
                     </div>
                     <div class="history" id="history-pin">
                         <div class="history-detail">
@@ -298,6 +301,19 @@
                     
             if (rs.status === 'success') {
                 if (rs.message !== '' && rs.message !== null) alert(rs.message);
+                window.location.reload();
+            }
+        }
+
+        const activatePin = async function () {
+            const rp = await fetch('/api/UserPinTransfer/ActivatePin', {
+                method: 'get',
+                headers: Enum.OptionHeaderDefault
+            });
+            let rs = await rp.json();
+            if (CheckErrorResponse(rs) === false) return;
+            if (rs.status === 'error') if (rs.message !== '' && rs.message !== null) alert(rs.message);
+            if (rs.status === 'success') {
                 window.location.reload();
             }
         }

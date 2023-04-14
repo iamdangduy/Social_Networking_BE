@@ -63,7 +63,7 @@
 
                     <div class="d-flex justify-content-between">
                         <div class="logo">
-                            <a href="index.html"><img src="/Content/assets/images/logo/logo.png" /></a>
+                            <a href="/admin"><img src="/Content/assets/images/logo/logo.png" /></a>
                         </div>
                         <div class="toggler">
                             <a href="#" class="sidebar-hide d-xl-none d-block"><i class="fa-solid fa-xmark fa-xs"></i></a>
@@ -109,6 +109,13 @@
                             <a href="/admin/ManageWaitingLine" class="sidebar-link">
                                 <i class="fa-solid fa-layer-group"></i>
                                 <span class="title">Quản lý Hàng chờ</span>
+
+                            </a>
+                        </li>
+                        <li class="sidebar-item @(ViewBag.Menu == "share-fund-month" ? "active" : "")">
+                            <a href="/admin/ManageShareFundMonth" class="sidebar-link">
+                                <i class="fa-solid fa-layer-group"></i>
+                                <span class="title">Quản lý Đồng chia</span>
 
                             </a>
                         </li>

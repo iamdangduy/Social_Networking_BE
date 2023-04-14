@@ -18,6 +18,21 @@
             width: 50%;
             border-left: solid 1px #dedede;
         }
+        .table td{
+            padding-left:20px;
+        }
+        .list-give {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+        }
+        .list-receive{
+            display:flex;
+            flex-direction:column;
+            justify-content:space-between;
+            height:100%;
+        }
     </style>    
 }
 
@@ -73,6 +88,7 @@
             if (AdminCheckErrorResponse(rs) === false) return;
             if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
                 $('.card-left .product-page-list').html('');
+                $('#list-user-give').html('');
                 for (let page = 1; page <= rs.data.TotalPage; page++) {
                     $('.card-left .product-page-list').append(`<a onclick="GetListQueueGive(${page});" data-page="${page}" class="product-page ${_currentPage === page ? 'active' : ''}" id="page-num">${page}</a>`);
                 }
@@ -88,9 +104,9 @@
             }
         }
 
-        @*const GetListQueueGive = async function (page = 1) {
+        const GetListQueueReceive = async function (page = 1) {
             _currentPage = page;
-            let rq = await fetch(Enum.ApiUrl + '/api/AdminQueueGive/GetListQueueGive?PageIndex=' + page, {
+            let rq = await fetch(Enum.ApiUrl + '/api/AdminQueueReceive/GetListQueueReceive?PageIndex=' + page, {
                 method: 'get',
                 headers: Enum.OptionAdminHeaderDefault,
 
@@ -99,9 +115,10 @@
 
             if (AdminCheckErrorResponse(rs) === false) return;
             if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
-                $('.card-left .product-page-list').html('');
+                $('.card-right .product-page-list').html('');
+                $('#list-user-receive').html('');
                 for (let page = 1; page <= rs.data.TotalPage; page++) {
-                    $('.card-left .product-page-list').append(`<a onclick="GetListQueueGive(${page});" data-page="${page}" class="product-page ${_currentPage === page ? 'active' : ''}" id="page-num">${page}</a>`);
+                    $('.card-right .product-page-list').append(`<a onclick="GetListQueueGive(${page});" data-page="${page}" class="product-page ${_currentPage === page ? 'active' : ''}" id="page-num">${page}</a>`);
                 }
 
                 for (let i = 0; i < rs.data.ListData.length; i++) {
@@ -110,13 +127,14 @@
                     html += '<td>' + item.Name + '</td>';
                     html += '</tr>';
 
-                    $('#list-user-give').append(html);
+                    $('#list-user-receive').append(html);
                 }
             }
-        }*@
+        }
 
         const InitPage = async function () {
             await GetListQueueGive();
+            await GetListQueueReceive();
         }
 
         InitPage();

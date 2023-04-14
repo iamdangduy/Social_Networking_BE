@@ -5,6 +5,7 @@ using GiveAndReceive.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Web;
 using System.Web.Http;
 
@@ -54,11 +55,15 @@ namespace GiveAndReceive.ApiControllers
                         UserWalletService userWalletService = new UserWalletService(connect);
                         UserPinTransferService userPinTransferService = new UserPinTransferService(connect);
 
+                        // Kiểm tra pin trong ví người dùng
+                        UserWallet userWallet = userWalletService.GetUserWalletByUser(user.UserId, transaction);
+                        if (userWallet.Pin <= 0) throw new Exception("Bạn không có pin để kích hoạt.");
+
                         QueueGive queueGive = queueGiveService.GetQueueGiveByUserId(user.UserId, transaction);
-                        if (queueGive.Status == QueueGive.EnumStatus.PENDING || queueGive.Status == QueueGive.EnumStatus.IN_DUTY) throw new Exception("Bạn đã đang ở trong phòng chờ cho, không thể kích hoạt pin");
+                        if(queueGive != null && (queueGive.Status == QueueGive.EnumStatus.PENDING || queueGive.Status == QueueGive.EnumStatus.IN_DUTY)) throw new Exception("Bạn đã đang ở trong phòng chờ cho, không thể kích hoạt pin");
 
                         QueueReceive queueReceive = queueReceiveService.GetQueueReceiveByUserId(user.UserId, transaction);
-                        if (queueReceive.Status == QueueReceive.EnumStatus.PENDING || queueReceive.Status == QueueReceive.EnumStatus.IN_DUTY) throw new Exception("Bạn đã đang ở trong phòng nhận cho, không thể kích hoạt pin");
+                        if(queueReceive != null && (queueReceive.Status == QueueReceive.EnumStatus.PENDING || queueReceive.Status == QueueReceive.EnumStatus.IN_DUTY)) throw new Exception("Bạn đã đang ở trong phòng nhận cho, không thể kích hoạt pin");
 
                         queueGive = new QueueGive();
                         queueGive.QueueGiveId = Guid.NewGuid().ToString();
@@ -75,7 +80,7 @@ namespace GiveAndReceive.ApiControllers
                         userPinTransfer.UserGiveId = user.UserId;
                         userPinTransfer.Pin = 1;
                         userPinTransfer.Status = UserPinTransfer.EnumStatus.DONE;
-                        userPinTransfer.Message = "Người dùng sử dụng để kích hoạt pin";
+                        userPinTransfer.Message = "Bạn sử dụng để kích hoạt pin";
                         userPinTransfer.CreateTime = HelperProvider.GetSeconds();
                         userPinTransferService.InsertUserPinTransfer(userPinTransfer, transaction);
 

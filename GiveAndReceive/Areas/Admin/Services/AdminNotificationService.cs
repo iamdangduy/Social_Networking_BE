@@ -16,7 +16,7 @@ namespace GiveAndReceive.Areas.Admin.Services
 
         public bool InsertNotification(Notification model, IDbTransaction transaction = null)
         {
-            string query = "insert into notification (UserId, Title, Message, IsRead, CreateTime) values (@UserId, @Title, @Message, @IsRead, @CreateTime)";
+            string query = "insert into notification (NotificationId, UserId, Message, IsRead, CreateTime) values (@NotificationId, @UserId, @Message, @IsRead, @CreateTime)";
             int status = this._connection.Execute(query, model, transaction);
             return status > 0;
         }
