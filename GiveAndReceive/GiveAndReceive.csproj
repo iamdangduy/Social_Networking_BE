@@ -51,16 +51,39 @@
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.3.6.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Extensions.Logging.Abstractions, Version=2.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Logging.Abstractions.2.1.1\lib\netstandard2.0\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Web.Infrastructure.2.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="Quartz, Version=3.6.2.0, Culture=neutral, PublicKeyToken=f6b8c98a402cc8a4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Quartz.3.6.2\lib\net472\Quartz.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.5.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Diagnostics.DiagnosticSource.4.7.1\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
+    </Reference>
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Net.Http.Formatting, Version=5.2.9.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.9\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.3\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -4091,42 +4114,7 @@
     <Content Include="Content\js\helper.js" />
     <Content Include="Content\js\jquery-3.6.0.min.js" />
     <Content Include="Content\Site.css" />
-    <Content Include="files\avatar\216a012e-14cd-491e-b107-d016b8f3094e.jpg" />
-    <Content Include="files\avatar\34cf7f63-731c-407f-992c-c931b0bbd1c3.jpg" />
-    <Content Include="files\avatar\67f46357-ccc8-4767-b7cb-1480b89bcee4.jpg" />
-    <Content Include="files\avatar\69cf8b5e-b923-4c48-b5fe-49c5c459e05a.jpg" />
-    <Content Include="files\avatar\6ce4e088-7396-4820-b87d-77c223734b32.jpg" />
-    <Content Include="files\avatar\98f978ca-7e3c-483a-9e90-4561f786d10c.jpg" />
-    <Content Include="files\avatar\cb014457-8831-4039-83e2-6be9d73b8520.jpg" />
-    <Content Include="files\avatar\d2347996-e4c4-46d3-bdd1-707e871448e2.jpg" />
-    <Content Include="files\avatar\df2f0e84-be94-40f3-b4ec-bf3626160db1.jpg" />
-    <Content Include="files\avatar\f1fe077c-21aa-4f73-a02d-5c3f0eec19d8.jpg" />
-    <Content Include="files\identity\1ec946ee-4e67-4244-9804-ec737d8ba76b.jpg" />
-    <Content Include="files\identity\25b0287a-8736-48f8-b590-8b6b3b4056d6.jpg" />
-    <Content Include="files\identity\37ba9dc7-ef80-4f1f-bafe-7be0a7b538cf.jpg" />
-    <Content Include="files\identity\75e8c662-56c2-457b-b94e-0d7165018a54.jpg" />
-    <Content Include="files\identity\82b37a84-ecaf-468c-9a36-b3ae2e72bb19.jpg" />
-    <Content Include="files\identity\85de95ba-b777-4f37-88d3-9ba904acc6fd.jpg" />
-    <Content Include="files\identity\9a648771-25fe-41eb-99cb-6ab1f352989f.jpg" />
-    <Content Include="files\identity\c5a63a9f-4565-4dbb-aa9a-cff3b80795f9.jpg" />
-    <Content Include="files\identity\e332267c-4eb0-4f29-ab32-c9d0cf9a8374.jpg" />
-    <Content Include="files\product\thumbnail\0d752764-5b66-475c-b636-34b1f4b477df.jpg" />
-    <Content Include="files\product\thumbnail\de63ce30-1ab5-4a43-b8a2-70f4fc7eaf59.jpg" />
-    <Content Include="files\systembank\01a50baf-d164-4d7a-8929-4b08462109ff.jpg" />
-    <Content Include="files\systembank\32c294bb-8bba-4b80-9a43-b401ec4085fb.jpg" />
-    <Content Include="files\systembank\460037d8-9166-4dac-a551-9ab551a49601.jpg" />
-    <Content Include="files\systembank\4ece6405-529f-42fb-a312-e2e4414f0793.jpg" />
-    <Content Include="files\systembank\64261a29-9f97-444b-94aa-10e179562bb2.jpg" />
-    <Content Include="files\systembank\67375f9d-fd85-4ba0-89d8-0af91b265706.jpg" />
-    <Content Include="files\systembank\77b3b37f-505e-4490-9f8c-80a79bde3b64.jpg" />
-    <Content Include="files\systembank\7ea5b3b4-a81b-4a00-90bc-c8092991f5c7.jpg" />
-    <Content Include="files\systembank\a40f2b10-55f6-4cfd-8c08-11cbbbfe02c1.jpg" />
-    <Content Include="files\systembank\ba938107-1dbe-4874-b707-5d97e2d8708b.jpg" />
-    <Content Include="files\systembank\c98c51ec-76d6-4f4b-89d0-a534098c9494.jpg" />
-    <Content Include="files\systembank\e0133d38-f54c-4ea6-b7bc-7231072a5031.jpg" />
-    <Content Include="files\systembank\e693a50c-1654-412c-bc35-3586502fc6e8.jpg" />
     <Content Include="Global.asax" />
-    <Content Include="Properties\PublishProfiles\FolderProfile.pubxml.user" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -4137,15 +4125,13 @@
     <Compile Include="ApiControllers\UserController.cs" />
     <Compile Include="ApiControllers\UserPinTransferController.cs" />
     <Compile Include="ApiControllers\UserPropertiesController.cs" />
+    <Compile Include="ApiControllers\UserQuestController.cs" />
     <Compile Include="ApiControllers\UserTransactionController.cs" />
     <Compile Include="ApiControllers\UserWalletController.cs" />
     <Compile Include="ApiControllers\UserWithdrawOrderController.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
-    <Compile Include="Areas\Admin\ApiControllers\AdminShareFundController.cs" />
-    <Compile Include="Areas\Admin\ApiControllers\AdminShareFundMonthController.cs" />
-    <Compile Include="Areas\Admin\ApiControllers\AdminShareFundUserMonthController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminSystemBankInfoController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminProductController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminRankController.cs" />
@@ -4153,15 +4139,12 @@
     <Compile Include="Areas\Admin\ApiControllers\AdminQueueGiveController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminQueueReceiveController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminSystemController.cs" />
-    <Compile Include="Areas\Admin\ApiControllers\AdminSystemIncomeYearReportController.cs" />
-    <Compile Include="Areas\Admin\ApiControllers\AdminSystemWalletController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminUserPropertiesController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminUserWalletController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminUserWithdrawOrderController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\ApiAdminBaseController.cs" />
     <Compile Include="Areas\Admin\Controllers\HomeController.cs" />
     <Compile Include="Areas\Admin\Controllers\ManageRankController.cs" />
-    <Compile Include="Areas\Admin\Controllers\ManageShareFundMonthController.cs" />
     <Compile Include="Areas\Admin\Controllers\ManageSystemBankController.cs" />
     <Compile Include="Areas\Admin\Controllers\ManageUserController.cs" />
     <Compile Include="Areas\Admin\Controllers\ManageWaitingLineController.cs" />
@@ -4185,7 +4168,8 @@
     <Compile Include="Areas\Admin\Services\AdminUserWalletService.cs" />
     <Compile Include="Areas\Admin\Services\AdminUserWithdrawOrderService.cs" />
     <Compile Include="Areas\Admin\Services\AdminRankService.cs" />
-    <Compile Include="Areas\Admin\Services\SystemConfig.cs" />
+    <Compile Include="BackgroundJobs\NextQuestForUserTask.cs" />
+    <Compile Include="BackgroundJobs\ScheduledTask.cs" />
     <Compile Include="Controllers\ConnectMemberController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminUserController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -4212,6 +4196,7 @@
     <Compile Include="Models\ShareFundMonth.cs" />
     <Compile Include="Models\ShareFundUserMonth.cs" />
     <Compile Include="Models\SystemBankInfo.cs" />
+    <Compile Include="Models\SystemConfig.cs" />
     <Compile Include="Models\SystemTransaction.cs" />
     <Compile Include="Models\SystemWallet.cs" />
     <Compile Include="Models\User.cs" />
@@ -4235,8 +4220,10 @@
     <Compile Include="Services\BaseService.cs" />
     <Compile Include="Services\CodeConfirmService.cs" />
     <Compile Include="Services\NotificationService.cs" />
+    <Compile Include="Services\QueryGiveQuestService.cs" />
     <Compile Include="Services\QueueGiveService.cs" />
     <Compile Include="Services\QueueReceiveService.cs" />
+    <Compile Include="Services\SystemConfigService.cs" />
     <Compile Include="Services\SystemWalletService.cs" />
     <Compile Include="Services\UserAdminService.cs" />
     <Compile Include="Services\UserBankInfoService.cs" />
@@ -4411,8 +4398,6 @@
     <Content Include="Areas\Admin\Views\ManageRank\Index.cshtml" />
     <Content Include="Areas\Admin\Views\SystemConfig\Index.cshtml" />
     <Content Include="Areas\Admin\Views\ManageWaitingLine\Index.cshtml" />
-    <Content Include="Areas\Admin\Views\ManageShareFundMonth\Index.cshtml" />
-    <Content Include="Areas\Admin\Views\ManageShareFundMonth\ShareFundUserMonth.cshtml" />
     <None Include="packages.config" />
     <Content Include="Views\Home\Login.cshtml" />
     <Content Include="Views\Home\Register.cshtml" />
@@ -4427,7 +4412,6 @@
     <Content Include="Views\User\AccountVerification.cshtml" />
     <Content Include="Views\User\ChangePassword.cshtml" />
     <Content Include="Views\UserBankInfo\Index.cshtml" />
-    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Views\Introduce\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

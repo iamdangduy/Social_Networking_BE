@@ -357,7 +357,14 @@ namespace GiveAndReceive.ApiControllers
                         string deviceId = Guid.NewGuid().ToString().ToLower();
                         string token = SecurityProvider.CreateToken(userLogin.UserId, userLogin.Password, deviceId);
 
-                        userService.UpdateUserToken(userLogin.UserId, token, transaction);
+                        DateTime now = DateTime.Now;
+                        UserToken userToken = new UserToken();
+                        userToken.CreateTime = HelperProvider.GetSeconds(now);
+                        userToken.ExpireTime=HelperProvider.GetSeconds(now.AddDays(7));
+                        userToken.Token = token;
+                        userToken.UserId = userLogin.UserId;
+                        userToken.UserTokenId = Guid.NewGuid().ToString();
+                        userService.InsertUserToken(userToken, transaction);
                         transaction.Commit();
                         return Success(new { token, deviceId });
                     }
