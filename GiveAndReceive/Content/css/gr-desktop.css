@@ -179,7 +179,9 @@ a {
 /*End HomePage*/
 
 /*ConnectPage*/
-
+.connect-page{
+    align-items:center;
+}
 .connect-page .connect-code {
     background-color: white;
     padding: 10px 20px;

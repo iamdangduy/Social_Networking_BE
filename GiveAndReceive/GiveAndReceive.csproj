@@ -4189,6 +4189,7 @@
     <Compile Include="Controllers\ConnectMemberController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminUserController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\IntroduceController.cs" />
     <Compile Include="Controllers\NotificationController.cs" />
     <Compile Include="Controllers\UserBankInfoController.cs" />
     <Compile Include="Controllers\UserController.cs" />
@@ -4427,6 +4428,7 @@
     <Content Include="Views\User\ChangePassword.cshtml" />
     <Content Include="Views\UserBankInfo\Index.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
+    <Content Include="Views\Introduce\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
