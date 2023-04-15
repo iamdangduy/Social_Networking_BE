@@ -12,6 +12,7 @@ namespace GiveAndReceive.Models
         public long CreateTime { get; set; }
         public string ShareCode { get; set; }
         public string ParentCode { get; set; }
+        public int Depth { get; set; }
     }
     public class UserLoginPost
     {

@@ -161,7 +161,7 @@ namespace GiveAndReceive.Services
 
         public void UpdateUserCode(User user, IDbTransaction transaction = null)
         {
-            string query = "UPDATE [dbo].[user] SET [ParentCode] = @ParentCode, [ShareCode] = @ShareCode WHERE [UserId] = @UserId";
+            string query = "UPDATE [dbo].[user] SET [ParentCode] = @ParentCode, [ShareCode] = @ShareCode, [Depth] = @Depth WHERE [UserId] = @UserId";
             int status = this._connection.Execute(query, user, transaction);
             if (status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
         }

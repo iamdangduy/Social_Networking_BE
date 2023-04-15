@@ -564,6 +564,10 @@ namespace GiveAndReceive.ApiControllers
 
                         user.ShareCode = HelperProvider.MakeCode();
                         user.ParentCode = code;
+                        User user1 = userService.GetUserByShareCode(user.ParentCode, transaction);
+                        if (user1 == null) throw new Exception("Mã giới thiệu không đúng.");
+                        user.Depth = user1.Depth + 1;
+
                         userService.UpdateUserCode(user, transaction);
 
                         transaction.Commit();
@@ -578,6 +582,6 @@ namespace GiveAndReceive.ApiControllers
             }
         }
 
-
+        
     }
 }
