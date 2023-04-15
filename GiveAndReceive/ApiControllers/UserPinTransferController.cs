@@ -37,7 +37,7 @@ namespace GiveAndReceive.ApiControllers
 
         [HttpGet]
         [ApiTokenRequire]
-        public JsonResult ActivatePin()
+        public JsonResult ActivatePin(string productId)
         {
             try
             {
@@ -55,6 +55,9 @@ namespace GiveAndReceive.ApiControllers
                         QueueReceiveService queueReceiveService = new QueueReceiveService(connect);
                         UserWalletService userWalletService = new UserWalletService(connect);
                         UserPinTransferService userPinTransferService = new UserPinTransferService(connect);
+                        UserWareHouseService userWareHouseService = new UserWareHouseService(connect);
+
+                        if(productId  == null) throw new Exception("Bạn chưa chọn sản phẩm.");
 
                         // Kiểm tra pin trong ví người dùng
                         UserWallet userWallet = userWalletService.GetUserWalletByUser(user.UserId, transaction);
@@ -72,6 +75,28 @@ namespace GiveAndReceive.ApiControllers
                         queueGive.Status = QueueGive.EnumStatus.PENDING;
                         queueGive.CreateTime = HelperProvider.GetSeconds(DateTime.Now);
                         queueGiveService.InsertQueueGive(queueGive, transaction);
+
+                        UserWareHouse userWareHouse = userWareHouseService.GetWareHouseByUserId(user.UserId, transaction);
+                        if(userWareHouse != null)
+                        {
+                            userWareHouse.TotalProduct = 1;
+                            userWareHouseService.UpdateUserWareHouse(userWareHouse, transaction);
+                        }
+                        else
+                        {
+                            userWareHouse = new UserWareHouse();
+                            userWareHouse.UserId = user.UserId;
+                            userWareHouse.TotalProduct = 1;
+                            userWareHouseService.InsertUserWareHouse(userWareHouse, transaction);
+                        }
+
+                        UserWareHouseDetail userWareHouseDetail = new UserWareHouseDetail();
+                        userWareHouseDetail.UserWareHouseDetailId = Guid.NewGuid().ToString();  
+                        userWareHouseDetail.UserId = user.UserId;
+                        userWareHouseDetail.ProductId = productId;
+                        userWareHouseDetail.Quantity = 1;
+                        userWareHouseDetail.Status = UserWareHouseDetail.EnumStatus.NOT_RECEIVE;
+                        userWareHouseService.InsertUserWareHouseDetail(userWareHouseDetail, transaction);
 
                         // Cập nhật pin trong ví người dùng
                         userWalletService.UpdatePinByUserId(user.UserId, -1, transaction);
@@ -98,7 +123,7 @@ namespace GiveAndReceive.ApiControllers
         }
 
 
-        [HttpGet]
+        [HttpPost]
         [ApiTokenRequire]
         public JsonResult TransferPin(TransferPin model)
         {
@@ -118,13 +143,16 @@ namespace GiveAndReceive.ApiControllers
                         UserWalletService userWalletService = new UserWalletService(connect);
                         UserPinTransferService userPinTransferService = new UserPinTransferService(connect);
 
+                        if (string.IsNullOrEmpty(model.Phone)) throw new Exception("Số điện thoại không được để trống.");
+                        if (model.Pin == null || model.Pin == 0) throw new Exception("Số pin phải lớn hơn 0 và không được để trống.");
+
                         // Kiểm tra pin trong ví người dùng
                         UserWallet userWallet = userWalletService.GetUserWalletByUser(user.UserId, transaction);
                         if (userWallet.Pin < model.Pin) throw new Exception("Bạn không đủ pin để chuyển.");
 
                         // Kiểm tra người nhận có tồn tại không
                         User userReceive = userService.GetUserByPhone(model.Phone, transaction);
-                        if (userReceive != null) throw new Exception("Người nhận không tồn tại.");
+                        if (userReceive == null) throw new Exception("Người nhận không tồn tại.");
 
                         if (user.Depth == userReceive.Depth) throw new Exception("Bạn không thể chuyển vé cho người này.");
 
@@ -133,9 +161,9 @@ namespace GiveAndReceive.ApiControllers
                         if(user.Depth > userReceive.Depth)
                         {
                             user1 = userService.GetUserByShareCode(user.ParentCode, transaction);
-                            while (user1.Depth > userReceive.Depth)
+                            while (user1.Depth >= userReceive.Depth)
                             {                                
-                                if(string.Compare(user1.Phone, userReceive.Phone, true) > 0)
+                                if(string.Compare(user1.UserId, userReceive.UserId) == 0)
                                 {
                                     kt = true;
                                     break;
@@ -146,9 +174,9 @@ namespace GiveAndReceive.ApiControllers
                         else if(userReceive.Depth > user.Depth)
                         {
                             user1 = userService.GetUserByShareCode(userReceive.ParentCode, transaction);
-                            while (user1.Depth > userReceive.Depth)
+                            while (user1.Depth >= user.Depth)
                             {
-                                if (string.Compare(user1.Phone, user.Phone, true) > 0)
+                                if (string.Compare(user1.UserId, user.UserId) == 0)
                                 {
                                     kt = true;
                                     break;

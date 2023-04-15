@@ -74,6 +74,44 @@
                 border-radius: 5px;
             }
 
+        .products .product-detail {
+            display: flex;
+            gap: 10px;
+            padding: 5px 10px;
+            width: 100px;
+            flex-direction: column;
+            align-items: center;
+            border: 0.5px solid #c4c4c4;
+            border-radius: 7px;
+        }
+            .products .product-detail.selected {
+                background-color: azure;
+            }
+
+        .products .product-detail .product-img {
+            width: 30px;
+            height: 30px;
+        }
+
+        .products .product-detail .product-img .thumbnail{
+            height: 0;
+            width: 100%;
+            padding-bottom: 100%;
+            border-radius: 100%;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            border: .5px solid #d7d7d7;
+        }
+
+        .products .product-detail .product-name{
+            flex: 1;
+            display: flex;
+            align-items: center;
+            font-size:14px;
+        }
+
+
         @@keyframes modalFadeIn {
             from {
                 opacity: 0;
@@ -121,8 +159,8 @@
                     <div class="balance-header">
                         <div class="wallet-balance" id="wallet-pin"> 3 Vé</div>
                         <div class="withdraw-button" style="text-align:right">
-                            <button class="btn btn-sm rounded-pill btn-primary" style="padding:3px 15px;" onclick="activatePin()"> Kích hoạt </button>
-                            <button class="btn btn-sm rounded-pill btn-primary" style="padding:3px 15px;" onclick=""> Chuyển </button>
+                            <button class="btn btn-sm rounded-pill btn-primary" style="padding:3px 15px;" onclick="activatePin();"> Kích hoạt </button>
+                            <button class="btn btn-sm rounded-pill btn-primary" style="padding:3px 15px;" onclick="transferPin();"> Chuyển </button>
                         </div>
                     </div>
                     <div class="history" id="history-pin">
@@ -160,33 +198,105 @@
 
     </div>
 
-    <div id="modal" class="modal" onclick="closeTransferModal()">
+    <div id="activatePinModal" class="modal" onclick="closeActivatePinModal()">
         <div class="modal-container">
             <div class="modal-header">Kích hoạt</div>
+            <div class="modal-body products">
+                <div class="product-label">Danh sách sản phẩm</div>
+                <div class="list-product" id="list-product" style="display: flex; width: 100%; flex-wrap: wrap; gap: 7px; ">
+                    <div class="product-detail selected" onclick="ProductSelect(this);">
+                        <div class="product-img">
+                            <div class="thumbnail"></div>
+                        </div>
+                        <div class="product-name">Sữa A </div>
+                    </div>
+                    <div class="product-detail" onclick="ProductSelect(this);">
+
+                        <div class="product-img">
+                            <div class="thumbnail"></div>
+                        </div>
+                        <div class="product-name"> Sữa B </div>
+                    </div>
+                    <div class="product-detail" onclick="ProductSelect(this);">
+
+                        <div class="product-img">
+                            <div class="thumbnail"></div>
+                        </div>
+                        <div class="product-name"> Sữa C </div>
+                    </div>
+                    <div class="product-detail" onclick="ProductSelect(this);">
+
+                        <div class="product-img">
+                            <div class="thumbnail"></div>
+                        </div>
+                        <div class="product-name"> Sữa D </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-sm close-modal" onclick="closeActivatePinModal();">Đóng</button>
+                <button class="btn btn-sm btn-primary" onclick="ActivatePinModal();">Lưu</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="transferPinModal" class="modal" onclick="closeTransferPinModal()">
+        <div class="modal-container">
+            <div class="modal-header">Chuyển</div>
             <div class="modal-body">
                 <div class="form-group">
                     <label class="font-weight-semibold" for="withDraw">Số điện thoại</label>
-                    <input type="text" class="form-control" id="withDraw" placeholder="Số điện thoại">
+                    <input type="text" class="form-control" id="PhoneTransfer" placeholder="Số điện thoại">
                 </div>
                 <div class="form-group">
                     <label class="font-weight-semibold" for="withDraw">Số vé</label>
-                    <input type="text" class="form-control" id="withDraw" placeholder="Số vé">
+                    <input type="text" class="form-control" id="PinTransfer" placeholder="Số vé">
                 </div>
             </div>
 
             <div class="modal-footer">
-                <button class="btn btn-sm close-modal" onclick="closeTransferModal()">Đóng</button>
-                <button class="btn btn-sm btn-primary" onclick="CreateUserWithdrawOrder();">Lưu</button>
-
+                <button class="btn btn-sm close-modal" onclick="closeTransferPinModal();">Đóng</button>
+                <button class="btn btn-sm btn-primary" onclick="TransferPinModal();">Lưu</button>
             </div>
-
         </div>
-
     </div>
 </section>
 
 @section scripts{
     <script>
+        const ProductSelect = function(el) {
+            if(!$(el).hasClass('selected')) {
+                $(el).siblings().removeClass('selected')
+                $(el).addClass('selected');
+            } 
+        }
+
+        const getListProduct = async function(){
+            $('#list-product').html('');
+
+            const rp = await fetch('/api/Product/GetListProduct', {
+                method: 'get',
+                headers: Enum.OptionHeaderDefault
+            });
+            let rs = await rp.json();
+            if (CheckErrorResponse(rs) === false) return;
+            if (rs.status === 'error') if (rs.message !== '' && rs.message !== null) alert(rs.message);
+            if (rs.status === 'success') {
+                if (rs.message !== '' && rs.message !== null) alert(rs.message);
+                let html = '';
+                for (let index = 0; index < rs.data.length; index++) {
+                    html += `<div class="product-detail" data-id="${rs.data[index].ProductId}" onclick="ProductSelect(this);"><div class="product-img"><div class="thumbnail" style="background-image:url(${rs.data[index].Thumbnail})"></div></div>`;
+                    html += `<div class="product-name"> ${rs.data[index].Name} </div></div>`;                        
+                }
+                $('#list-product').append(html);
+                console.log(rs);
+            }
+        }
+
+        
+
         const getListWithdrawPending = async function () {
             $('#withdraw-pending').html('');
 
@@ -331,7 +441,18 @@
         }
 
         const activatePin = async function () {
-            const rp = await fetch('/api/UserPinTransfer/ActivatePin', {
+            $('#activatePinModal').css('display', 'flex');
+        }
+
+        const closeActivatePinModal = function(){
+            $('#activatePinModal').css('display', 'none');
+            $('#list-product').find('.selected').removeClass('.selected');
+        }       
+        
+        const ActivatePinModal = async function(){
+            var id = $('#list-product').find('.selected').data('id');
+            console.log(id);
+            const rp = await fetch('/api/UserPinTransfer/ActivatePin?productId=' + id, {
                 method: 'get',
                 headers: Enum.OptionHeaderDefault
             });
@@ -341,6 +462,44 @@
             if (rs.status === 'success') {
                 window.location.reload();
             }
+        } 
+
+        const transferPin = function () {
+            $('#transferPinModal').css('display', 'flex');
+        }
+
+        const closeTransferPinModal = function () {
+            $('#transferPinModal').css('display', 'none'); 
+            $('#PhoneTransfer').val('');
+            $('#PinTransfer').val('');
+        }
+
+        const TransferPinModal = async function () {
+            let model = {
+                Phone: $('#PhoneTransfer').val(),
+                Pin: $('#PinTransfer').val()
+            };
+
+            if (GetObjectProperty(model, 'Phone') === '') { alert('Số điện thoại không được để trống'); return; }
+            if (GetObjectProperty(model, 'Pin') === '') { alert('Số pin không được để trống'); return; }
+
+            model.Phone = '+84 ' + model.Phone.substr(1, 9);
+
+            console.log(model);
+
+            let rq = await fetch('/api/UserPinTransfer/TransferPin', {
+                method: 'post',
+                headers: Enum.OptionHeaderDefault,
+                body: JSON.stringify(model)
+            })
+            let rs = await rq.json();
+            if (CheckErrorResponse(rs) === false) {
+                return;
+            }
+
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                window.location.reload();
+            }
         }
 
         const InitPage = async function () {
@@ -348,6 +507,7 @@
             await getListWithdrawPending();
             await getListUserTransaction();
             await getListPinTransfer();
+            await getListProduct();
 
             $(".modal-container").click(function (event) {
                 event.stopPropagation();

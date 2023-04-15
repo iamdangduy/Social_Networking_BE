@@ -4121,6 +4121,7 @@
     <Compile Include="ApiControllers\ApiBaseController.cs" />
     <Compile Include="ApiControllers\HomeController.cs" />
     <Compile Include="ApiControllers\NotificationController.cs" />
+    <Compile Include="ApiControllers\ProductController.cs" />
     <Compile Include="ApiControllers\UserBankInfoController.cs" />
     <Compile Include="ApiControllers\UserController.cs" />
     <Compile Include="ApiControllers\UserPinTransferController.cs" />
@@ -4221,6 +4222,7 @@
     <Compile Include="Services\CodeConfirmService.cs" />
     <Compile Include="Services\NotificationService.cs" />
     <Compile Include="Services\QueryGiveQuestService.cs" />
+    <Compile Include="Services\ProductService.cs" />
     <Compile Include="Services\QueueGiveService.cs" />
     <Compile Include="Services\QueueReceiveService.cs" />
     <Compile Include="Services\SystemConfigService.cs" />
@@ -4232,6 +4234,7 @@
     <Compile Include="Services\UserService.cs" />
     <Compile Include="Services\UserTransactionService.cs" />
     <Compile Include="Services\UserWalletService.cs" />
+    <Compile Include="Services\UserWareHouseService.cs" />
     <Compile Include="Services\UserWithdrawOrderService.cs" />
   </ItemGroup>
   <ItemGroup>
