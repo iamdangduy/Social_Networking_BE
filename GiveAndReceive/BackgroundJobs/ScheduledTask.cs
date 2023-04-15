@@ -18,36 +18,22 @@ namespace GiveAndReceive.BackgroundJobs
 
 
                 #region NextQuestForUser
-                IJobDetail userConnectTask = JobBuilder.Create<NextQuestForUserTask>()
-                            .WithIdentity("userConnectJob", "userConnectGroup")
+                IJobDetail nextQuestForUserTask = JobBuilder.Create<NextQuestForUserTask>()
+                            .WithIdentity("NextQuestForUserJob", "NextQuestForUserGroup")
                             .Build();
 
-                ITrigger triggerFristTimeInFristDayUserConnectTask = TriggerBuilder.Create()
-                    .WithIdentity("userConnectTrigger", "userConnectGroup")
+                ITrigger triggerNextQuestForUserTask = TriggerBuilder.Create()
+                    .WithIdentity("NextQuestForUserTrigger", "NextQuestForUserGroup")
                     .StartNow()
-                    .WithCronSchedule("0 2 0 1 * ?")
-                    .Build();
-
-                ITrigger triggerFristDayUserConnectTask = TriggerBuilder.Create()
-                    .WithIdentity("userConnectTrigger1", "userConnectGroup")
-                    .StartNow()
-                    .WithCronSchedule("0 2,12,22,32,42,52 1-23 1 * ?")
-                    .Build();
-
-                ITrigger triggerUserConnectTask = TriggerBuilder.Create()
-                    .WithIdentity("userConnectTrigger2", "userConnectGroup")
-                    .StartNow()
-                    .WithCronSchedule("0 2,12,22,32,42,52 * 2-31 * ?")
+                    .WithCronSchedule("0 0 0/6 1/1 * ? *")
                     .Build();
                 //await scheduler.AddJob(userConnectTask, true);
 
-                IList<ITrigger> listTriggersUserConnect = new List<ITrigger>();
-                listTriggersUserConnect.Add(triggerFristTimeInFristDayUserConnectTask);
-                listTriggersUserConnect.Add(triggerFristDayUserConnectTask);
-                listTriggersUserConnect.Add(triggerUserConnectTask);
-                IReadOnlyCollection<ITrigger> listOfTriggersUserConnect = new ReadOnlyCollection<ITrigger>(listTriggersUserConnect);
+                IList<ITrigger> listTriggerNextQuestForUserTask = new List<ITrigger>();
+                listTriggerNextQuestForUserTask.Add(triggerNextQuestForUserTask);
+                IReadOnlyCollection<ITrigger> listOfTriggersUserConnect = new ReadOnlyCollection<ITrigger>(listTriggerNextQuestForUserTask);
 
-                await scheduler.ScheduleJob(userConnectTask, listOfTriggersUserConnect, true);
+                await scheduler.ScheduleJob(nextQuestForUserTask, listOfTriggersUserConnect, true);
                 #endregion
 
    

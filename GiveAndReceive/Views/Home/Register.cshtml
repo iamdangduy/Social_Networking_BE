@@ -66,45 +66,48 @@
     <div class="row h-100">
         <div class="col-lg-5 col-12">
             <div class="form-register">
-                <div class="step step-1" style="display:flex">
-                    <div class="form-group position-relative has-icon-left mb-4 mt-5">
-                        <input type="tel" class="form-control form-control-xl" id="phone" placeholder="Nhập số điện thoại" onkeyup="ValidateInputOnlyPhoneNumber(event, this);">
-                        <div class="form-control-icon">
-                            <i class="bi bi-person"></i>
-                        </div>
-                    </div>
 
-                    <button class="btn btn-primary btn-block btn-lg shadow-lg" onclick="SendOTP(this);">Gửi mã OTP</button>
-                    <div class="text-center mt-5">
-                        <p class="text-gray-600">
-                            Bạn đã có tài khoản?
-                            <a href="/dang-nhap" class="font-bold">
-                                Đăng nhập
-                            </a>
-                        </p>
+                <!--
+    <div class="step step-1" style="display:flex">
+        <div class="form-group position-relative has-icon-left mb-4 mt-5">
+            <input type="tel" class="form-control form-control-xl" id="phone" placeholder="Nhập số điện thoại" onkeyup="ValidateInputOnlyPhoneNumber(event, this);">
+            <div class="form-control-icon">
+                <i class="bi bi-person"></i>
+            </div>
+        </div>
 
-                    </div>
+        <button class="btn btn-primary btn-block btn-lg shadow-lg" onclick="SendOTP(this);">Gửi mã OTP</button>
+        <div class="text-center mt-5">
+            <p class="text-gray-600">
+                Bạn đã có tài khoản?
+                <a href="/dang-nhap" class="font-bold">
+                    Đăng nhập
+                </a>
+            </p>
+
+        </div>
+    </div>
+    <div class="step step-2" style="display:none;">
+        <div class="form-body">
+            <div class="register-input-group">
+                <div class="input-label">Hệ thống đã gửi mã OTP vào số điện thoại bạn vừa nhập</div>
+                <div class="input-control">
+                    <input id="otp" type="tel" class="form-control form-control-xl" placeholder="Nhập mã xác nhận" onkeyup="ValidateInputOnlyPhoneNumber(event, this);" />
                 </div>
-                <div class="step step-2" style="display:none;">
-                    <div class="form-body">
-                        <div class="register-input-group">
-                            <div class="input-label">Hệ thống đã gửi mã OTP vào số điện thoại bạn vừa nhập</div>
-                            <div class="input-control">
-                                <input id="otp" type="tel" class="form-control form-control-xl" placeholder="Nhập mã xác nhận" onkeyup="ValidateInputOnlyPhoneNumber(event, this);" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-footer">
-                        <div class="action">
-                            <div>
-                                <a class="btn btn-secondary" onclick="GoToStep(1);">Quay lại</a>
-                            </div>
-                            <div>
-                                <a class="btn btn-primary" onclick="VerifyCode();">Xác nhận</a>
-                            </div>
-                        </div>
-                    </div>
+            </div>
+        </div>
+        <div class="form-footer">
+            <div class="action">
+                <div>
+                    <a class="btn btn-secondary" onclick="GoToStep(1);">Quay lại</a>
                 </div>
+                <div>
+                    <a class="btn btn-primary" onclick="VerifyCode();">Xác nhận</a>
+                </div>
+            </div>
+        </div>
+    </div>
+        -->
                 <div class="step step-3" style="display:none;">
                     <div class="form-body">
 
