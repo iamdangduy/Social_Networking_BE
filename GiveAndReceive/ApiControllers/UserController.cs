@@ -16,7 +16,6 @@ namespace GiveAndReceive.ApiControllers
     public class UserController : ApiBaseController
     {
         [HttpPost]
-        [ApiTokenRequire]
         public JsonResult ChangePassword(UserRequest model)
         {
             try
@@ -60,7 +59,6 @@ namespace GiveAndReceive.ApiControllers
         }
 
         [HttpPost]
-        [ApiTokenRequire]
         public JsonResult UpdateInfoUser(UpdateUser model)
         {
             try
@@ -377,7 +375,6 @@ namespace GiveAndReceive.ApiControllers
         }
 
         [HttpGet]
-        [ApiTokenRequire]
         public JsonResult Logout()
         {
             try
@@ -506,7 +503,6 @@ namespace GiveAndReceive.ApiControllers
         }
 
         [HttpGet]
-        [ApiTokenRequire]
         public JsonResult GetInforUser()
         {
             try
@@ -526,7 +522,6 @@ namespace GiveAndReceive.ApiControllers
         }
 
         [HttpGet]
-        [ApiTokenRequire]
         public JsonResult GetListConnectMember()
         {
             try
@@ -547,7 +542,6 @@ namespace GiveAndReceive.ApiControllers
         }
 
         [HttpGet]
-        [ApiTokenRequire]
         public JsonResult ConnectMember(string code)
         {
             try

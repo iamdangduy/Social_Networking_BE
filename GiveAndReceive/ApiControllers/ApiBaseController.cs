@@ -9,7 +9,7 @@ using System.Web.Http;
 
 namespace GiveAndReceive.ApiControllers
 {
-    [APIAuthenticationFilter]
+    [ApiTokenRequire]
     public class ApiBaseController : ApiController
     {
         [HttpGet]
