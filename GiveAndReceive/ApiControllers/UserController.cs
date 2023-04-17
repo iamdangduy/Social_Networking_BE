@@ -279,14 +279,19 @@ namespace GiveAndReceive.ApiControllers
                         UserService userService = new UserService(connect);
                         UserWalletService userWalletService = new UserWalletService(connect);
                         UserPropertiesService userPropertiesService = new UserPropertiesService(connect);
+                        if (string.IsNullOrEmpty(userRequest.Account)) return Error("Tên tài khoản không được để trống.");
                         if (string.IsNullOrEmpty(userRequest.Name)) return Error("Họ và tên không được để trống.");
                         if (string.IsNullOrEmpty(userRequest.Password)) return Error("Mật khẩu không được để trống.");
+
+                        User checkAccount = userService.GetUserByAccount(userRequest.Account, transaction);
+                        if (checkAccount != null) throw new Exception("Tên tài khoản đã có người sử dụng");
 
                         User user = new User();
                         user.UserId = Guid.NewGuid().ToString();
                         user.Password = SecurityProvider.EncodePassword(user.UserId, userRequest.Password);
                         user.Name = userRequest.Name.Trim();
                         user.CreateTime = HelperProvider.GetSeconds();
+                        user.Account = userRequest.Account;
                         if (!string.IsNullOrEmpty(userRequest.ParentCode))
                         {
                             User parent = userService.GetUserByShareCode(userRequest.ParentCode, transaction);
@@ -294,8 +299,7 @@ namespace GiveAndReceive.ApiControllers
                             user.ParentCode = userRequest.ParentCode;
                             user.ShareCode = HelperProvider.MakeCode();
                         }
-                        user.Phone = userRequest.Phone.Trim();
-                        if (userService.CheckPhoneExist(user.Phone, transaction)) return Error("Số điện thoại đã tồn tại");
+                       
                         userService.InsertUser(user, transaction);
 
                         UserProperties userProperties = new UserProperties();
@@ -306,12 +310,6 @@ namespace GiveAndReceive.ApiControllers
                         userProperties.TotalAmountReceive = 0;
                         userProperties.Status = UserProperties.EnumStatus.CANCEL;
                         userPropertiesService.CreateUserProperties(userProperties, transaction);
-
-                        UserToken userToken = new UserToken();
-                        userToken.UserTokenId = Guid.NewGuid().ToString();
-                        userToken.UserId = user.UserId;
-                        userToken.CreateTime = HelperProvider.GetSeconds();
-                        userService.InsertUserToken(userToken, transaction);
 
                         UserWallet userWallet = new UserWallet();
                         userWallet.UserId = user.UserId;

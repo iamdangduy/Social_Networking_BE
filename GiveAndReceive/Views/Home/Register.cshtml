@@ -196,7 +196,6 @@
                 return;
             }
 
-            model.Phone = '+84 ' + model.Phone.substr(1, 9);
             model.Password = MD5(base64.encode(model.Password));
 
             $(el).addClass('is-loading');

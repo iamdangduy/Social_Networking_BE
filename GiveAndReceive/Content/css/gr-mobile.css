@@ -131,7 +131,7 @@ a {
     .home-page .current-mission .list-mission {
     }
 
-    .home-page .current-mission .mission-label {
+    .home-page .current-mission .mission-label, .home-page .confirm-give-list .confirm-give-label {
         font-weight: bold;
         padding: 10px 0 20px;
     }
