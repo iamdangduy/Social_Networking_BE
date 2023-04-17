@@ -71,8 +71,39 @@
 
     <div class="confirm-give-list">
         <div class="confirm-give-label"> DANH SÁCH NGƯỜI GỬI CẦN XÁC NHẬN</div>
+        <div class="filter">
+            <select class="form-control form-control-sm" name="status" onchange="GetListGive();">
+                <option value="" selected>Tất cả</option>
+                <option value="PENDING">Chưa gửi</option>
+                <option value="SENT">Đã gửi</option>
+                <option value="DONE">Đã xác nhận</option>
+            </select>
+        </div>
         <div class="list-give">
-
+            <div class="user-give-detail">
+                <div class="avatar">
+                    <img />
+                </div>
+                <div class="name">
+                    Nguyen van a
+                </div>
+                <div class="status">
+                    <span class="btn-outline-success ">Chưa gửi</span>
+                </div>
+                <div class="action">
+                    <button class="btn btn-sm btn-primary">Xác nhận</button>
+                </div>
+            </div>
+        </div>
+        <div class="paging">
+            <button class="btn btn-sm btn-outline-primary" onclick="ListGive_PreviousPage(this);"><i class="fa-solid fa-chevron-left"></i></button>
+            <div class="go-to-page">
+                <input class="form-control form-control-sm" name="page" value="1" />
+                <span>/</span>
+                <span class="total-page"></span>
+                <button class="btn btn-sm btn-outline-primary" onclick="GetListGive();"><i class="fa-solid fa-play"></i></button>
+            </div>
+            <button class="btn btn-sm btn-outline-primary" onclick="ListGive_NextPage(this);"><i class="fa-solid fa-chevron-right"></i></button>
         </div>
     </div>
 
@@ -120,7 +151,31 @@
         <div class="modal-custom-form-footer">
             <div style="display:flex;gap:10px;justify-content:flex-end;">
                 <button class="btn btn-outline-secondary btn-sm" onclick="CloseModel">Đóng</button>
-                <button class="btn btn-outline-success btn-sm"  onclick="ConfirmSent(this);">Xác nhận</button>
+                <button class="btn btn-outline-success btn-sm" onclick="ConfirmSent(this);">Xác nhận</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-custom" id="transaction-detail" style="display:none;">
+    <div class="modal-custom-backdrop"></div>
+    <div class="modal-custom-form">
+        <div class="modal-custom-form-header">
+            <div>XÁC NHẬN ĐÃ CHUYỂN</div>
+        </div>
+        <div class="modal-custom-form-body">
+            <input type="hidden" name="queue-quest-give-id" value="" />
+            <div>
+                <div>Ảnh giao dịch</div>
+                <div>
+                    <div class="preview-transaction-image" onclick="TransactionImage_OpenFileDialog(this);"></div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-custom-form-footer">
+            <div style="display:flex;gap:10px;justify-content:flex-end;">
+                <button class="btn btn-outline-secondary btn-sm" onclick="CloseModel">Đóng</button>
+                <button class="btn btn-outline-success btn-sm" onclick="ConfirmSent(this);">Xác nhận</button>
             </div>
         </div>
     </div>
@@ -196,7 +251,7 @@
                 if (rs.data.listQueueGiveQuest.length <= 0) {
                     $('.current-mission .list-mission').append(`
 <div class="mission-detail"><span>Bạn đang chưa có nhiệm vụ nào</span></div>
-                    `);
+                            `);
                 } else {
                     for (let i = 0; i < rs.data.listQueueGiveQuest.length; i++) {
                         const item = rs.data.listQueueGiveQuest[i];
@@ -225,7 +280,7 @@
 
         }
 
-       
+
 
         const OpenModalConfirmSent = function (el) {
             const queuequestid = $(el).data('quest-id');
@@ -277,8 +332,79 @@
             reader.readAsDataURL(el.files[0]);
         }
 
+        const ListGive_PreviousPage = function (el) {
+            let page = $(el).closest('.paging').find('input[name=page]').val();
+            if (page === '') page = '1';
+            page = parseInt(page);
+            if (page === 1) return;
+            page--;
+            $(el).closest('.paging').find('input[name=page]').val(page);
+            GetListGive();
+        }
+
+        const ListGive_NextPage = function (el) {
+            let page = $(el).closest('.paging').find('input[name=page]').val();
+            let totalPage = $(el).closest('.paging').find('.total-page').text();
+            totalPage = parseInt(totalPage);
+            if (page === '') page = '1';
+            page = parseInt(page);
+            if (page === totalPage) return;
+            page++;
+            $(el).closest('.paging').find('input[name=page]').val(page);
+            GetListGive();
+        }
+        const QuestDetail = async function (el) {
+            const status = $(el).data('status');
+            const questId = $(el).data('quest-id');
 
 
+        }
+        const GetListGive = async function () {
+            const page = $('.confirm-give-list input[name=page]').val();
+            const status = $('.confirm-give-list .filter select[name=status]').val();
+            const rq = await fetch(`/api/userquest/GetListGive?page=${page}&Status=${status}`, {
+                method: 'get',
+                headers: Enum.OptionHeaderDefault
+            });
+
+            const rs = await rq.json();
+
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                
+                $('.confirm-give-list .total-page').text(GetObjectProperty(rs.data, 'totalPage'));
+                $('.confirm-give-list .list-give').html('');
+                if (rs.data.listData.length <= 0) {
+                    $('.confirm-give-list .list-give').append(`<div class="user-give-detail">Chưa có người cần xác nhận</div>`);
+                }
+                for (let i = 0; i < rs.data.listData.length; i++) {
+                    const item = rs.data.listData[i];
+
+                    let status = '';
+                    let button = '';
+                    switch (item.Status) {
+                        case 'PENDING': status = '<span class="btn-outline-warning ">Chưa gửi</span>'; break;
+                        case 'SENT': status = '<span class="btn-outline-info ">Đã gửi</span>';
+                            button = '<button class="btn btn-sm btn-primary">Xác nhận</button>';
+                            break;
+                        case 'DONE': status = '<span class="btn-outline-success ">Hoàn thành</span>'; break;
+                        default: status = '<span class="btn-outline-danger ">Hoàn thành</span>'; break;
+                    }
+
+                    $('.confirm-give-list .list-give').append(`<div class="user-give-detail">
+                    <div class="avatar">
+                        <img src=" ${GetObjectProperty(item, 'Avatar')}"/>
+                    </div>
+                    <div class="name" onclick="QuestDetail(this);" data-status="${GetObjectProperty(item,'Status')}" data-quest-id="${GetObjectProperty(item, 'QueueGiveQuestId')}">
+                        ${GetObjectProperty(item, 'Name')}
+                    </div>
+                    <div class="status">${status}</div>
+                    <div class="action">${button}</div>
+                </div>`);
+                }
+            }
+
+        }
+        GetListGive();
         InitPage();
     </script>
 }
