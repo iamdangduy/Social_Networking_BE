@@ -16,7 +16,6 @@ namespace GiveAndReceive.ApiControllers
     public class ProductController : ApiBaseController
     {
         [HttpGet]
-        [ApiTokenRequire]
         public JsonResult GetListProduct()
         {
             try

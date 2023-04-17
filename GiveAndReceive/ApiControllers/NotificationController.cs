@@ -14,7 +14,6 @@ namespace GiveAndReceive.ApiControllers
     public class NotificationController : ApiBaseController
     {
         [HttpGet]
-        [ApiTokenRequire]
         public JsonResult GetListNotification(int page)
         {
             try
@@ -35,7 +34,6 @@ namespace GiveAndReceive.ApiControllers
         }
 
         [HttpGet]
-        [ApiTokenRequire]
         public JsonResult UpdateNotificationRead(string id)
         {
             try

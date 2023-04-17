@@ -14,7 +14,6 @@ namespace GiveAndReceive.ApiControllers
     public class UserWithdrawOrderController : ApiBaseController
     {
         [HttpPost]
-        [ApiTokenRequire]
         public JsonResult CreateUserWithdrawOrder(UserWithdrawOrder model)
         {
             try
@@ -84,7 +83,6 @@ namespace GiveAndReceive.ApiControllers
         }
 
         [HttpGet]
-        [ApiTokenRequire]
         public JsonResult UserCancelWithdrawOrder(string userWithdrawId)
         {
             try

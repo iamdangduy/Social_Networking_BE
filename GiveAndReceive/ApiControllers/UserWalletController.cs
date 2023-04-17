@@ -13,7 +13,6 @@ namespace GiveAndReceive.ApiControllers
     public class UserWalletController : ApiBaseController
     {
         [HttpGet]
-        [ApiTokenRequire]
         public JsonResult GetBalanceByUserId()
         {
             try
@@ -33,7 +32,6 @@ namespace GiveAndReceive.ApiControllers
         }
 
         [HttpGet]
-        [ApiTokenRequire]
         public JsonResult GetListWithdrawPendingByUser()
         {
             try
@@ -53,7 +51,6 @@ namespace GiveAndReceive.ApiControllers
         }
 
         [HttpGet]
-        [ApiTokenRequire]
         public JsonResult GetUserWalletByUser()
         {
             try
