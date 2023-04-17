@@ -22,7 +22,7 @@ namespace GiveAndReceive.Providers
             UserToken userToken = userService.GetUserToken(token,transaction);
             if (userToken == null) return null;
             long now = HelperProvider.GetSeconds();
-            if (userToken.ExpireTime >= now) {
+            if (userToken.ExpireTime <= now) {
                 userService.RemoveUserToken(userToken.Token, transaction);
                 return null;
             }

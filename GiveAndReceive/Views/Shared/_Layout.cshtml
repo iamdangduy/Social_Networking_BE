@@ -239,7 +239,7 @@
                 headers: Enum.OptionHeaderDefault,
             });
             let rs = await rq.json();
-            if (CheckErrorResponse(rs) === false) return;
+           // if (CheckErrorResponse(rs) === false) return;
             if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
                 if (rs.data.Status === 'CANCEL') {
                     $('.layout-navbar .approve-status').html(`

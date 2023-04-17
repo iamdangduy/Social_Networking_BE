@@ -11,7 +11,8 @@ namespace GiveAndReceive.ApiControllers
 {
     public class UserQuestController : ApiBaseController
     {
-/*        [HttpGet]
+
+        [HttpGet]
         public JsonResult GetListQuest()
         {
             try
@@ -34,7 +35,9 @@ namespace GiveAndReceive.ApiControllers
             {
                 return Error(ex.Message);
             }
-        }*/
+
+        }
+
 
         [HttpGet]
         public JsonResult GetListGive(int page, string status) {

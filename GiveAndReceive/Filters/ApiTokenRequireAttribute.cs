@@ -8,6 +8,7 @@ using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
 using GiveAndReceive.Models;
+using GiveAndReceive.Providers;
 using GiveAndReceive.Services;
 
 namespace GiveAndReceive.Filters
@@ -36,10 +37,8 @@ namespace GiveAndReceive.Filters
                 }
                 else
                 {
-                    string token = filterContext.Request.Headers.Authorization.Parameter;
-                    string schema = filterContext.Request.Headers.Authorization.Scheme;
                     UserService userService = new UserService();
-                    User user = userService.GetUserByToken(schema + " " + token);
+                    User user = UserProvider.GetUserFromRequestHeader(filterContext.Request);
                     if (user == null)
                     {
                         filterContext.Response = new HttpResponseMessage();
