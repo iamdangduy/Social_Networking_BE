@@ -15,7 +15,6 @@ namespace GiveAndReceive.ApiControllers
     public class UserPinTransferController : ApiBaseController
     {
         [HttpGet]
-        [ApiTokenRequire]
         public JsonResult GetListPinTransferByUser()
         {
             try
@@ -36,7 +35,6 @@ namespace GiveAndReceive.ApiControllers
 
 
         [HttpGet]
-        [ApiTokenRequire]
         public JsonResult ActivatePin(string productId)
         {
             try
@@ -124,7 +122,6 @@ namespace GiveAndReceive.ApiControllers
 
 
         [HttpPost]
-        [ApiTokenRequire]
         public JsonResult TransferPin(TransferPin model)
         {
             try

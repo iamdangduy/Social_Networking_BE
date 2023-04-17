@@ -13,7 +13,6 @@ namespace GiveAndReceive.ApiControllers
     public class UserTransactionController : ApiBaseController
     {
         [HttpGet]
-        [ApiTokenRequire]
         public JsonResult GetListUserTransactionByUser()
         {
             try

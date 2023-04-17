@@ -167,13 +167,6 @@
 
             let confirmPassword = $('#ConfirmPassword').val();
 
-            if (GetObjectProperty(model, 'Phone') === '') {
-                Swal.fire({
-                    icon: "error",
-                    title: "Số điện thoại không được để trống",
-                })
-                return;
-            }
             if (GetObjectProperty(model, 'Name') === '') {
                 Swal.fire({
                     icon: "error",

@@ -13,7 +13,6 @@ using System.Web.Http;
 
 namespace GiveAndReceive.ApiControllers
 {
-    [ApiTokenRequire]
     public class UserBankInfoController : ApiBaseController
     {
         [HttpGet]
