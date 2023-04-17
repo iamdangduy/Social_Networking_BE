@@ -53,7 +53,7 @@ namespace GiveAndReceive.ApiControllers
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return Error();
             }
