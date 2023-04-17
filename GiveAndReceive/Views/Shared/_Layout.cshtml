@@ -218,7 +218,7 @@
                 title: "Bạn có chắc muốn đăng xuất tài khoản khỏi hệ thống?",
                 showCancelButton: true,
                 preConfirm: async function () {
-                ///    const userToken = GetCookie('UserToken');
+                    ///    const userToken = GetCookie('UserToken');
                     let rq = await fetch('/api/user/logout', {
                         method: 'get',
                         headers: Enum.OptionHeaderDefault
@@ -243,18 +243,22 @@
             if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
                 if (rs.data.Status === 'CANCEL') {
                     $('.layout-navbar .approve-status').html(`
-                    <div class="alert alert-light-danger approve">
-                        <i class="fa-solid fa-circle-exclamation"></i> 
-                        Tài khoản của bạn chưa được xác thực. Vui lòng xác thực để có thể dùng được đầy đủ chức năng của hệ thống!
-                    </div>`
+                        <a href="/nguoi-dung/xac-thuc-tai-khoan">
+                           <div class="alert alert-light-danger approve">
+                            <i class="fa-solid fa-circle-exclamation"></i>
+                            Tài khoản của bạn chưa được xác thực. Vui lòng xác thực để có thể dùng được đầy đủ chức năng của hệ thống!
+                           </div>
+                        </a>`
                     );
                 }
                 if (rs.data.Status === 'PENDING') {
                     $('.layout-navbar .approve-status').html(`
-                    <div class="alert alert-light-warning approve">
-                        <i class="fa-solid fa-circle-exclamation"></i> 
-                        Tài khoản của bạn đang chờ được duyệt!
-                    </div>`
+                        <a href="/nguoi-dung/xac-thuc-tai-khoan">
+                           <div class="alert alert-light-warning approve" >
+                            <i class="fa-solid fa-circle-exclamation"></i>
+                           </div>
+                            Tài khoản của bạn đang chờ được duyệt!
+                        </a>`
                     );
                 }
                 if (rs.data.Status === 'DONE') {
