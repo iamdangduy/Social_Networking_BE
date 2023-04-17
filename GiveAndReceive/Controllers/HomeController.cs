@@ -31,5 +31,11 @@ namespace GiveAndReceive.Controllers
             return View();
         }
 
+        [Route("gioi-thieu")]
+        public ActionResult AboutUs()
+        {
+            return View();
+        }
+
     }
 }

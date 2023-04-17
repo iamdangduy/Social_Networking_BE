@@ -7,9 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Security.Policy;
 using System.Web.Http;
-using static GiveAndReceive.Models.JsonResult;
 
 namespace GiveAndReceive.ApiControllers
 {
@@ -80,10 +78,10 @@ namespace GiveAndReceive.ApiControllers
                         if (!string.IsNullOrEmpty(model.Avatar))
                         {
                             string filename = Guid.NewGuid().ToString() + ".jpg";
-                            var path = System.Web.HttpContext.Current.Server.MapPath(Constant.AVATAR_USER_PATH + filename);
+                            var path = System.Web.HttpContext.Current.Server.MapPath(Constant.PATH.AVATAR_USER_PATH + filename);
                             HelperProvider.Base64ToImage(model.Avatar, path);
                             if (!HelperProvider.DeleteFile(user.Avatar)) return Error();
-                            user.Avatar = Constant.AVATAR_USER_URL + filename;
+                            user.Avatar = Constant.PATH.AVATAR_USER_URL + filename;
                         }
 
                         if (!string.IsNullOrEmpty(model.Account))

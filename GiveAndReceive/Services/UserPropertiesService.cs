@@ -78,6 +78,19 @@ namespace GiveAndReceive.Services
             return this._connection.Query<long>(query, new { UserId }).FirstOrDefault();
         }
 
+        public void UpdateTotalAmountReceive(string userId, long amount, IDbTransaction transaction = null)
+        {
+            string query = "update [user_properties] set TotalAmountReceive=TotalAmountReceive+@amount where UserId=@userId";
+            int status = this._connection.Execute(query, new { userId, amount }, transaction);
+            if (status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
+        }
+
+        public void UpdateTotalAmountGive(string userId, long amount, IDbTransaction transaction = null)
+        {
+            string query = "update [user_properties] set TotalAmountGive=TotalAmountGive+@amount where UserId=@userId";
+            int status = this._connection.Execute(query, new { userId, amount }, transaction);
+            if (status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
+        }
 
     }
 }

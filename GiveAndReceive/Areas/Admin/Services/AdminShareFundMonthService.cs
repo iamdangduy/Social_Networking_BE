@@ -6,8 +6,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Web;
-using static GiveAndReceive.Models.JsonResult;
-using System.Web.Razor.Tokenizer.Symbols;
 
 namespace GiveAndReceive.Areas.Admin.Services
 {
@@ -30,11 +28,11 @@ namespace GiveAndReceive.Areas.Admin.Services
             int totalRow = _connection.Query<int>(queryCount + query, transaction).FirstOrDefault();
             if (totalRow > 0)
             {
-                listShareFundMonthView.TotalPage = (int)Math.Ceiling((decimal)totalRow / Constant.ADMIN_PAGE_SIZE);
+                listShareFundMonthView.TotalPage = (int)Math.Ceiling((decimal)totalRow / Constant.NUMBER.ADMIN_PAGE_SIZE);
             }
 
-            int skip = (page - 1) * Constant.ADMIN_PAGE_SIZE;
-            query += " order by sfm.Month desc, sfm.Year desc offset " + skip + " rows fetch next " + Constant.ADMIN_PAGE_SIZE + " rows only";
+            int skip = (page - 1) * Constant.NUMBER.ADMIN_PAGE_SIZE;
+            query += " order by sfm.Month desc, sfm.Year desc offset " + skip + " rows fetch next " + Constant.NUMBER.ADMIN_PAGE_SIZE + " rows only";
             listShareFundMonthView.List = this._connection.Query<ShareFundMonth>(querySelect + query, transaction).ToList();
             return listShareFundMonthView;
         }

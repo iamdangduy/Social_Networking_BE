@@ -5,7 +5,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Web;
-
+using GiveAndReceive.Models;
+using GiveAndReceive.Services;
 namespace GiveAndReceive.BackgroundJobs
 {
     public class ScheduledTask
@@ -14,6 +15,7 @@ namespace GiveAndReceive.BackgroundJobs
         {
             try
             {
+                
                 IScheduler scheduler = await StdSchedulerFactory.GetDefaultScheduler();
 
 
@@ -36,7 +38,7 @@ namespace GiveAndReceive.BackgroundJobs
                 await scheduler.ScheduleJob(nextQuestForUserTask, listOfTriggersUserConnect, true);
                 #endregion
 
-   
+
 
                 await scheduler.Start();
             }

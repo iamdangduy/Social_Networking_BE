@@ -10,7 +10,6 @@ using System.Net;
 using System.Net.Http;
 using System.Web;
 using System.Web.Http;
-using static GiveAndReceive.Models.JsonResult;
 
 namespace GiveAndReceive.ApiControllers
 {
@@ -52,9 +51,9 @@ namespace GiveAndReceive.ApiControllers
                         UserPropertiesService userPropertiesService = new UserPropertiesService(connect);
                         UserProperties userProperties = new UserProperties();
 
-                        if (!Directory.Exists(HttpContext.Current.Server.MapPath("~" + String.Format(Constant.IDENTITY_THUMBNAIL_PATH))))
+                        if (!Directory.Exists(HttpContext.Current.Server.MapPath("~" + String.Format(Constant.PATH.IDENTITY_THUMBNAIL_PATH))))
                         {
-                            Directory.CreateDirectory(HttpContext.Current.Server.MapPath("~" + String.Format(Constant.IDENTITY_THUMBNAIL_PATH)));
+                            Directory.CreateDirectory(HttpContext.Current.Server.MapPath("~" + String.Format(Constant.PATH.IDENTITY_THUMBNAIL_PATH)));
                         }
 
                         #region Thêm mới ảnh căn cước
@@ -63,25 +62,25 @@ namespace GiveAndReceive.ApiControllers
                         //tạo file mới
                         if (model.CitizenIdentificationImageFront == null) return Error();
                         string filename = Guid.NewGuid().ToString() + ".jpg";
-                        var path = System.Web.HttpContext.Current.Server.MapPath(Constant.IDENTITY_THUMBNAIL_PATH + filename);
+                        var path = System.Web.HttpContext.Current.Server.MapPath(Constant.PATH.IDENTITY_THUMBNAIL_PATH + filename);
                         HelperProvider.Base64ToImage(model.CitizenIdentificationImageFront, path);
-                        userProperties.CitizenIdentificationImageFront = Constant.IDENTITY_THUMBNAIL_URL + filename;
+                        userProperties.CitizenIdentificationImageFront = Constant.PATH.IDENTITY_THUMBNAIL_URL + filename;
 
                         if (string.IsNullOrEmpty(model.CitizenIdentificationImageBack)) return Error();
                         //tạo file mới
                         if (model.CitizenIdentificationImageBack == null) return Error();
                         string filename1 = Guid.NewGuid().ToString() + ".jpg";
-                        var path1 = System.Web.HttpContext.Current.Server.MapPath(Constant.IDENTITY_THUMBNAIL_PATH + filename1);
+                        var path1 = System.Web.HttpContext.Current.Server.MapPath(Constant.PATH.IDENTITY_THUMBNAIL_PATH + filename1);
                         HelperProvider.Base64ToImage(model.CitizenIdentificationImageBack, path1);
-                        userProperties.CitizenIdentificationImageBack = Constant.IDENTITY_THUMBNAIL_URL + filename1;
+                        userProperties.CitizenIdentificationImageBack = Constant.PATH.IDENTITY_THUMBNAIL_URL + filename1;
 
                         if (string.IsNullOrEmpty(model.PhotoFace)) return Error();
                         //tạo file mới
                         if (model.PhotoFace == null) return Error();
                         string filename2 = Guid.NewGuid().ToString() + ".jpg";
-                        var path2 = System.Web.HttpContext.Current.Server.MapPath(Constant.IDENTITY_THUMBNAIL_PATH + filename2);
+                        var path2 = System.Web.HttpContext.Current.Server.MapPath(Constant.PATH.IDENTITY_THUMBNAIL_PATH + filename2);
                         HelperProvider.Base64ToImage(model.PhotoFace, path2);
-                        userProperties.PhotoFace = Constant.IDENTITY_THUMBNAIL_URL + filename2; 
+                        userProperties.PhotoFace = Constant.PATH.IDENTITY_THUMBNAIL_URL + filename2; 
 
                         #endregion
 
@@ -127,9 +126,9 @@ namespace GiveAndReceive.ApiControllers
                         UserProperties userProperties = new UserProperties();
 
                         #region Chỉnh sửa ảnh căn cước
-                        if (!Directory.Exists(HttpContext.Current.Server.MapPath("~" + String.Format(Constant.IDENTITY_THUMBNAIL_PATH))))
+                        if (!Directory.Exists(HttpContext.Current.Server.MapPath("~" + String.Format(Constant.PATH.IDENTITY_THUMBNAIL_PATH))))
                         {
-                            Directory.CreateDirectory(HttpContext.Current.Server.MapPath("~" + String.Format(Constant.IDENTITY_THUMBNAIL_PATH)));
+                            Directory.CreateDirectory(HttpContext.Current.Server.MapPath("~" + String.Format(Constant.PATH.IDENTITY_THUMBNAIL_PATH)));
                         }
 
 
@@ -140,9 +139,9 @@ namespace GiveAndReceive.ApiControllers
                             //tạo file mới
                             if (model.CitizenIdentificationImageFront == null) return Error();
                             string filename = Guid.NewGuid().ToString() + ".jpg";
-                            var path = System.Web.HttpContext.Current.Server.MapPath(Constant.IDENTITY_THUMBNAIL_PATH + filename);
+                            var path = System.Web.HttpContext.Current.Server.MapPath(Constant.PATH.IDENTITY_THUMBNAIL_PATH + filename);
                             HelperProvider.Base64ToImage(model.CitizenIdentificationImageFront, path);
-                            userProperties.CitizenIdentificationImageFront = Constant.IDENTITY_THUMBNAIL_URL + filename;
+                            userProperties.CitizenIdentificationImageFront = Constant.PATH.IDENTITY_THUMBNAIL_URL + filename;
                         }
                         else
                         {
@@ -156,9 +155,9 @@ namespace GiveAndReceive.ApiControllers
                             //tạo file mới
                             if (model.CitizenIdentificationImageBack == null) return Error();
                             string filename1 = Guid.NewGuid().ToString() + ".jpg";
-                            var path1 = System.Web.HttpContext.Current.Server.MapPath(Constant.IDENTITY_THUMBNAIL_PATH + filename1);
+                            var path1 = System.Web.HttpContext.Current.Server.MapPath(Constant.PATH.IDENTITY_THUMBNAIL_PATH + filename1);
                             HelperProvider.Base64ToImage(model.CitizenIdentificationImageBack, path1);
-                            userProperties.CitizenIdentificationImageBack = Constant.IDENTITY_THUMBNAIL_URL + filename1;
+                            userProperties.CitizenIdentificationImageBack = Constant.PATH.IDENTITY_THUMBNAIL_URL + filename1;
                         }
                         else
                         {
@@ -172,9 +171,9 @@ namespace GiveAndReceive.ApiControllers
                             //tạo file mới
                             if (model.PhotoFace == null) return Error();
                             string filename2 = Guid.NewGuid().ToString() + ".jpg";
-                            var path2 = System.Web.HttpContext.Current.Server.MapPath(Constant.IDENTITY_THUMBNAIL_PATH + filename2);
+                            var path2 = System.Web.HttpContext.Current.Server.MapPath(Constant.PATH.IDENTITY_THUMBNAIL_PATH + filename2);
                             HelperProvider.Base64ToImage(model.PhotoFace, path2);
-                            userProperties.PhotoFace = Constant.IDENTITY_THUMBNAIL_URL + filename2;
+                            userProperties.PhotoFace = Constant.PATH.IDENTITY_THUMBNAIL_URL + filename2;
                         }
                         else
                         {

@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
-using static GiveAndReceive.Models.JsonResult;
 
 namespace GiveAndReceive.Areas.Admin.ApiControllers
 {
@@ -58,9 +57,9 @@ namespace GiveAndReceive.Areas.Admin.ApiControllers
                             if (!HelperProvider.DeleteFile(systemConfig.Value)) return Error(JsonResult.Message.ERROR_SYSTEM);
                             //tạo file mới
                             string filename = Guid.NewGuid().ToString() + ".jpg";
-                            var path = System.Web.HttpContext.Current.Server.MapPath(Constant.SYSTEM_BANK_QR_IMAGE_PATH + filename);
+                            var path = System.Web.HttpContext.Current.Server.MapPath(Constant.PATH.SYSTEM_BANK_QR_IMAGE_PATH + filename);
                             HelperProvider.Base64ToImage(model.Value, path);
-                            systemConfig.Value = Constant.SYSTEM_BANK_QR_IMAGE_URL + filename;
+                            systemConfig.Value = Constant.PATH.SYSTEM_BANK_QR_IMAGE_URL + filename;
                         }
 
                         adminSystemConfig.UpdateConfig(systemConfig, transaction);

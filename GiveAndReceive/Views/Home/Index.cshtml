@@ -5,8 +5,19 @@
 }
 @section styles {
     <style>
-        section{
-            flex-direction:column;
+        section {
+            flex-direction: column;
+        }
+
+        .preview-transaction-image {
+            width: 120px;
+            height: 120px;
+            display: flex;
+            border-radius: 10px;
+            border: .5px solid #e5e5e5;
+            background-position: center;
+            background-size: cover;
+            background-repeat: no-repeat;
         }
     </style>
 }
@@ -15,53 +26,53 @@
     <div class="system-general-parameter">
         <div class="general-parameter-box">
             <div class="parameter-icon">
-                <i class="fa-solid fa-dollar-sign"></i>
+                <i class="fa-solid fa-dollar-sign" style="color:  #56a6d1; "></i>
             </div>
             <div class="parameter-info">
-                <div class="parameter-description">Số dư</div>
                 <div class="parameter-value" id="userBalance"></div>
+                <div class="parameter-description">Số dư</div>
             </div>
         </div>
         <div class="general-parameter-box">
             <div class="parameter-icon">
-                <i class="iconly-boldShow"></i>
+                <i class="fa-solid fa-file-circle-exclamation" style="color: #eeaa7a;"></i>
             </div>
             <div class="parameter-info">
-                <div class="parameter-description">Nhiệm vụ chưa hoàn thành</div>
                 <div class="parameter-value">3</div>
+                <div class="parameter-description">Nhiệm vụ chưa hoàn thành</div>
             </div>
         </div>
         <div class="general-parameter-box">
             <div class="parameter-icon">
-                <i class="iconly-boldShow"></i>
+                <i class="fa-solid fa-arrow-turn-up" style="color: #da7272;"></i>
             </div>
             <div class="parameter-info">
-                <div class="parameter-description">Tổng đã cho</div>
                 <div class="parameter-value" id="amountGive"></div>
+                <div class="parameter-description">Tổng đã cho</div>
             </div>
         </div>
         <div class="general-parameter-box">
             <div class="parameter-icon">
-                <i class="iconly-boldShow"></i>
+                <i class="fa-solid fa-arrow-turn-down" style="color: #39c261;"></i>
             </div>
             <div class="parameter-info">
-                <div class="parameter-description">Tổng đã nhận</div>
                 <div class="parameter-value" id="amountReceive"></div>
+                <div class="parameter-description">Tổng đã nhận</div>
             </div>
         </div>
     </div>
     <div class="current-mission">
-        <div class="mission-label"> Nhiệm vụ hiện tại </div>
-        <div class="mission-detail">
-            <div class="name">Nguyễn Đăng Duy</div>
-            <div class="status"><span class="btn btn-sm btn-outline-warning">Đang chờ</span></div>
-            <div class="button"><button class="btn btn-sm btn-primary"> Đã chuyển </button></div>
+        <div class="mission-label"> NHIỆM VỤ HIỆN TẠI </div>
+        <div class="list-mission">
+
         </div>
 
-        <div class="mission-detail">
-            <div class="name">Nguyễn Đăng Duy</div>
-            <div class="status"><span class="btn btn-sm btn-outline-success">Đã chuyển</span></div>
-            <div class="button"><button class="btn btn-sm btn-primary" style="display:none"></button></div>
+    </div>
+
+    <div class="confirm-give-list">
+        <div class="confirm-give-label"> DANH SÁCH NGƯỜI GỬI CẦN XÁC NHẬN</div>
+        <div class="list-give">
+
         </div>
     </div>
 
@@ -89,7 +100,31 @@
     </div>
 </section>
 
-
+<div class="modal-custom" id="confirm-sent" style="display:none;">
+    <div class="modal-custom-backdrop"></div>
+    <div class="modal-custom-form">
+        <div class="modal-custom-form-header">
+            <div>XÁC NHẬN ĐÃ CHUYỂN</div>
+        </div>
+        <div class="modal-custom-form-body">
+            <input type="hidden" name="queue-quest-give-id" value="" />
+            <div>
+                <div>Ảnh giao dịch</div>
+                <div>
+                    <input type="file" style="display:none;" onchange="TransactionImage_OnChange(this);" />
+                    <input type="hidden" value="" name="transaction-image" />
+                    <div class="preview-transaction-image" onclick="TransactionImage_OpenFileDialog(this);"></div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-custom-form-footer">
+            <div style="display:flex;gap:10px;justify-content:flex-end;">
+                <button class="btn btn-outline-secondary btn-sm" onclick="CloseModel">Đóng</button>
+                <button class="btn btn-outline-success btn-sm"  onclick="ConfirmSent(this);">Xác nhận</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section scripts{
     <script>
@@ -140,10 +175,109 @@
         }
 
         const InitPage = async function () {
-            await GetBalanceByUserId();
-            await GetTotalAmountReceive();
-            await GetTotalAmountGive();
+            const token = GetCookie('UserToken');
+            if (token === '') window.location.href = '/gioi-thieu';
+            GetBalanceByUserId();
+            GetTotalAmountReceive();
+            GetTotalAmountGive();
+            GetUserQuest();
         }
+
+        const GetUserQuest = async function () {
+            const rq = await fetch(`/api/userquest/GetListQuest`, {
+                method: 'get',
+                headers: Enum.OptionHeaderDefault
+            });
+            const rs = await rq.json();
+
+            if (GetObjectProperty(rs, 'status') == Enum.ResponseStatus.SUCCESS) {
+
+                $('.current-mission .list-mission').html('');
+                if (rs.data.listQueueGiveQuest.length <= 0) {
+                    $('.current-mission .list-mission').append(`
+<div class="mission-detail"><span>Bạn đang chưa có nhiệm vụ nào</span></div>
+                    `);
+                } else {
+                    for (let i = 0; i < rs.data.listQueueGiveQuest.length; i++) {
+                        const item = rs.data.listQueueGiveQuest[i];
+
+                        let status = '';
+                        let button = '';
+                        switch (item.Status) {
+                            case 'PENDING':
+                                status = '<span class="btn btn-sm btn-outline-warning">Mới tạo</span>';
+                                button = `<button class="btn btn-sm btn-primary"  onclick="OpenModalConfirmSent(this);" data-quest-id="${item.QueueGiveQuestId}">Đã chuyển</button>`;
+                                break;
+                            case 'SENT': status = '<span class="btn btn-sm btn-outline-info">Đã chuyển</span>'; break;
+                            case 'DONE': status = '<span class="btn btn-sm btn-outline-success">Hoàn thành</span>'; break;
+                            default: status = '<span class="btn btn-sm btn-outline-danger">Đã hủy</span>'; break;
+                        }
+
+                        $('.current-mission .list-mission').append(`
+<div class="mission-detail">
+<div class="name">${GetObjectProperty(item, 'Name')}</div>
+<div class="status">${status}</div>
+<div class="button">${button}</div>
+</div>`);
+                    }
+                }
+            }
+
+        }
+
+       
+
+        const OpenModalConfirmSent = function (el) {
+            const queuequestid = $(el).data('quest-id');
+            $('#confirm-sent input[name=queue-quest-give-id]').val(queuequestid);
+            $('#confirm-sent').css('display', 'flex');
+        }
+
+        const ConfirmSent = async function (el) {
+            $(el).attr('disabled', true)
+            try {
+                let model = {
+                    QueueGiveQuestId: $('#confirm-sent input[name=queue-quest-give-id]').val(),
+                    TransactionImage: $('#confirm-sent input[name=transaction-image]').val(),
+                };
+                let errorCount = 0;
+                if (GetObjectProperty(model, 'TransactionImage') === '') {
+                    NotificationShow('Bạn cần chọn ảnh giao dịch');
+                    errorCount++;
+                }
+                if (errorCount > 0) return;
+                const rq = await fetch(`/api/userquest/ConfirmSent`, {
+                    method: 'post',
+                    headers: Enum.OptionHeaderDefault,
+                    body: JSON.stringify(model)
+                })
+                const rs = await rq.json();
+                if (!CheckErrorResponse(rs)) throw new Error();
+                GetUserQuest();
+                NotificationShow('Cập nhật nhiệm vụ thành công', 'success');
+                $('#confirm-sent').css('display', 'none');
+            }
+            catch (ex) { }
+            $(el).attr('disabled', false)
+
+
+        }
+
+        const TransactionImage_OpenFileDialog = function (el) {
+            $(el).siblings('input[type=file]').click();
+        }
+        const TransactionImage_OnChange = function (el) {
+            const reader = new FileReader();
+            reader.onloadend = function (rs) {
+                const base64DataPart = rs.target.result.split(';base64,');
+                $(el).siblings('input[type=hidden]').val(base64DataPart[1]);
+                $(el).siblings('.preview-transaction-image').css('background-image', `url(${rs.target.result})`);
+            }
+
+            reader.readAsDataURL(el.files[0]);
+        }
+
+
 
         InitPage();
     </script>

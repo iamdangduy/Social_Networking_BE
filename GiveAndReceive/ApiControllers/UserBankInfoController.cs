@@ -10,7 +10,6 @@ using System.Net;
 using System.Net.Http;
 using System.Web;
 using System.Web.Http;
-using static GiveAndReceive.Models.JsonResult;
 
 namespace GiveAndReceive.ApiControllers
 {
@@ -59,16 +58,16 @@ namespace GiveAndReceive.ApiControllers
                         userBankInfo.BankNumber = model.BankNumber;
                         userBankInfo.IsDefault = model.IsDefault;
 
-                        if (!Directory.Exists(HttpContext.Current.Server.MapPath("~" + String.Format(Constant.SYSTEM_BANK_QR_IMAGE_PATH))))
+                        if (!Directory.Exists(HttpContext.Current.Server.MapPath("~" + String.Format(Constant.PATH.SYSTEM_BANK_QR_IMAGE_PATH))))
                         {
-                            Directory.CreateDirectory(HttpContext.Current.Server.MapPath("~" + String.Format(Constant.SYSTEM_BANK_QR_IMAGE_PATH)));
+                            Directory.CreateDirectory(HttpContext.Current.Server.MapPath("~" + String.Format(Constant.PATH.SYSTEM_BANK_QR_IMAGE_PATH)));
                         }
                         //tạo file mới
                         if (model.QRImage == null) return Error();
                         string filename = Guid.NewGuid().ToString() + ".jpg";
-                        var path = System.Web.HttpContext.Current.Server.MapPath(Constant.SYSTEM_BANK_QR_IMAGE_PATH + filename);
+                        var path = System.Web.HttpContext.Current.Server.MapPath(Constant.PATH.SYSTEM_BANK_QR_IMAGE_PATH + filename);
                         HelperProvider.Base64ToImage(model.QRImage, path);
-                        userBankInfo.QRImage = Constant.SYSTEM_BANK_QR_IMAGE_URL + filename;
+                        userBankInfo.QRImage = Constant.PATH.SYSTEM_BANK_QR_IMAGE_URL + filename;
 
                         UserBankInfoService userBankInfoService = new UserBankInfoService(connect);
                         userBankInfoService.InsertUserBankInfo(userBankInfo, transaction);
@@ -117,9 +116,9 @@ namespace GiveAndReceive.ApiControllers
                             //tạo file mới
                             if (model.QRImage == null) return Error();
                             string filename = Guid.NewGuid().ToString() + ".jpg";
-                            var path = HttpContext.Current.Server.MapPath(Constant.SYSTEM_BANK_QR_IMAGE_PATH + filename);
+                            var path = HttpContext.Current.Server.MapPath(Constant.PATH.SYSTEM_BANK_QR_IMAGE_PATH + filename);
                             HelperProvider.Base64ToImage(model.QRImage, path);
-                            userBankInfo.QRImage = Constant.SYSTEM_BANK_QR_IMAGE_URL + filename;
+                            userBankInfo.QRImage = Constant.PATH.SYSTEM_BANK_QR_IMAGE_URL + filename;
                         }
 
                         if (string.IsNullOrEmpty(model.QRImage)) userBankInfo.QRImage = UserBankInforModel.QRImage;

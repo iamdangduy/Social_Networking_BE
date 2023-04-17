@@ -81,17 +81,17 @@ namespace GiveAndReceive.Areas.Admin.ApiControllers
                         product.Price = model.Price;
                         product.Description = model.Description;
 
-                        if (!Directory.Exists(HttpContext.Current.Server.MapPath("~" + String.Format(Constant.PRODUCT_THUMBNAIL_PATH))))
+                        if (!Directory.Exists(HttpContext.Current.Server.MapPath("~" + String.Format(Constant.PATH.PRODUCT_THUMBNAIL_PATH))))
                         {
-                            Directory.CreateDirectory(HttpContext.Current.Server.MapPath("~" + String.Format(Constant.PRODUCT_THUMBNAIL_PATH)));
+                            Directory.CreateDirectory(HttpContext.Current.Server.MapPath("~" + String.Format(Constant.PATH.PRODUCT_THUMBNAIL_PATH)));
                         }
 
                         if (!string.IsNullOrEmpty(model.Thumbnail))
                         {
                             string filename = Guid.NewGuid().ToString() + ".jpg";
-                            var path = System.Web.HttpContext.Current.Server.MapPath(Constant.PRODUCT_THUMBNAIL_PATH + filename);
+                            var path = System.Web.HttpContext.Current.Server.MapPath(Constant.PATH.PRODUCT_THUMBNAIL_PATH + filename);
                             HelperProvider.Base64ToImage(model.Thumbnail, path);
-                            product.Thumbnail = Constant.PRODUCT_THUMBNAIL_URL + filename;
+                            product.Thumbnail = Constant.PATH.PRODUCT_THUMBNAIL_URL + filename;
                         }
 
                         AdminProductService adminProductService = new AdminProductService(connect);
@@ -133,9 +133,9 @@ namespace GiveAndReceive.Areas.Admin.ApiControllers
                             if (!HelperProvider.DeleteFile(product.Thumbnail)) return Error(JsonResult.Message.ERROR_SYSTEM);
                             //tạo file mới
                             string filename = Guid.NewGuid().ToString() + ".jpg";
-                            var path = System.Web.HttpContext.Current.Server.MapPath(Constant.PRODUCT_THUMBNAIL_PATH + filename);
+                            var path = System.Web.HttpContext.Current.Server.MapPath(Constant.PATH.PRODUCT_THUMBNAIL_PATH + filename);
                             HelperProvider.Base64ToImage(model.Thumbnail, path);
-                            product.Thumbnail = Constant.PRODUCT_THUMBNAIL_URL + filename;
+                            product.Thumbnail = Constant.PATH.PRODUCT_THUMBNAIL_URL + filename;
                         }
                         AdminProductService adminProductService = new AdminProductService(connect);
                         adminProductService.UpdateProduct(product, transaction);

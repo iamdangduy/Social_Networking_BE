@@ -916,13 +916,16 @@
 }
 
     .sidebar-wrapper .sidebar-header {
-        padding: 2rem 2rem 1rem;
+        padding: 15px;
         font-size: 2rem;
         font-weight: 700
     }
 
         .sidebar-wrapper .sidebar-header img {
-            height: 1.2rem
+            width: 120px;
+            height: 60px;
+            display: flex;
+            object-fit: contain;
         }
 
     .sidebar-wrapper .sidebar-toggler.x {
@@ -987,7 +990,7 @@
             }
 
             .sidebar-wrapper .menu .sidebar-item.active .sidebar-link {
-                background-color: #435ebe
+                background-color: #ccbf74
             }
 
                 .sidebar-wrapper .menu .sidebar-item.active .sidebar-link span {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -221,7 +222,7 @@ namespace GiveAndReceive.Providers
             else { strNumber = number.ToString("N0"); }
             return strNumber;
         }
-        public static void Base64ToImage(string base64String, string pathToSave)
+        public static void Base64ToImage(string base64String, string pathToSave,int maxWidth = 1024,int maxHeight = 1024)
         {
             try
             {
@@ -235,8 +236,21 @@ namespace GiveAndReceive.Providers
                 using (var ms = new MemoryStream(imageBytes, 0, imageBytes.Length))
                 {
                     Image image = Image.FromStream(ms, true);
-                    Bitmap bmp = new Bitmap(image);
-                    bmp.Save(pathToSave);
+
+                    var ratioX = maxWidth >= image.Width ? 1 : (double)maxWidth / image.Width;
+                    var ratioY = maxHeight >= image.Height ? 1 : (double)maxHeight / image.Height;
+                    var ratio = Math.Min(ratioX, ratioY);
+                    var newWidth = (int)(image.Width * ratio);
+                    var newHeight = (int)(image.Height * ratio);
+                    var newImage = new Bitmap(newWidth, newHeight);
+                    Graphics thumbGraph = Graphics.FromImage(newImage);
+                    thumbGraph.CompositingQuality = CompositingQuality.HighQuality;
+                    thumbGraph.SmoothingMode = SmoothingMode.HighQuality;
+                    thumbGraph.DrawImage(image, 0, 0, newWidth, newHeight);
+
+                    image.Dispose();
+                    newImage.Save(pathToSave);
+                    newImage.Dispose();
                 }
             }
             catch (Exception ex) { throw ex; }

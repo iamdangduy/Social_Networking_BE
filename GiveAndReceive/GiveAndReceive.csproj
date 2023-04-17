@@ -4114,6 +4114,7 @@
     <Content Include="Content\js\helper.js" />
     <Content Include="Content\js\jquery-3.6.0.min.js" />
     <Content Include="Content\Site.css" />
+    <Content Include="favicon.png" />
     <Content Include="Global.asax" />
     <Content Include="Web.config" />
   </ItemGroup>
@@ -4133,6 +4134,9 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
+    <Compile Include="Areas\Admin\ApiControllers\AdminShareFundController.cs" />
+    <Compile Include="Areas\Admin\ApiControllers\AdminShareFundMonthController.cs" />
+    <Compile Include="Areas\Admin\ApiControllers\AdminShareFundUserMonthController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminSystemBankInfoController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminProductController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminRankController.cs" />
@@ -4140,12 +4144,15 @@
     <Compile Include="Areas\Admin\ApiControllers\AdminQueueGiveController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminQueueReceiveController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminSystemController.cs" />
+    <Compile Include="Areas\Admin\ApiControllers\AdminSystemIncomeYearReportController.cs" />
+    <Compile Include="Areas\Admin\ApiControllers\AdminSystemWalletController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminUserPropertiesController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminUserWalletController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminUserWithdrawOrderController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\ApiAdminBaseController.cs" />
     <Compile Include="Areas\Admin\Controllers\HomeController.cs" />
     <Compile Include="Areas\Admin\Controllers\ManageRankController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ManageShareFundMonthController.cs" />
     <Compile Include="Areas\Admin\Controllers\ManageSystemBankController.cs" />
     <Compile Include="Areas\Admin\Controllers\ManageUserController.cs" />
     <Compile Include="Areas\Admin\Controllers\ManageWaitingLineController.cs" />
@@ -4221,8 +4228,8 @@
     <Compile Include="Services\BaseService.cs" />
     <Compile Include="Services\CodeConfirmService.cs" />
     <Compile Include="Services\NotificationService.cs" />
-    <Compile Include="Services\QueryGiveQuestService.cs" />
     <Compile Include="Services\ProductService.cs" />
+    <Compile Include="Services\QueueGiveQuestService.cs" />
     <Compile Include="Services\QueueGiveService.cs" />
     <Compile Include="Services\QueueReceiveService.cs" />
     <Compile Include="Services\SystemConfigService.cs" />
@@ -4401,6 +4408,8 @@
     <Content Include="Areas\Admin\Views\ManageRank\Index.cshtml" />
     <Content Include="Areas\Admin\Views\SystemConfig\Index.cshtml" />
     <Content Include="Areas\Admin\Views\ManageWaitingLine\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\ManageShareFundMonth\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\ManageShareFundMonth\ShareFundUserMonth.cshtml" />
     <None Include="packages.config" />
     <Content Include="Views\Home\Login.cshtml" />
     <Content Include="Views\Home\Register.cshtml" />
@@ -4416,6 +4425,7 @@
     <Content Include="Views\User\ChangePassword.cshtml" />
     <Content Include="Views\UserBankInfo\Index.cshtml" />
     <Content Include="Views\Introduce\Index.cshtml" />
+    <Content Include="Views\Home\AboutUs.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

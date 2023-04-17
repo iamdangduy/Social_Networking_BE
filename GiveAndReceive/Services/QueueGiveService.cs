@@ -18,6 +18,11 @@ namespace GiveAndReceive.Services
             string query = "select TOP(1)* from [queue_give] where UserId=@userId order by CreateTime desc";
             return this._connection.Query<QueueGive>(query,new { userId }, transaction).FirstOrDefault();
         }
+        public QueueGive GetQueueGive(string queueGiveId, IDbTransaction transaction = null)
+        {
+            string query = "select TOP(1) * from [queue_give] where QueueGiveId=@queueGiveId";
+            return this._connection.Query<QueueGive>(query, new { queueGiveId }, transaction).FirstOrDefault();
+        }
 
         public void InsertQueueGive(QueueGive queueGive, IDbTransaction transaction = null)
         {
@@ -41,6 +46,11 @@ namespace GiveAndReceive.Services
         public QueueGive GetFirstPendingInQueue(IDbTransaction transaction = null) {
             string query = "select top 1 * from queue_give where Status=@status order by CreateTime asc";
             return this._connection.Query<QueueGive>(query, new { status = QueueGive.EnumStatus.PENDING }, transaction).FirstOrDefault();
+        }
+
+        public QueueGive GetUserQueueGiveInDuty(string userId, IDbTransaction transaction = null) {
+            string query = "select top 1 * from queue_give where Status=@status and UserId=@userId";
+            return this._connection.Query<QueueGive>(query, new { userId, status =QueueGive.EnumStatus.IN_DUTY}, transaction).FirstOrDefault();
         }
     }
 }
