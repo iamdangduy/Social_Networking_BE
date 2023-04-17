@@ -5,9 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Reflection;
-using System.Web;
-using static GiveAndReceive.Models.JsonResult;
 
 namespace GiveAndReceive.Areas.Admin.Services
 {
@@ -36,11 +33,11 @@ namespace GiveAndReceive.Areas.Admin.Services
             int totalRow = _connection.Query<int>(queryCount + query, new { keyword = keyword }, transaction).FirstOrDefault();
             if (totalRow > 0)
             {
-                listUserWithdrawOrderView.TotalPage = (int)Math.Ceiling((decimal)totalRow / Constant.ADMIN_PAGE_SIZE);
+                listUserWithdrawOrderView.TotalPage = (int)Math.Ceiling((decimal)totalRow / Constant.NUMBER.ADMIN_PAGE_SIZE);
             }
 
-            int skip = (page - 1) * Constant.ADMIN_PAGE_SIZE;
-            query += " order by uwo.CreateTime desc offset " + skip + " rows fetch next " + Constant.ADMIN_PAGE_SIZE + " rows only";
+            int skip = (page - 1) * Constant.NUMBER.ADMIN_PAGE_SIZE;
+            query += " order by uwo.CreateTime desc offset " + skip + " rows fetch next " + Constant.NUMBER.ADMIN_PAGE_SIZE + " rows only";
             listUserWithdrawOrderView.List = this._connection.Query<UserWithdrawOrderModel>(querySelect + query, new { keyword = keyword }, transaction).ToList();
             return listUserWithdrawOrderView;
         }

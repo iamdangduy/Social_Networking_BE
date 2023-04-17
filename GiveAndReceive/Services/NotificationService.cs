@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Web;
-using static GiveAndReceive.Models.JsonResult;
 
 namespace GiveAndReceive.Services
 {
@@ -17,7 +16,7 @@ namespace GiveAndReceive.Services
         {
 
             string query = "select * from notification where 1 = 1 and UserId=@userId order by CreateTime desc";
-            query += " OFFSET(" + (page - 1) * Constant.USER_PAGE_SIZE + ") ROWS FETCH NEXT(" + Constant.USER_PAGE_SIZE + ") ROWS ONLY ";
+            query += " OFFSET(" + (page - 1) * Constant.NUMBER.USER_PAGE_SIZE + ") ROWS FETCH NEXT(" + Constant.NUMBER.USER_PAGE_SIZE + ") ROWS ONLY ";
             List<Notification> ls = this._connection.Query<Notification>(query, new { userId = userId }).ToList();
             return ls;
         }
@@ -28,6 +27,11 @@ namespace GiveAndReceive.Services
             return this._connection.Query<Notification>(query, new { id }, transaction).FirstOrDefault();
         }
 
+        public void CreateNotification(Notification model, IDbTransaction transaction = null) {
+            string query = "";
+            int status = this._connection.Execute(query,model,transaction);
+            if (status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
+        }
         public void UpdateNotificationRead(Notification model, IDbTransaction transaction = null)
         {
             string query = "UPDATE [dbo].[notification] SET IsRead = @IsRead WHERE NotificationId = @NotificationId";

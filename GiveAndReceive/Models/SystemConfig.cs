@@ -17,6 +17,7 @@ namespace GiveAndReceive.Models
             public const string AVATAR = "AVATAR";
             public const string LIMIT_GIVE = "LIMIT_GIVE";
             public const string LIMIT_RECEIVE = "LIMIT_RECEIVE";
+            public const string WAITING_TIME_FOR_QUEST = "WAITING_TIME_FOR_QUEST";
         }
         public class EnumValueType
         {

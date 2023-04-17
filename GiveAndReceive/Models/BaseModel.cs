@@ -34,13 +34,18 @@ namespace GiveAndReceive.Models
             public const string LOGIN_ACCOUNT_OR_PASSWORD_INCORRECT = "Số điện thoại/Email/Tên tài khoản hoặc mật khẩu không chính xác.";
         }
 
-        public static class Constant
-        {
+    }
+
+    public class Constant
+    {
+        public class NUMBER {
             public const int PAGE_NEWS_SIZE = 6;
             public const int PAGE_SIZE = 25;
             public const int ADMIN_PAGE_SIZE = 20;
             public const int USER_PAGE_SIZE = 20;
+        }
 
+        public class PATH {
             public const string IDENTITY_THUMBNAIL_URL = "/files/identity/";
             public const string IDENTITY_THUMBNAIL_PATH = "~/files/identity/";
 
@@ -52,6 +57,11 @@ namespace GiveAndReceive.Models
 
             public const string AVATAR_USER_URL = "/files/avatar/";
             public const string AVATAR_USER_PATH = "~/files/avatar/";
+
+            public const string QUEUE_GIVE_QUEST_TRANSACTION_IMAGE_URL = "/files/trasaction/{0}/";//{0} : userId
         }
+        
+
+        
     }
 }

@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Web;
-using static GiveAndReceive.Models.JsonResult;
 
 namespace GiveAndReceive.Areas.Admin.Services
 {
@@ -31,10 +30,10 @@ namespace GiveAndReceive.Areas.Admin.Services
             int TotalPage = 0;
             if (TotalRow > 0)
             {
-                TotalPage = (int)Math.Ceiling((decimal)TotalRow / Constant.PAGE_SIZE);
+                TotalPage = (int)Math.Ceiling((decimal)TotalRow / Constant.NUMBER.PAGE_SIZE);
             }
-            int skip = (PageIndex - 1) * Constant.PAGE_SIZE;
-            queryWhere += " order by Name offset " + skip + " rows fetch next " + Constant.PAGE_SIZE + " rows only";
+            int skip = (PageIndex - 1) * Constant.NUMBER.PAGE_SIZE;
+            queryWhere += " order by Name offset " + skip + " rows fetch next " + Constant.NUMBER.PAGE_SIZE + " rows only";
             List<object> ListData = this._connection.Query<object>(querySelect + queryWhere, new { PageIndex, Keyword }).ToList();
 
             return new

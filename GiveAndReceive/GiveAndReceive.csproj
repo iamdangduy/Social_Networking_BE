@@ -4148,6 +4148,7 @@
     <Content Include="files\systembank\c98c51ec-76d6-4f4b-89d0-a534098c9494.jpg" />
     <Content Include="files\systembank\e0133d38-f54c-4ea6-b7bc-7231072a5031.jpg" />
     <Content Include="files\systembank\e693a50c-1654-412c-bc35-3586502fc6e8.jpg" />
+    <Content Include="favicon.png" />
     <Content Include="Global.asax" />
     <Content Include="Web.config" />
   </ItemGroup>
@@ -4185,6 +4186,7 @@
     <Compile Include="Areas\Admin\ApiControllers\ApiAdminBaseController.cs" />
     <Compile Include="Areas\Admin\Controllers\HomeController.cs" />
     <Compile Include="Areas\Admin\Controllers\ManageRankController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ManageShareFundMonthController.cs" />
     <Compile Include="Areas\Admin\Controllers\ManageSystemBankController.cs" />
     <Compile Include="Areas\Admin\Controllers\ManageUserController.cs" />
     <Compile Include="Areas\Admin\Controllers\ManageWaitingLineController.cs" />
@@ -4260,8 +4262,8 @@
     <Compile Include="Services\BaseService.cs" />
     <Compile Include="Services\CodeConfirmService.cs" />
     <Compile Include="Services\NotificationService.cs" />
-    <Compile Include="Services\QueryGiveQuestService.cs" />
     <Compile Include="Services\ProductService.cs" />
+    <Compile Include="Services\QueueGiveQuestService.cs" />
     <Compile Include="Services\QueueGiveService.cs" />
     <Compile Include="Services\QueueReceiveService.cs" />
     <Compile Include="Services\SystemConfigService.cs" />
@@ -4440,6 +4442,8 @@
     <Content Include="Areas\Admin\Views\ManageRank\Index.cshtml" />
     <Content Include="Areas\Admin\Views\SystemConfig\Index.cshtml" />
     <Content Include="Areas\Admin\Views\ManageWaitingLine\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\ManageShareFundMonth\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\ManageShareFundMonth\ShareFundUserMonth.cshtml" />
     <None Include="packages.config" />
     <Content Include="Views\Home\Login.cshtml" />
     <Content Include="Views\Home\Register.cshtml" />
@@ -4455,6 +4459,7 @@
     <Content Include="Views\User\ChangePassword.cshtml" />
     <Content Include="Views\UserBankInfo\Index.cshtml" />
     <Content Include="Views\Introduce\Index.cshtml" />
+    <Content Include="Views\Home\AboutUs.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

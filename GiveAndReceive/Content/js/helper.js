@@ -135,16 +135,19 @@ function ValidateInputOnlyPhoneNumber(evt, el) {
     $(el).val(value.substr(0, 10));
 }
 
-var NotificationShow = function (message = '', type = 'error', title = 'Thông báo') { //type : ['error','success']
+var NotificationShow = function (message = '', type = 'error') { //type : ['error','success']
+    let backgroundColor = '';
+    switch (type) {
+        case 'success': backgroundColor = '#4fbe87'; break;
+        case 'error': backgroundColor = '#f3616d'; break;
+        default: backgroundColor = '#435ebe';break;
+    }
+    Toastify({
+        text: message,
+        duration: 3000,
+        backgroundColor: backgroundColor
+    }).showToast();
 
-    const notificationElement = $(`<div class="notification ${type}">
-<div class="notification-header">
-<div class="notification-title">${title}</div>
-<a class="notification-close" onclick="(function (el) { $(el).closest('.notification').remove(); })(this);"><i class="fa fa-times" aria-hidden="true"></i></a>
-</div><div class="notification-body">
-<div class="notification-message">${message}</div></div></div>`);
-    $('body').append(notificationElement);
-    setTimeout(function () { $(notificationElement).remove(); }, 3000);
 }
 
 var CheckErrorResponse = function (model) {

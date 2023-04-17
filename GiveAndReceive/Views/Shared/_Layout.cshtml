@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title</title>
-
+    <link rel="shortcut icon" href="/favicon.png" />
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/Content/assets/css/bootstrap.css">
@@ -35,7 +35,7 @@
 
                     <div class="d-flex justify-content-between">
                         <div class="logo">
-                            <a href="/"><img src="/Content/assets/images/logo/logo.png" /></a>
+                            <a href="/"><img  src="/Content/assets/images/logo/logo.png" /></a>
                         </div>
                         <div class="toggler">
                             <a href="#" class="sidebar-hide d-xl-none d-block"><i class="fa-solid fa-xmark fa-xs"></i></a>
@@ -45,19 +45,20 @@
                 <div class="sidebar-menu" style="flex: 1;">
                     <ul class="menu" style="flex:1;">
                         <li class="sidebar-item  @(ViewBag.Menu == "introduce" ? "active":"")">
-                            <a href="/introduce" class='sidebar-link'>
+                            <a href="/gioi-thieu" class='sidebar-link'>
                                 <i class="fa-brands fa-readme"></i>
                                 <span>Giới thiệu</span>
                             </a>
                         </li>
-                        <li class="sidebar-item  @(ViewBag.Menu == "dashboard" ? "active":"")">
+
+                        <li class="sidebar-item  @(ViewBag.Menu == "dashboard" ? "active":"") require-login">
                             <a href="/" class='sidebar-link'>
                                 <i class="fa-solid fa-gauge"></i>
                                 <span>Tổng quan</span>
                             </a>
                         </li>
 
-                        <li class="sidebar-item @(ViewBag.Menu == "user" ? "active":"") has-sub">
+                        <li class="sidebar-item @(ViewBag.Menu == "user" ? "active":"") has-sub require-login">
                             <a href="#" class='sidebar-link'>
                                 <i class="fa-solid fa-arrow-right-arrow-left"></i>
                                 <span>Giao dịch</span>
@@ -70,45 +71,59 @@
                             </ul>
                         </li>
 
-                        <li class="sidebar-item @(ViewBag.Menu == "connect-member" ? "active":"")">
+                        <li class="sidebar-item @(ViewBag.Menu == "connect-member" ? "active":"") require-login">
                             <a href="/ketnoi" class='sidebar-link'>
                                 <i class="fa-solid fa-link"></i>
                                 <span>Kết nối thành viên</span>
                             </a>
                         </li>
 
-                        <li class="sidebar-item @(ViewBag.Menu == "notification" ? "active":"")">
+                        <li class="sidebar-item @(ViewBag.Menu == "notification" ? "active":"") require-login">
                             <a href="/thong-bao" class='sidebar-link'>
                                 <i class="fa-solid fa-bell"></i>
                                 <span>Thông báo</span>
                             </a>
                         </li>
 
-                        <li class="sidebar-item @(ViewBag.Menu == "user-quest" ? "active":"")">
+                        <li class="sidebar-item @(ViewBag.Menu == "user-quest" ? "active":"") require-login">
                             <a href="/nguoi-dung/nhiem-vu" class='sidebar-link'>
                                 <i class="fa-solid fa-clipboard-question"></i>
                                 <span>Nhiệm vụ</span>
                             </a>
                         </li>
 
-                        <li class="sidebar-item @(ViewBag.Menu == "bank-info" ? "active":"")">
+                        <li class="sidebar-item @(ViewBag.Menu == "bank-info" ? "active":"") require-login">
                             <a href="/nguoi-dung/tai-khoan-ngan-hang" class='sidebar-link'>
                                 <i class="fa-solid fa-building-columns"></i>
                                 <span>Tài khoản ngân hàng</span>
                             </a>
                         </li>
 
-                        <li class="sidebar-item @(ViewBag.Menu == "user-info" ? "active":"")">
+                        <li class="sidebar-item @(ViewBag.Menu == "user-info" ? "active":"") require-login">
                             <a href="/nguoi-dung/thong-tin" class='sidebar-link'>
                                 <i class="fa-solid fa-user-gear"></i>
                                 <span>Tài khoản</span>
                             </a>
                         </li>
 
-                        <li class="sidebar-item ">
+                        <li class="sidebar-item require-login">
                             <a onclick="LogOut()" class='sidebar-link' style="color: #d42020;">
                                 <i class="fa-solid fa-arrow-right-from-bracket" style="color: #d42020!important"></i>
                                 <span>Đăng xuất</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-item require-logout">
+                            <a href="/dang-nhap" class='sidebar-link'>
+                                <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                                <span>Đăng nhập</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-item require-logout">
+                            <a href="/dang-ky" class='sidebar-link' >
+                                <i class="fa-solid fa-user-plus"></i>
+                                <span>Đăng ký</span>
                             </a>
                         </li>
 
@@ -138,12 +153,12 @@
                                 <a href="#" data-bs-toggle="dropdown" aria-expanded="false">
                                     <div class="user-menu d-flex">
                                         <div class="user-name text-end me-3">
-                                            <h6 class="mb-0 text-gray-600">John Ducky</h6>
-                                            <p class="mb-0 text-sm text-gray-600">Administrator</p>
+                                            <h6 class="mb-0 text-gray-600" id="user-name"></h6>
+                                            <p class="mb-0 text-sm text-gray-600" id="user-account"></p>
                                         </div>
                                         <div class="user-img d-flex align-items-center">
                                             <div class="avatar avatar-md">
-                                                <img src="/Content/assets/images/faces/1.jpg">
+                                                <img src="/Content/assets/images/faces/1.jpg" id="user-avatar">
                                             </div>
                                         </div>
                                     </div>
@@ -175,6 +190,28 @@
     <script src="/Content/assets/js/main.js"></script>
     <script src="/Content/js/helper.js"></script>
     <script>
+
+        const GetUserLayoutInfo = async function () {
+            let rq = await fetch(Enum.ApiUrl + '/api/user/GetInforUser', {
+                method: 'get',
+                headers: Enum.OptionHeaderDefault,
+            });
+            let rs = await rq.json();
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                $('.require-login').css('display', 'list-item');
+                $('.require-logout').css('display', 'none');
+
+                $('#user-avatar').attr('src', GetObjectProperty(rs.data, 'Avatar'));
+                $('#user-name').text(GetObjectProperty(rs.data, 'Name'));
+                $('#user-account').text(GetObjectProperty(rs.data, 'Account'));
+            }
+            else {
+                $('.require-login').css('display', 'none');
+                $('.require-logout').css('display', 'list-item');
+            }
+        }
+        GetUserLayoutInfo();
+
         const LogOut = async () => {
             Swal.fire({
                 icon: "question",

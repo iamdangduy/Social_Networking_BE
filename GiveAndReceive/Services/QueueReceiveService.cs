@@ -19,6 +19,12 @@ namespace GiveAndReceive.Services
             return this._connection.Query<QueueReceive>(query, new { userId }, transaction).FirstOrDefault();
         }
 
+        public QueueReceive GetQueueReceive(string queueReceiveId, IDbTransaction transaction = null)
+        {
+            string query = "select TOP(1) * from [queue_receive] where QueueReceiveId=@queueReceiveId";
+            return this._connection.Query<QueueReceive>(query, new { queueReceiveId }, transaction).FirstOrDefault();
+        }
+
 
         public List<QueueReceive> GetListAvaiableQueueReceive(IDbTransaction transaction = null) {
             string query = " select top 2 * from  queue_receive where TotalExpectReceiveAmount < (select cast(Value as bigint) from system_config where SystemConfigId='LIMIT_RECEIVE') order by CreateTime asc";

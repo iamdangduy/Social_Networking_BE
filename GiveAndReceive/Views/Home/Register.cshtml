@@ -108,13 +108,19 @@
         </div>
     </div>
         -->
-                <div class="step step-3" style="display:none;">
+                <div class="step step-3">
                     <div class="form-body">
+                        <div class="register-input-group">
+                            <div class="input-label">Tài khoản đăng nhập (*)</div>
+                            <div class="input-control">
+                                <input id="Account" type="text" class="form-control form-control-xl" placeholder="Nhập tài khoản viết liền không dấu" />
+                            </div>
+                        </div>
 
                         <div class="register-input-group">
                             <div class="input-label">Họ tên (*)</div>
                             <div class="input-control">
-                                <input id="Name" type="text" class="form-control form-control-xl" placeholder="Nhập họ và tên của bạn" />
+                                <input id="Name" type="text" class="form-control form-control-xl" placeholder="Nhập họ và tên theo CCCD/Passport" />
                             </div>
                         </div>
 
@@ -145,93 +151,17 @@
 
             </div>
         </div>
-        <div class="col-lg-7 d-none d-lg-block">
-            <div id="auth-right">
-                <div class="logo-desktop">
-                    <a href="/"><img src="/Content/img/utao-5.png" alt="Logo"></a>
-                </div>
-            </div>
-        </div>
     </div>
 </div>
 
 @section scripts{
     <script>
-        const SendOTP = async function (el) {
-            $(el).addClass('is-loading');
-            let phone = $('#phone').val();
-
-            if (phone === '' || phone === null || typeof phone === 'undefined') {
-                Swal.fire({
-                    icon: "error",
-                    title: "Số điện thoại không được để trống",
-                })
-                return;
-            }
-
-            if (phone.length !== 10 && phone[0] !== '') {
-                Swal.fire({
-                    icon: "error",
-                    title: "Số điện thoại không đúng định dạng",
-                })
-                return;
-            }
-
-            phone = '%2B84%20' + phone.substr(1, 9);
-            let rq = await fetch('/api/user/GetVerifyCode?phone=' + phone, {
-                method: 'get',
-                headers: {
-                    "Content-Type": "application/json",
-                }
-            });
-            let rs = await rq.json();
-            $(el).removeClass('is-loading');
-            if (CheckErrorResponse(rs) === false) return;
-            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
-                GoToStep(2);
-            }
-        }
-        const GoToStep = function (step) {
-            $('.step').css('display', 'none');
-            $('.step-' + step).css('display', 'flex');
-        }
-        const VerifyCode = async function () {
-            let otp = $('#otp').val();
-            let phone = $('#phone').val();
-            phone = '%2B84%20' + phone.substr(1, 9);
-            if (otp === '' || otp === null || typeof otp === 'undefined') {
-                Swal.fire({
-                    icon: "error",
-                    title: "Mã xác nhận không được để trống",
-                })
-                return;
-            }
-
-            if (phone === '' || phone === null || typeof phone === 'undefined') {
-                Swal.fire({
-                    icon: "error",
-                    title: "Số điện thoại không được để trống",
-                })
-                return;
-            }
-            let rq = await fetch('/api/user/ConfirmCode?phone=' + phone + '&code=' + otp, {
-                method: 'get',
-                headers: {
-                    "Content-Type": "application/json",
-                }
-            });
-            let rs = await rq.json();
-            if (CheckErrorResponse(rs) === false) return;
-            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
-                GoToStep(3);
-            }
-        }
+        
         const Register = async function (el) {
             let model = {
-                Phone: $('#phone').val(),
+                Account: $('#Account').val(),
                 Name: $('#Name').val(),
                 Password: $('#Password').val(),
-                NameSearch: '',
                 ParentCode: $('#ParentCode').val()
             }
 
@@ -273,7 +203,6 @@
                 return;
             }
 
-            model.NameSearch = RemoveVietnameseTones(model.Name);
             model.Phone = '+84 ' + model.Phone.substr(1, 9);
             model.Password = MD5(base64.encode(model.Password));
 

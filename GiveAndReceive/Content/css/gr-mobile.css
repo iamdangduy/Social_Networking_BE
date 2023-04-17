@@ -34,6 +34,50 @@ a {
     padding-top: 0;
 }
 
+.modal-custom {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 99;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+    .modal-custom .modal-custom-backdrop {
+        position: absolute;
+        background-color: black;
+        width: 100vw;
+        height: 100vh;
+        top: 0;
+        left: 0;
+        opacity: .5;
+    }
+
+    .modal-custom .modal-custom-form {
+        width: 90%;
+        background-color: white;
+        z-index: 1;
+        border-radius: 7px;
+    }
+
+        .modal-custom .modal-custom-form .modal-custom-form-header {
+            padding: 15px;
+            border-bottom: .5px solid #e5e5e5;
+        }
+
+        .modal-custom .modal-custom-form .modal-custom-form-body {
+            padding: 15px;
+        }
+
+        .modal-custom .modal-custom-form .modal-custom-form-footer {
+            padding: 15px;
+            border-top: .5px solid #e5e5e5;
+        }
+
 .approve {
     padding: 10px;
     font-size: 14px;
@@ -50,38 +94,42 @@ a {
 
     .home-page .system-general-parameter .general-parameter-box {
         display: flex;
-        padding: 10px;
+        padding: 5px 5px 5px 20px;
         background-color: white;
         border: 0.5px solid #eee;
-        width: 48%;
+        width: calc(50% - 10px);
         border-radius: 10px;
+        align-items: center;
     }
 
         .home-page .system-general-parameter .general-parameter-box .parameter-icon {
-            display: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 25px;
         }
 
         .home-page .system-general-parameter .general-parameter-box .parameter-info {
             font-size: 14px;
-            text-align: center;
-            width: 100%;
+            flex: 1;
+            padding-left: 10px;
         }
 
             .home-page .system-general-parameter .general-parameter-box .parameter-info .parameter-description {
-                font-weight: bold;
-                display: flex;
-                height: 42px;
-                justify-content: center;
-                align-items: center;
+                color: #c4c4c4;
+                font-size: 12px;
             }
 
-.home-page .current-mission {
+.home-page .current-mission, .home-page .confirm-give-list {
     margin-top: 20px;
     padding: 10px 10px 20px;
     border-radius: 10px;
     border: 0.5px solid #eee;
     background-color: white;
 }
+
+    .home-page .current-mission .list-mission {
+    }
 
     .home-page .current-mission .mission-label {
         font-weight: bold;
@@ -103,6 +151,7 @@ a {
         .home-page .current-mission .mission-detail .status {
             width: 80px;
             display: flex;
+            align-items: center;
             justify-content: center;
         }
 
@@ -112,8 +161,10 @@ a {
             }
 
         .home-page .current-mission .mission-detail .button {
-            flex: 1;
-            text-align: right;
+            width: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
             .home-page .current-mission .mission-detail .button button {
@@ -254,7 +305,7 @@ a {
             background-repeat: no-repeat;
             background-size: cover;
             border: .5px solid #d7d7d7;
-            cursor:pointer;
+            cursor: pointer;
         }
 
     .account-page .user-info .info-detail {
@@ -409,8 +460,9 @@ a {
 }
 
 .verification-page .verification-info input {
-    font-size:14px;
+    font-size: 14px;
 }
+
 .verification-page .verification-info label {
     font-size: 14px;
 }
