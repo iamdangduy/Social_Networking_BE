@@ -65,7 +65,6 @@
             }
 
             .modal-body .content-bank {
-                letter-spacing: -0.5px;
                 color: #000;
             }
 
@@ -308,165 +307,19 @@
                     <div class="header">
                         Số tiền
                     </div>
-                    <div class="value">
-                        1,000,000<sup>vnđ</sup>
+                    <div class="value" id="total-pay">
                     </div>
                 </div>
                 <div class="content">
                     <div class="header">
                         Nội dung chuyển khoản
                     </div>
-                    <div class="value">
-                        KS 7K6FLD9J
+                    <div class="value" id="content-pay">
                     </div>
                 </div>
             </div>
             <div class="list-userbank">
-                <div>
-                    <div class="item-userbank">
-                        <div class="bank-name">
-                            <div class="header">
-                                Ngân hàng:
-                            </div>
-                            <div class="text-value">
-                                Agribank
-                            </div>
-                        </div>
-                        <div class="bank-ownername">
-                            <div class="header">
-                                Chủ tài khoản:
-                            </div>
-                            <div class="text-value">
-                                Nguyen Trieu Phu
-                            </div>
-                        </div>
-                        <div class="bank-number">
-                            <div class="header">
-                                Số tài khoản:
-                            </div>
-                            <div class="text-value">
-                                8414205223446
-                            </div>
-                        </div>
-                        <div class="QR-Image">
-                            <div class="header">
-                                Mã QR:
-                            </div>
-                            <div class="text-value">
-                                <div class="image">
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item-userbank">
-                        <div class="bank-name">
-                            <div class="header">
-                                Ngân hàng:
-                            </div>
-                            <div class="text-value">
-                                Agribank
-                            </div>
-                        </div>
-                        <div class="bank-ownername">
-                            <div class="header">
-                                Chủ tài khoản:
-                            </div>
-                            <div class="text-value">
-                                Nguyen Trieu Phu
-                            </div>
-                        </div>
-                        <div class="bank-number">
-                            <div class="header">
-                                Số tài khoản:
-                            </div>
-                            <div class="text-value">
-                                8414205223446
-                            </div>
-                        </div>
-                        <div class="QR-Image">
-                            <div class="header">
-                                Mã QR:
-                            </div>
-                            <div class="text-value">
-                                <div class="image">
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item-userbank">
-                        <div class="bank-name">
-                            <div class="header">
-                                Ngân hàng:
-                            </div>
-                            <div class="text-value">
-                                Agribank
-                            </div>
-                        </div>
-                        <div class="bank-ownername">
-                            <div class="header">
-                                Chủ tài khoản:
-                            </div>
-                            <div class="text-value">
-                                Nguyen Trieu Phu
-                            </div>
-                        </div>
-                        <div class="bank-number">
-                            <div class="header">
-                                Số tài khoản:
-                            </div>
-                            <div class="text-value">
-                                8414205223446
-                            </div>
-                        </div>
-                        <div class="QR-Image">
-                            <div class="header">
-                                Mã QR:
-                            </div>
-                            <div class="text-value">
-                                <div class="image">
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item-userbank">
-                        <div class="bank-name">
-                            <div class="header">
-                                Ngân hàng:
-                            </div>
-                            <div class="text-value">
-                                Agribank
-                            </div>
-                        </div>
-                        <div class="bank-ownername">
-                            <div class="header">
-                                Chủ tài khoản:
-                            </div>
-                            <div class="text-value">
-                                Nguyen Trieu Phu
-                            </div>
-                        </div>
-                        <div class="bank-number">
-                            <div class="header">
-                                Số tài khoản:
-                            </div>
-                            <div class="text-value">
-                                8414205223446
-                            </div>
-                        </div>
-                        <div class="QR-Image">
-                            <div class="header">
-                                Mã QR:
-                            </div>
-                            <div class="text-value">
-                                <div class="image">
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div id="list-userbank">
                 </div>
             </div>
         </div>
@@ -568,10 +421,10 @@
                         }
 
                         $('.current-mission .list-mission').append(`
-<div class="mission-detail" onclick="OpenBankInfo(this);" data-id="${GetObjectProperty(item, 'UserId')}">
+<div class="mission-detail" onclick="OpenBankInfo(this);" data-userid="${GetObjectProperty(item, 'UserId')}" data-id="${GetObjectProperty(item,'QueueGiveQuestId')}">
                         <div class="avatar-user" style="background-image:url(${GetObjectProperty(item, 'Avatar')})"></div>
 <div class="name">${GetObjectProperty(item, 'Name')}</div>
-<div class="amountgive">${NumberFormat(GetObjectProperty(item, 'AmountGive'))}</div>
+<div class="amountgive">${NumberFormat(GetObjectProperty(item, 'AmountGive'))}<sup>đ</sup></div>
 <div class="status">${status}</div>
 <div class="button btn btn-sm">${button}</div>
 </div>`);
@@ -711,17 +564,70 @@
         const OpenBankInfo = async function (itemUser) {
             $('#updateBank-btn').attr('onclick', 'creatBankAccount()');
             $('#modal').css('display', 'flex');
-            const idUser = $(itemUser).data('id');
-            const rq = await fetch(`/api/UserBankInfo/GetListUserBankInfoByUserId?userId=` + idUser, {
+            await ResetDataPayment();
+            const idUser = $(itemUser).data('userid');
+            const queueGiveQuestId = $(itemUser).data('id');
+            const rq = await fetch('/api/UserBankInfo/GetListUserBankInfoByUserId?userId=' + idUser + '&queueGiveQuestId=' + queueGiveQuestId, {
                 method: 'get',
                 headers: Enum.OptionHeaderDefault
             });
             const rs = await rq.json();
-
             if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
 
+                $('#total-pay').html(`${NumberFormat(GetObjectProperty(rs.data.queueGiveQuest,'AmountGive'))}<sup> vnđ</sup>`);
+                $('#content-pay').html('KS ' + GetObjectProperty(rs.data, 'Code'));
+                for (let index = 0; index < rs.data.listUserBank.length; index++) {
+                    let itemBank = rs.data.listUserBank[index];
+                    $('#list-userbank').append(`
+                        <div class="item-userbank">
+                        <div class="bank-name">
+                            <div class="header">
+                                Ngân hàng:
+                            </div>
+                            <div class="text-value">
+                                ${GetObjectProperty(itemBank, 'BankName')}
+                            </div>
+                        </div>
+                        <div class="bank-ownername">
+                            <div class="header">
+                                Chủ tài khoản:
+                            </div>
+                            <div class="text-value">
+                                ${GetObjectProperty(itemBank, 'BankOwnerName')}
+                            </div>
+                        </div>
+                        <div class="bank-number">
+                            <div class="header">
+                                Số tài khoản:
+                            </div>
+                            <div class="text-value">
+                                ${GetObjectProperty(itemBank, 'BankNumber')}
+                            </div>
+                        </div>
+                        <div class="QR-Image">
+                            <div class="header">
+                                Mã QR:
+                            </div>
+                            <div class="text-value">
+                                <div class="image">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                   `);
+                }
+            } else {
+                alert(rs.message);
             }
         }
+        const ResetDataPayment = async function () {
+            $('#total-pay').html('');
+            $('#content-pay').html('');
+            $('#list-userbank').html('');
+        }
+
+
         GetListGive();
         InitPage();
     </script>
