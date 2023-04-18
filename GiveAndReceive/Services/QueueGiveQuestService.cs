@@ -26,7 +26,7 @@ namespace GiveAndReceive.Services
 
         public List<object> GetListCurrentUserQuestView(string queueGiveId, IDbTransaction transaction = null)
         {
-            string query = "select qgq.*,u.Name,u.Email,u.Phone from [queue_give_quest] qgq left join [queue_receive] qr on qgq.QueueReceiveId=qr.QueueReceiveId left join [user] u on qr.UserId=u.UserId where qgq.QueueGiveId=@queueGiveId";
+            string query = "select qgq.*,u.UserId,u.Avatar,u.Name,u.Email,u.Phone from [queue_give_quest] qgq left join [queue_receive] qr on qgq.QueueReceiveId=qr.QueueReceiveId left join [user] u on qr.UserId=u.UserId where qgq.QueueGiveId=@queueGiveId";
             return this._connection.Query<object>(query, new { queueGiveId }, transaction).ToList();
         }
 

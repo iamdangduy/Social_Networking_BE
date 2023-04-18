@@ -33,6 +33,27 @@ namespace GiveAndReceive.ApiControllers
                 return Error(ex.Message);
             }
         }
+        [HttpGet]
+        public JsonResult GetListUserBankInfoByUserId(string userId)
+        {
+            try
+            {
+                string token = Request.Headers.Authorization.ToString();
+                UserService userService = new UserService();
+                User user = userService.GetUserByToken(token);
+                if (user == null) return Unauthorized();
+
+                User user1 = userService.GetUserById(userId);
+                if (user1 == null) throw new Exception("Không tìm thấy người dùng này");
+
+                UserBankInfoService userBankInfoService = new UserBankInfoService();
+                return Success(userBankInfoService.GetListUserBankInfo(user1.UserId), "Lấy dữ liệu thành công!");
+            }
+            catch (Exception ex)
+            {
+                return Error(ex.Message);
+            }
+        }
 
         [HttpPost]
         public JsonResult InsertUserBankInfo(UserBankInfo model)
