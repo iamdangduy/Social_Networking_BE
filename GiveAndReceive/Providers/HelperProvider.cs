@@ -178,24 +178,15 @@ namespace GiveAndReceive.Providers
             {
                 DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
                 ulong time = (ulong)(DateTime.UtcNow - epoch).TotalMilliseconds;
-
-                char[] _base = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V' };
-                char[] Code = new char[10];
-
-                Code[0] = _base[(time >> 45) & 31];
-                Code[1] = _base[(time >> 40) & 31];
-                Code[2] = _base[(time >> 35) & 31];
-                Code[3] = _base[(time >> 30) & 31];
-                Code[4] = _base[(time >> 25) & 31];
-                Code[5] = _base[(time >> 20) & 31];
-                Code[6] = _base[(time >> 15) & 31];
-                Code[7] = _base[(time >> 10) & 31];
-                Code[8] = _base[(time >> 5) & 31];
-                Code[9] = _base[time & 31];
-
-                string ShareCode = new string(Code);
-
-                return ShareCode;
+                char[] _base = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
+                List<char> code = new List<char>();
+                while (time > 0)
+                {
+                    code.Add(_base[time % (ulong)_base.Length]);
+                    time = time / (ulong)_base.Length;
+                }
+                code.Reverse();
+                return string.Join("", code);
             }
             catch (Exception ex)
             {

@@ -119,18 +119,15 @@ namespace GiveAndReceive.BackgroundJobs
                 queueGiveQuest.QueueGiveId = firstUserInQueue.QueueGiveId;
                 queueGiveQuest.QueueGiveQuestId = Guid.NewGuid().ToString();
                 queueGiveQuest.Status = QueueGiveQuest.EnumStatus.PENDING;
-
+                queueGiveQuest.Code = HelperProvider.MakeCode();
                 if (item.TotalExpectReceiveAmount == 0)
                 {
                     queueGiveQuest.QueueReceiveId = randomBot.QueueReceiveId;
                     queueGiveQuest.AmountGive = 300000;
-
                     amountNeedGiveLeft -= queueGiveQuest.AmountGive;
                 }
                 else
                 {
-
-
                     queueGiveQuest.QueueReceiveId = item.QueueReceiveId;
 
                     if (amountNeedGiveLeft > item.TotalExpectReceiveAmount)
@@ -149,8 +146,6 @@ namespace GiveAndReceive.BackgroundJobs
                         queueGiveQuest.AmountGive = limitReceiveTotal - item.TotalExpectReceiveAmount;
                         amountNeedGiveLeft = amountNeedGiveLeft - queueGiveQuest.AmountGive;
                     }
-
-
                     queueReceiveService.UpdateTotalExpectReceiveAmount(queueGiveQuest.QueueReceiveId, queueGiveQuest.AmountGive, transaction);
                 }
 

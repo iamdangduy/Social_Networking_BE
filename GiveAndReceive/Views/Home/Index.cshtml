@@ -19,6 +19,23 @@
             background-size: cover;
             background-repeat: no-repeat;
         }
+        .transaction-received-info {
+            display:flex;
+            flex-direction:column;
+        }
+            .transaction-received-info .item {
+                display: flex;
+                align-items: center;
+                padding:5px;
+            }
+                .transaction-received-info .item .item-label {
+                    font-size: 14px;
+                    width:120px;
+                    font-weight:bold;
+                }
+            .transaction-received-info .item .item-value {
+                flex:1;
+            }
     </style>
 }
 <section class="home-page">
@@ -150,14 +167,14 @@
         </div>
         <div class="modal-custom-form-footer">
             <div style="display:flex;gap:10px;justify-content:flex-end;">
-                <button class="btn btn-outline-secondary btn-sm" onclick="CloseModel">Đóng</button>
+                <button class="btn btn-outline-secondary btn-sm" onclick="CloseModel();">Đóng</button>
                 <button class="btn btn-outline-success btn-sm" onclick="ConfirmSent(this);">Xác nhận</button>
             </div>
         </div>
     </div>
 </div>
 
-<div class="modal-custom" id="transaction-detail" style="display:none;">
+<div class="modal-custom" id="transaction-received-confirm" style="display:none;">
     <div class="modal-custom-backdrop"></div>
     <div class="modal-custom-form">
         <div class="modal-custom-form-header">
@@ -165,17 +182,35 @@
         </div>
         <div class="modal-custom-form-body">
             <input type="hidden" name="queue-quest-give-id" value="" />
-            <div>
-                <div>Ảnh giao dịch</div>
+            <div class="transaction-received-info">
+                <div class="item">
+                    <div class="item-label">Mã giao dịch</div>
+                    <div class="item-value queue-give-quest-code"></div>
+                </div>
+
+                <div class="item">
+                    <div class="item-label">Người gửi</div>
+                    <div class="item-value queue-give-quest-user-name"></div>
+                </div>
+
+                <div class="item">
+                    <div class="item-label">Số tiền</div>
+                    <div class="item-value queue-give-quest-amount-give"></div>
+                </div>
+
                 <div>
-                    <div class="preview-transaction-image" onclick="TransactionImage_OpenFileDialog(this);"></div>
+                    <div >Ảnh giao dịch</div>
+                    <div>
+                        <div class="preview-transaction-image" data-transaction-image-source="" onclick="OpenImageSource(this);"></div>
+                    </div>
                 </div>
             </div>
+            
         </div>
         <div class="modal-custom-form-footer">
             <div style="display:flex;gap:10px;justify-content:flex-end;">
-                <button class="btn btn-outline-secondary btn-sm" onclick="CloseModel">Đóng</button>
-                <button class="btn btn-outline-success btn-sm" onclick="ConfirmSent(this);">Xác nhận</button>
+                <button class="btn btn-outline-secondary btn-sm" onclick="CloseModel();">Đóng</button>
+                <button class="btn btn-outline-success btn-sm" onclick="ConfirmReceived(this);">Xác nhận</button>
             </div>
         </div>
     </div>
@@ -280,6 +315,12 @@
 
         }
 
+        const CloseModel = function () {
+            $('.modal-custom input').val('')
+            $('.modal-custom .preview-transaction-image').css('background-image', 'url()');
+            $('.modal-custom .item-value').html('');
+            $('.modal-custom').css('display','none')
+        }
 
 
         const OpenModalConfirmSent = function (el) {
@@ -353,12 +394,42 @@
             $(el).closest('.paging').find('input[name=page]').val(page);
             GetListGive();
         }
-        const QuestDetail = async function (el) {
-            const status = $(el).data('status');
+        const OpenConfirmReceivedModal = async function (el) {
             const questId = $(el).data('quest-id');
 
+            const rq = await fetch(`/api/userquest/GetQuestDetail?questId=${questId}`, {
+                method: 'get',
+                headers: Enum.OptionHeaderDefault
+            });
+            const rs = await rq.json();
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
 
+                $('#transaction-received-confirm input[name=queue-quest-give-id]').val(GetObjectProperty(rs.data, 'QueueGiveQuestId'));
+                $('#transaction-received-confirm .queue-give-quest-code').text(GetObjectProperty(rs.data, 'Code'));
+                $('#transaction-received-confirm .queue-give-quest-user-name').text(GetObjectProperty(rs.data, 'Name'));
+                $('#transaction-received-confirm .queue-give-quest-amount-give').html(NumberFormat(GetObjectProperty(rs.data, 'AmountGive'))+' <sup>VNĐ</sup>');
+                $('#transaction-received-confirm .preview-transaction-image').css('background-image', `url(${GetObjectProperty(rs.data, 'Avatar')})`);
+                $('#transaction-received-confirm .preview-transaction-image').data('transaction-image-source', `${GetObjectProperty(rs.data, 'Avatar')}`);
+        
+                $('#transaction-received-confirm').css('display','flex');
+            }
         }
+
+        const OpenImageSource = function (el) {
+            const urlImage = $(el).data('transaction-image-source');
+            if (urlImage === '' || urlImage === null || typeof urlImage === 'undefined') return;
+        }
+
+        const ConfirmReceived = async function (el) {
+            if (confirm('Bạn có chắc chắn muốn xác nhận đã nhận đủ và hoàn thành giao dịch này?') === false) return;
+            const questId = $('#transaction-received-confirm input[name=queue-quest-give-id]').val();
+            const rq = await fetch(`/api/userquest/ConfirmReceive?questId=${questId}`, {
+                method: 'get',
+                headers: Enum.OptionHeaderDefault
+            });
+            const rs = await rq.json();
+        }
+
         const GetListGive = async function () {
             const page = $('.confirm-give-list input[name=page]').val();
             const status = $('.confirm-give-list .filter select[name=status]').val();
@@ -384,19 +455,15 @@
                     switch (item.Status) {
                         case 'PENDING': status = '<span class="btn-outline-warning ">Chưa gửi</span>'; break;
                         case 'SENT': status = '<span class="btn-outline-info ">Đã gửi</span>';
-                            button = '<button class="btn btn-sm btn-primary">Xác nhận</button>';
+                            button = `<button class="btn btn-sm btn-primary" onclick="OpenConfirmReceivedModal(this);" data-quest-id="${GetObjectProperty(item, 'QueueGiveQuestId')}">Xác nhận</button>`;
                             break;
                         case 'DONE': status = '<span class="btn-outline-success ">Hoàn thành</span>'; break;
                         default: status = '<span class="btn-outline-danger ">Hoàn thành</span>'; break;
                     }
 
                     $('.confirm-give-list .list-give').append(`<div class="user-give-detail">
-                    <div class="avatar">
-                        <img src=" ${GetObjectProperty(item, 'Avatar')}"/>
-                    </div>
-                    <div class="name" onclick="QuestDetail(this);" data-status="${GetObjectProperty(item,'Status')}" data-quest-id="${GetObjectProperty(item, 'QueueGiveQuestId')}">
-                        ${GetObjectProperty(item, 'Name')}
-                    </div>
+                    <div class="avatar"><img src="${GetObjectProperty(item, 'Avatar')}"/></div>
+                    <div class="name">${GetObjectProperty(item, 'Name')}</div>
                     <div class="status">${status}</div>
                     <div class="action">${button}</div>
                 </div>`);

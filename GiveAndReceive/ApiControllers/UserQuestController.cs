@@ -52,13 +52,49 @@ namespace GiveAndReceive.ApiControllers
             }
         }
 
+        [HttpGet]
+        public JsonResult GetQuestDetail(string questId)
+        {
+            try
+            {
+                User user = UserProvider.GetUserFromRequestHeader(Request);
+                QueueGiveQuestService queueGiveQuestService = new QueueGiveQuestService();
+                QueueReceiveService queueReceiveService = new QueueReceiveService();
+                QueueGiveService queueGiveService = new QueueGiveService();
+                QueueGiveQuest queueGiveQuest = queueGiveQuestService.GetQueueGiveQuest(questId);
+                UserService userService = new UserService();
+                QueueGive queueGive = queueGiveService.GetQueueGive(queueGiveQuest.QueueGiveId);
+                if(queueGive == null) throw new Exception("Không tìm thấy thông tin giao dịch");
+
+                QueueReceive queueReceive = queueReceiveService.GetQueueReceive(queueGiveQuest.QueueReceiveId);
+                if (queueReceive.UserId != user.UserId) throw new Exception("Không tìm thấy thông tin giao dịch");
+
+                User userGive = userService.GetUserById(queueGive.UserId);
+                return Success(new {
+                    queueGiveQuest.AmountGive,
+                    queueGiveQuest.Code,
+                    queueGiveQuest.ExpireTime,
+                    queueGiveQuest.QueueGiveQuestId,
+                    queueGiveQuest.Status,
+                    queueGiveQuest.TransactionImage,
+                    userGive.Name,
+                    userGive.Account,
+                    userGive.Avatar,
+                    userGive.Phone,
+                    userGive.Email
+                });
+            }
+            catch (Exception ex) {
+                return Error(ex.Message);
+            }
+        }
+
         [HttpPost]
         public JsonResult ConfirmSent(QueueGiveQuest model)
         {
 
             try
             {
-
                 if (string.IsNullOrEmpty(model.TransactionImage)) throw new Exception("Bạn cần gửi kèm ảnh chụp giao dịch thành công để người nhận có thể xác nhận");
 
                 using (var connection = BaseService.Connect())
@@ -121,7 +157,7 @@ namespace GiveAndReceive.ApiControllers
 
 
         [HttpGet]
-        public JsonResult ConfirmReceive(QueueGiveQuest model)
+        public JsonResult ConfirmReceive(string questId)
         {
             try
             {
@@ -135,14 +171,16 @@ namespace GiveAndReceive.ApiControllers
                         QueueGiveService queueGiveService = new QueueGiveService(connection);
                         UserService userService = new UserService(connection);
 
-                        QueueGiveQuest queueGiveQuest = queueGiveQuestService.GetQueueGiveQuest(model.QueueGiveQuestId, transaction);
+                        QueueGiveQuest queueGiveQuest = queueGiveQuestService.GetQueueGiveQuest(questId, transaction);
                         if (queueGiveQuest == null) throw new Exception("Không tìm thấy thông tin nhiệm vụ");
-
+                        
                         QueueReceive queueReceive = queueReceiveService.GetQueueReceive(queueGiveQuest.QueueReceiveId, transaction);
                         if (queueReceive == null) throw new Exception("Không tìm thấy thông tin nhiệm vụ");
 
                         QueueGive queueGive = queueGiveService.GetQueueGive(queueGiveQuest.QueueGiveId, transaction);
                         if (queueGive == null) throw new Exception("Không tìm thấy thông tin nhiệm vụ");
+
+                        if(queueGiveQuest.Status != QueueGiveQuest.EnumStatus.SENT) throw new Exception("Trạng thái nhiệm vụ không hợp lệ để xác nhận đã nhận");
 
                         User userReceive = userService.GetUserById(queueReceive.UserId, transaction);
                         User userGive = userService.GetUserById(queueGive.UserId, transaction);
