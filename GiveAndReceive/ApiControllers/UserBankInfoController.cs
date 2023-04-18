@@ -33,6 +33,38 @@ namespace GiveAndReceive.ApiControllers
                 return Error(ex.Message);
             }
         }
+        [HttpGet]
+        public JsonResult GetListUserBankInfoByUserId(string userId,string queueGiveQuestId)
+        {
+            try
+            {
+                string token = Request.Headers.Authorization.ToString();
+                UserService userService = new UserService();
+                User user = userService.GetUserByToken(token);
+                if (user == null) return Unauthorized();
+
+                User user1 = userService.GetUserById(userId);
+                if (user1 == null) throw new Exception("Không tìm thấy người dùng này");
+
+                UserBankInfoService userBankInfoService = new UserBankInfoService();
+                QueueGiveQuestService queueGiveQuestService = new QueueGiveQuestService();
+                QueueGiveService queueGiveService = new QueueGiveService();
+
+                List<object> lsUserBankInfo = userBankInfoService.GetListUserBankInfo(user1.UserId);
+                QueueGiveQuest queueGiveQuest = queueGiveQuestService.GetQueueGiveQuest(queueGiveQuestId);
+                if (queueGiveQuest == null) throw new Exception("Không tìm thấy người nhận");
+
+                QueueGive queueGive = queueGiveService.GetQueueGive(queueGiveQuest.QueueGiveId);
+                if (queueGive == null) throw new Exception("Có lỗi sảy ra , bạn vui lòng thử lại sau");
+                if (user.UserId != queueGive.UserId) throw new Exception("Có lỗi sảy ra , vui lòng thử lại sau");
+
+                return Success(new { listUserBank = lsUserBankInfo, queueGiveQuest = queueGiveQuest });
+            }
+            catch (Exception ex)
+            {
+                return Error(ex.Message);
+            }
+        }
 
         [HttpPost]
         public JsonResult InsertUserBankInfo(UserBankInfo model)

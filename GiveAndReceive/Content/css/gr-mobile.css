@@ -141,19 +141,33 @@ a {
         gap: 5px;
         align-items: center;
         padding: 10px 2px;
+        cursor:pointer;
     }
 
         .home-page .current-mission .mission-detail .name {
             flex: 2;
             font-size: 14px;
         }
-
-        .home-page .current-mission .mission-detail .status {
-            width: 80px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .home-page .current-mission .mission-detail .amountgive {
+            width: max-content;
+            font-size: 13px;
+            padding: 0 5px;
+            color: #d91d1d;
         }
+        .home-page .current-mission .mission-detail .avatar-user {
+            width: 50px;
+            height: 50px;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            border-radius: 5px;
+        }
+            .home-page .current-mission .mission-detail .status {
+                width: 80px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
 
             .home-page .current-mission .mission-detail .status span {
                 font-size: 10px;
@@ -161,7 +175,7 @@ a {
             }
 
         .home-page .current-mission .mission-detail .button {
-            width: 80px;
+            width: max-content;
             display: flex;
             align-items: center;
             justify-content: center;

@@ -21,9 +21,10 @@ namespace GiveAndReceive.Services
             return this._connection.Query<User>(query, new { id }, transaction).FirstOrDefault();
         }
 
-        public User GetUserByAccount(string account, IDbTransaction transaction = null) {
+        public User GetUserByAccount(string account, IDbTransaction transaction = null)
+        {
             string query = "select top 1 * from [user] where Account=@account";
-            return this._connection.Query<User>(query, new { account}, transaction).FirstOrDefault();
+            return this._connection.Query<User>(query, new { account }, transaction).FirstOrDefault();
         }
 
         public User GetUserByPhone(string phone, IDbTransaction transaction = null)
@@ -131,7 +132,8 @@ namespace GiveAndReceive.Services
             if (status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
         }
 
-        public UserToken GetUserToken(string token, IDbTransaction transaction = null) {
+        public UserToken GetUserToken(string token, IDbTransaction transaction = null)
+        {
             string query = "select top 1 * from [user_token] where Token=@token";
             return this._connection.Query<UserToken>(query, new { token }, transaction).FirstOrDefault();
         }
@@ -159,7 +161,7 @@ namespace GiveAndReceive.Services
         public List<User> GetListUserByShareCode(string code, IDbTransaction transaction = null)
         {
             string query = "select * from [user] where ParentCode=@code";
-            return this._connection.Query<User>(query, new {code = code }, transaction).ToList();
+            return this._connection.Query<User>(query, new { code = code }, transaction).ToList();
         }
 
         public void UpdateUserCode(User user, IDbTransaction transaction = null)
@@ -168,7 +170,5 @@ namespace GiveAndReceive.Services
             int status = this._connection.Execute(query, user, transaction);
             if (status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
         }
-
-
     }
 }

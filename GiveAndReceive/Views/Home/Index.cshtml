@@ -19,6 +19,7 @@
             background-size: cover;
             background-repeat: no-repeat;
         }
+
         .transaction-received-info {
             display:flex;
             flex-direction:column;
@@ -36,6 +37,126 @@
             .transaction-received-info .item .item-value {
                 flex:1;
             }
+
+
+        .modal {
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.4);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .modal-container {
+            background-color: #fff;
+            width: 900px;
+            max-width: calc(100% - 32px);
+            position: relative;
+            animation: modalFadeIn ease 0.5s;
+            transition: top 0.4s, opacity 0.4s;
+        }
+
+        .modal-header {
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center !important;
+            font-size: 20px;
+            border-bottom: solid #ccc 0.5px;
+            text-transform: uppercase;
+        }
+
+        .modal-body {
+            width: 90%;
+            margin: auto;
+        }
+
+            .modal-body .list-userbank {
+                margin-top: 20px;
+                font-size: 15px;
+                max-height: 250px;
+                overflow-y: scroll;
+            }
+
+            .modal-body .content-bank {
+                color: #000;
+            }
+
+                .modal-body .content-bank > div {
+                    display: flex;
+                    align-items:center;
+                }
+                    .modal-body .content-bank > div .header {
+                        width: 90px;
+                        font-size: 14px;
+                    }
+                    .modal-body .content-bank > div .value {
+                        flex: 1;
+                        text-align: right;
+                        color: #f52222;
+                    }
+
+                    .modal-body .list-userbank > div {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 15px;
+                        height: max-content;
+                    }
+
+            .modal-body .list-userbank .item-userbank {
+            }
+
+                .modal-body .list-userbank .item-userbank .QR-Image .text-value .image {
+                }
+
+                .modal-body .list-userbank .item-userbank > div {
+                    display: flex;
+                }
+
+                    .modal-body .list-userbank .item-userbank > div .header {
+                        flex: 1;
+                        font-weight: 600;
+                        color: #000;
+                    }
+
+                    .modal-body .list-userbank .item-userbank > div .text-value {
+                        flex: 1;
+                    }
+
+        .modal-footer {
+            width: 90%;
+            margin: auto;
+            justify-content: end;
+            display: flex;
+            gap: 10px;
+            padding-bottom: 10px;
+        }
+
+            .modal-footer .close-modal {
+                width: 65px;
+                color: black;
+                border: solid #ccc 0.5px;
+                cursor: pointer;
+                border-radius: 5px;
+            }
+
+        @@keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-200px);
+            }
+
+            to {
+                transform: translateY(0px);
+                opacity: 1;
+            }
+        }
+
     </style>
 }
 <section class="home-page">
@@ -215,7 +336,38 @@
         </div>
     </div>
 </div>
+<div id="modal" class="modal" onclick="closeModal()">
+    <div class="modal-container">
+        <div class="modal-header">Thông tin chuyển khoản</div>
+        <div class="modal-body">
+            <div class="content-bank">
+                <div class="number-price">
+                    <div class="header">
+                        Số tiền
+                    </div>
+                    <div class="value" id="total-pay">
+                    </div>
+                </div>
+                <div class="content">
+                    <div class="header">
+                        Nội dung chuyển khoản
+                    </div>
+                    <div class="value" id="content-pay">
+                    </div>
+                </div>
+            </div>
+            <div class="list-userbank">
+                <div id="list-userbank">
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-sm close-modal" onclick="closeModal()">Đóng</button>
+        </div>
 
+    </div>
+
+</div>
 @section scripts{
     <script>
         const TransferMoney = async function (el) {
@@ -265,6 +417,9 @@
         }
 
         const InitPage = async function () {
+            $(".modal-container").click(function (event) {
+                event.stopPropagation();
+            });
             const token = GetCookie('UserToken');
             if (token === '') window.location.href = '/gioi-thieu';
             GetBalanceByUserId();
@@ -286,7 +441,7 @@
                 if (rs.data.listQueueGiveQuest.length <= 0) {
                     $('.current-mission .list-mission').append(`
 <div class="mission-detail"><span>Bạn đang chưa có nhiệm vụ nào</span></div>
-                            `);
+                                                    `);
                 } else {
                     for (let i = 0; i < rs.data.listQueueGiveQuest.length; i++) {
                         const item = rs.data.listQueueGiveQuest[i];
@@ -304,10 +459,12 @@
                         }
 
                         $('.current-mission .list-mission').append(`
-<div class="mission-detail">
+<div class="mission-detail" onclick="OpenBankInfo(this);" data-userid="${GetObjectProperty(item, 'UserId')}" data-id="${GetObjectProperty(item,'QueueGiveQuestId')}">
+                        <div class="avatar-user" style="background-image:url(${GetObjectProperty(item, 'Avatar')})"></div>
 <div class="name">${GetObjectProperty(item, 'Name')}</div>
+<div class="amountgive">${NumberFormat(GetObjectProperty(item, 'AmountGive'))}<sup>đ</sup></div>
 <div class="status">${status}</div>
-<div class="button">${button}</div>
+<div class="button btn btn-sm">${button}</div>
 </div>`);
                     }
                 }
@@ -441,7 +598,7 @@
             const rs = await rq.json();
 
             if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
-                
+
                 $('.confirm-give-list .total-page').text(GetObjectProperty(rs.data, 'totalPage'));
                 $('.confirm-give-list .list-give').html('');
                 if (rs.data.listData.length <= 0) {
@@ -462,15 +619,87 @@
                     }
 
                     $('.confirm-give-list .list-give').append(`<div class="user-give-detail">
+
                     <div class="avatar"><img src="${GetObjectProperty(item, 'Avatar')}"/></div>
                     <div class="name">${GetObjectProperty(item, 'Name')}</div>
                     <div class="status">${status}</div>
                     <div class="action">${button}</div>
                 </div>`);
+
                 }
             }
 
         }
+        const closeModal = function () {
+            $('#modal').css('display', 'none');
+        }
+        const OpenBankInfo = async function (itemUser) {
+            $('#updateBank-btn').attr('onclick', 'creatBankAccount()');
+            $('#modal').css('display', 'flex');
+            await ResetDataPayment();
+            const idUser = $(itemUser).data('userid');
+            const queueGiveQuestId = $(itemUser).data('id');
+            const rq = await fetch('/api/UserBankInfo/GetListUserBankInfoByUserId?userId=' + idUser + '&queueGiveQuestId=' + queueGiveQuestId, {
+                method: 'get',
+                headers: Enum.OptionHeaderDefault
+            });
+            const rs = await rq.json();
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+
+                $('#total-pay').html(`${NumberFormat(GetObjectProperty(rs.data.queueGiveQuest,'AmountGive'))}<sup> vnđ</sup>`);
+                $('#content-pay').html('KS ' + GetObjectProperty(rs.data, 'Code'));
+                for (let index = 0; index < rs.data.listUserBank.length; index++) {
+                    let itemBank = rs.data.listUserBank[index];
+                    $('#list-userbank').append(`
+                        <div class="item-userbank">
+                        <div class="bank-name">
+                            <div class="header">
+                                Ngân hàng:
+                            </div>
+                            <div class="text-value">
+                                ${GetObjectProperty(itemBank, 'BankName')}
+                            </div>
+                        </div>
+                        <div class="bank-ownername">
+                            <div class="header">
+                                Chủ tài khoản:
+                            </div>
+                            <div class="text-value">
+                                ${GetObjectProperty(itemBank, 'BankOwnerName')}
+                            </div>
+                        </div>
+                        <div class="bank-number">
+                            <div class="header">
+                                Số tài khoản:
+                            </div>
+                            <div class="text-value">
+                                ${GetObjectProperty(itemBank, 'BankNumber')}
+                            </div>
+                        </div>
+                        <div class="QR-Image">
+                            <div class="header">
+                                Mã QR:
+                            </div>
+                            <div class="text-value">
+                                <div class="image">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                   `);
+                }
+            } else {
+                alert(rs.message);
+            }
+        }
+        const ResetDataPayment = async function () {
+            $('#total-pay').html('');
+            $('#content-pay').html('');
+            $('#list-userbank').html('');
+        }
+
+
         GetListGive();
         InitPage();
     </script>
