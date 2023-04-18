@@ -28,7 +28,7 @@ namespace GiveAndReceive.Services
         }
 
         public void CreateNotification(Notification model, IDbTransaction transaction = null) {
-            string query = "";
+            string query = "INSERT INTO [dbo].[notification] ([NotificationId],[UserId],[Message],[IsRead],[Link],[CreateTime],[MessageShort]) VALUES (@NotificationId,@UserId,@Message,@IsRead,@Link,@CreateTime,@MessageShort)";
             int status = this._connection.Execute(query,model,transaction);
             if (status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
         }

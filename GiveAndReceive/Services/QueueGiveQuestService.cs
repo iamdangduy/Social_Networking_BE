@@ -39,7 +39,7 @@ namespace GiveAndReceive.Services
 
         public void InsertQueueGiveQuest(QueueGiveQuest model, IDbTransaction transaction = null)
         {
-            string query = "INSERT INTO [dbo].[queue_give_quest] ([QueueGiveQuestId],[QueueGiveId],[QueueReceiveId],[AmountGive],[Status],[TransactionImage],[CreateTime],[ExpireTime]) VALUES (@QueueGiveQuestId,@QueueGiveId,@QueueReceiveId,@AmountGive,@Status,@TransactionImage,@CreateTime,@ExpireTime)";
+            string query = "INSERT INTO [dbo].[queue_give_quest] ([QueueGiveQuestId],[QueueGiveId],[QueueReceiveId],[AmountGive],[Status],[TransactionImage],[CreateTime],[ExpireTime],[Code]) VALUES (@QueueGiveQuestId,@QueueGiveId,@QueueReceiveId,@AmountGive,@Status,@TransactionImage,@CreateTime,@ExpireTime,@Code)";
             int status = this._connection.Execute(query, model, transaction);
             if (status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
         }
