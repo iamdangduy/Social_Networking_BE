@@ -1,0 +1,91 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    ViewBag.Menu = "system-about";
+    ViewBag.SubMenu = "";
+}
+
+@section Styles{
+    <style>
+        .select-asset {
+            display: flex;
+            justify-content: start;
+            margin-bottom: 5px;
+        }
+
+            .select-asset .updateAboutBtn {
+                padding: 5px 5px;
+                background-color: #435ebe;
+                color: white !important;
+                border-radius: 5px;
+                cursor: pointer;
+                text-align: right;
+                margin-bottom: 10px;
+            }
+    </style>
+}
+
+
+<div class="select-asset">
+    <a class="btn btn-primary" onclick="updateSystemAbout();">Cập nhật giới thiệu</a>
+</div>
+<textarea name="editor1" id="system-about" style="width:80%">
+
+ </textarea>
+<input type="hidden" id="SystemAboutId" />
+
+
+
+@section Scripts{
+    <script src="/Content/ckeditor/ckeditor.js"></script>
+    <script>
+       var editor= CKEDITOR.replace('system-about', {
+            height: 600,
+        });
+
+        const getSystemAbout = async function () {
+            let rq = await fetch(Enum.ApiUrl + '/api/AdminSystemAbout/GetSystemAbout', {
+                method: 'get',
+                headers: Enum.OptionAdminHeaderDefault
+            });
+            let rs = await rq.json();
+
+
+            if (AdminCheckErrorResponse(rs) === false) return;
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                editor.setData(rs.data.HtmlContent);
+                $('#SystemAboutId').val(rs.data.SystemAboutId);
+            }
+        }
+
+        const updateSystemAbout = async function () {
+
+            let model = {
+                SystemAboutId: $('#SystemAboutId').val(),
+                HtmlContent: editor.getData(),
+            }
+
+
+            let rq = await fetch(Enum.ApiUrl + '/api/AdminSystemAbout/UpdateSystemAbout', {
+                method: 'post',
+                headers: Enum.OptionAdminHeaderDefault,
+                body: JSON.stringify(model)
+            });
+            let rs = await rq.json();
+
+            if (AdminCheckErrorResponse(rs) === false) return;
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                alert('Cập nhật thông tin thành công');
+                window.location.reload();
+            }
+        }
+
+        const initPage = async function () {
+            await getSystemAbout();
+        }
+
+        initPage();
+
+    </script>
+
+}

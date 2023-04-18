@@ -4137,6 +4137,7 @@
     <Compile Include="Areas\Admin\ApiControllers\AdminShareFundController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminShareFundMonthController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminShareFundUserMonthController.cs" />
+    <Compile Include="Areas\Admin\ApiControllers\AdminSystemAboutController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminSystemBankInfoController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminProductController.cs" />
     <Compile Include="Areas\Admin\ApiControllers\AdminRankController.cs" />
@@ -4158,6 +4159,7 @@
     <Compile Include="Areas\Admin\Controllers\ManageWaitingLineController.cs" />
     <Compile Include="Areas\Admin\Controllers\ManageWithdrawController.cs" />
     <Compile Include="Areas\Admin\Controllers\ProductController.cs" />
+    <Compile Include="Areas\Admin\Controllers\SystemAboutController.cs" />
     <Compile Include="Areas\Admin\Controllers\SystemConfigController.cs" />
     <Compile Include="Areas\Admin\Services\AdminNotificationService.cs" />
     <Compile Include="Areas\Admin\Services\AdminShareFundMonthService.cs" />
@@ -4202,6 +4204,7 @@
     <Compile Include="Models\ShareFund.cs" />
     <Compile Include="Models\ShareFundMonth.cs" />
     <Compile Include="Models\ShareFundUserMonth.cs" />
+    <Compile Include="Models\SystemAbout.cs" />
     <Compile Include="Models\SystemBankInfo.cs" />
     <Compile Include="Models\SystemConfig.cs" />
     <Compile Include="Models\SystemTransaction.cs" />
@@ -4231,6 +4234,7 @@
     <Compile Include="Services\QueueGiveQuestService.cs" />
     <Compile Include="Services\QueueGiveService.cs" />
     <Compile Include="Services\QueueReceiveService.cs" />
+    <Compile Include="Services\SystemAboutService.cs" />
     <Compile Include="Services\SystemConfigService.cs" />
     <Compile Include="Services\SystemWalletService.cs" />
     <Compile Include="Services\UserAdminService.cs" />
@@ -4409,6 +4413,7 @@
     <Content Include="Areas\Admin\Views\ManageWaitingLine\Index.cshtml" />
     <Content Include="Areas\Admin\Views\ManageShareFundMonth\Index.cshtml" />
     <Content Include="Areas\Admin\Views\ManageShareFundMonth\ShareFundUserMonth.cshtml" />
+    <Content Include="Areas\Admin\Views\SystemAbout\Index.cshtml" />
     <None Include="packages.config" />
     <Content Include="Views\Home\Login.cshtml" />
     <Content Include="Views\Home\Register.cshtml" />
