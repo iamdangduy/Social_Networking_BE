@@ -1,4 +1,6 @@
-﻿using System;
+﻿using GiveAndReceive.Models;
+using GiveAndReceive.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -34,6 +36,9 @@ namespace GiveAndReceive.Controllers
         [Route("gioi-thieu")]
         public ActionResult AboutUs()
         {
+            SystemAboutService systemAboutService = new SystemAboutService();
+            SystemAbout systemAbout = systemAboutService.GetSystemAbout();
+            ViewBag.SystemAbout = systemAbout;
             return View();
         }
 
