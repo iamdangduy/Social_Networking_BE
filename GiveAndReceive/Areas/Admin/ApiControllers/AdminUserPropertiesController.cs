@@ -56,13 +56,13 @@ namespace GiveAndReceive.Areas.Admin.ApiControllers
                         AdminUserPropertiesService adminUserPropertiesService = new AdminUserPropertiesService(connect);
                         var UserProperties = adminUserPropertiesService.GetUserPropertiesByUserId(UserId, transaction);
                         if (UserProperties == null) return Error();
-
+                        if (UserProperties.Status != UserProperties.EnumStatus.PENDING) return Error("Trạng thái không hợp lệ!");
                         //tạo thông báo
                         Notification notification = new Notification
                         {
                             NotificationId = Guid.NewGuid().ToString(),
                             UserId = UserId,
-                            Message = "CMND của bạn đã bị từ chối vì: " + Reason,
+                            Message = "Yêu cầu xác thực tài khoản của bạn đã bị từ chối vì: " + Reason,
                             IsRead = false,
                             CreateTime = HelperProvider.GetSeconds(),
                         };
@@ -100,6 +100,7 @@ namespace GiveAndReceive.Areas.Admin.ApiControllers
                         AdminUserPropertiesService adminUserPropertiesService = new AdminUserPropertiesService(connect);
                         var UserProperties = adminUserPropertiesService.GetUserPropertiesByUserId(UserId, transaction);
                         if (UserProperties == null) return Error();
+                        if (UserProperties.Status != UserProperties.EnumStatus.PENDING) return Error("Trạng thái không hợp lệ!");
                         if (UserProperties.IdentificationApprove != UserProperties.EnumIdentificationApprove.SYSTEM_DECLINE) return Error();
                         //if (!) return Error();
                         //adminUserPropertiesService.UpdateStatusUserIdentity(UserId, UserProperties.EnumIdentificationApprove.SYSTEM_ACCEPT, , transaction);
