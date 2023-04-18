@@ -585,6 +585,10 @@
                 headers: Enum.OptionHeaderDefault
             });
             const rs = await rq.json();
+            if (!CheckErrorResponse(rs)) return;
+            GetListGive();
+            NotificationShow('Xác nhận thành công', 'success');
+            $('#transaction-received-confirm').css('display', 'none');
         }
 
         const GetListGive = async function () {
