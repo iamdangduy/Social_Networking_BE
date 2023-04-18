@@ -27,7 +27,7 @@ namespace GiveAndReceive.BackgroundJobs
                 ITrigger triggerNextQuestForUserTask = TriggerBuilder.Create()
                     .WithIdentity("NextQuestForUserTrigger", "NextQuestForUserGroup")
                     .StartNow()
-                    .WithCronSchedule("0 0 0/6 1/1 * ? *")
+                    .WithCronSchedule("0 0/3 * 1/1 * ? *")
                     .Build();
                 //await scheduler.AddJob(userConnectTask, true);
 

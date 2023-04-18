@@ -45,8 +45,8 @@ namespace GiveAndReceive.ApiControllers
                     using (var transaction = connect.BeginTransaction())
                     {
                         string token = Request.Headers.Authorization.ToString();
-                        UserService userService = new UserService();
-                        User user = userService.GetUserByToken(token);
+                        UserService userService = new UserService(connect);
+                        User user = userService.GetUserByToken(token,transaction);
                         if (user == null) return Unauthorized();
                         UserPropertiesService userPropertiesService = new UserPropertiesService(connect);
                         UserProperties userProperties = new UserProperties();

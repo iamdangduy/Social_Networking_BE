@@ -56,10 +56,10 @@ namespace GiveAndReceive.Services
             string querySelect = "select qgq.*,ug.Name,ug.Avatar ";
             string queryCount = "select count(*) as Total ";
 
-            string query = " from [queue_give_quest] qgq left join[queue_receive] qr on qgq.QueueReceiveId = qr.QueueReceiveId and qr.UserId = @userId";
-            query += " left join[queue_give] qg on qgq.QueueReceiveId = qg.QueueGiveId";
-            query += " left join[user] ug on qg.UserId = ug.UserId";
-            query += " where 1=1";
+            string query = " from [queue_give_quest] qgq left join [queue_receive] qr on qgq.QueueReceiveId = qr.QueueReceiveId";
+            query += " left join [queue_give] qg on qgq.QueueGiveId = qg.QueueGiveId";
+            query += " left join [user] ug on qg.UserId = ug.UserId";
+            query += " where qr.UserId = @userId";
 
             if (!string.IsNullOrEmpty(status))
             {

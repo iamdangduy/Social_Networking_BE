@@ -35,7 +35,7 @@
 
                     <div class="d-flex justify-content-between">
                         <div class="logo">
-                            <a href="/"><img  src="/Content/assets/images/logo/logo.png" /></a>
+                            <a href="/"><img src="/Content/assets/images/logo/logo.png" /></a>
                         </div>
                         <div class="toggler">
                             <a href="#" class="sidebar-hide d-xl-none d-block"><i class="fa-solid fa-xmark fa-xs"></i></a>
@@ -121,7 +121,7 @@
                         </li>
 
                         <li class="sidebar-item require-logout">
-                            <a href="/dang-ky" class='sidebar-link' >
+                            <a href="/dang-ky" class='sidebar-link'>
                                 <i class="fa-solid fa-user-plus"></i>
                                 <span>Đăng ký</span>
                             </a>
@@ -239,29 +239,28 @@
                 headers: Enum.OptionHeaderDefault,
             });
             let rs = await rq.json();
-            if (CheckErrorResponse(rs) === false) return;
             if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
-                if (rs.data.Status === 'CANCEL') {
+                if (GetObjectProperty(rs.data, 'Status') === 'CANCEL') {
                     $('.layout-navbar .approve-status').html(`
-                        <a href="/nguoi-dung/xac-thuc-tai-khoan">
-                           <div class="alert alert-light-danger approve">
-                            <i class="fa-solid fa-circle-exclamation"></i>
-                            Tài khoản của bạn chưa được xác thực. Vui lòng xác thực để có thể dùng được đầy đủ chức năng của hệ thống!
-                           </div>
-                        </a>`
+                            <a href="/nguoi-dung/xac-thuc-tai-khoan">
+                               <div class="alert alert-light-danger approve">
+                                <i class="fa-solid fa-circle-exclamation"></i>
+                                Tài khoản của bạn chưa được xác thực. Vui lòng xác thực để có thể dùng được đầy đủ chức năng của hệ thống!
+                               </div>
+                            </a>`
                     );
                 }
-                if (rs.data.Status === 'PENDING') {
+                else if (GetObjectProperty(rs.data, 'Status') === 'PENDING') {
                     $('.layout-navbar .approve-status').html(`
-                        <a href="/nguoi-dung/xac-thuc-tai-khoan">
-                           <div class="alert alert-light-warning approve" >
-                            <i class="fa-solid fa-circle-exclamation"></i>
-                           </div>
-                            Tài khoản của bạn đang chờ được duyệt!
-                        </a>`
+                            <a href="/nguoi-dung/xac-thuc-tai-khoan">
+                               <div class="alert alert-light-warning approve" >
+                                <i class="fa-solid fa-circle-exclamation"></i>
+                               </div>
+                                Tài khoản của bạn đang chờ được duyệt!
+                            </a>`
                     );
                 }
-                if (rs.data.Status === 'DONE') {
+                else if (GetObjectProperty(rs.data, 'Status') === 'DONE') {
                     $('.layout-navbar .approve-status').html(``);
                 }
             }

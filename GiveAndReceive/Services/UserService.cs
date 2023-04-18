@@ -21,7 +21,10 @@ namespace GiveAndReceive.Services
             return this._connection.Query<User>(query, new { id }, transaction).FirstOrDefault();
         }
 
-        
+        public User GetUserByAccount(string account, IDbTransaction transaction = null) {
+            string query = "select top 1 * from [user] where Account=@account";
+            return this._connection.Query<User>(query, new { account}, transaction).FirstOrDefault();
+        }
 
         public User GetUserByPhone(string phone, IDbTransaction transaction = null)
         {

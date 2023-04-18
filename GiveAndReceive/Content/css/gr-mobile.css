@@ -120,7 +120,7 @@ a {
                 font-size: 12px;
             }
 
-.home-page .current-mission, .home-page .confirm-give-list {
+.home-page .current-mission {
     margin-top: 20px;
     padding: 10px 10px 20px;
     border-radius: 10px;
@@ -131,7 +131,7 @@ a {
     .home-page .current-mission .list-mission {
     }
 
-    .home-page .current-mission .mission-label {
+    .home-page .current-mission .mission-label{
         font-weight: bold;
         padding: 10px 0 20px;
     }
@@ -171,6 +171,67 @@ a {
                 font-size: 10px;
             }
 
+.home-page .confirm-give-list {
+    margin-top: 20px;
+    padding: 10px 10px 20px;
+    border-radius: 10px;
+    border: 0.5px solid #eee;
+    background-color: white;
+}
+    .home-page .confirm-give-list .confirm-give-label {
+        font-weight: bold;
+        padding: 10px 0 20px;
+    }
+    .home-page .confirm-give-list .list-give {
+        padding: 15px 0;display:flex;
+        flex-direction:column;
+    }
+        .home-page .confirm-give-list .list-give .user-give-detail {
+            display: flex;
+            align-items: center;
+        }
+            .home-page .confirm-give-list .list-give .user-give-detail .avatar img {
+                width:30px;
+                height:30px;
+                object-fit:cover;
+                border-radius:30px;
+            }
+            .home-page .confirm-give-list .list-give .user-give-detail .name {
+                flex:1;
+                padding-left:5px;
+                font-size:13px;
+            }
+            .home-page .confirm-give-list .list-give .user-give-detail .status  {
+                width:60px;
+                
+            }
+            .home-page .confirm-give-list .list-give .user-give-detail .status span {
+                border-style: solid;
+                border-width: .5px;
+                border-radius: 25px;
+                font-size: 12px;
+                padding: 3px 5px;
+            }
+            .home-page .confirm-give-list .list-give .user-give-detail .action {
+                width:100px;
+                display:flex;
+                justify-content:center;
+            }
+.home-page .confirm-give-list .paging {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+        .home-page .confirm-give-list .paging .go-to-page {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+            .home-page .confirm-give-list .paging .go-to-page .total-page {
+            }
+        .home-page .confirm-give-list .paging .go-to-page input {
+            width:100px;
+        }
 .home-page .recent-transactions {
     margin-top: 20px;
     padding: 10px 10px 10px;
