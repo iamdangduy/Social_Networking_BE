@@ -1,9 +1,12 @@
-﻿
+﻿@using GiveAndReceive.Models;
 @{
-    ViewBag.Title = "Giới thiệu về King Smart";
-    ViewBag.Menu = "introduce";
+    SystemAbout systemAbout = (SystemAbout)ViewBag.SystemAbout;
+    ViewBag.Title = "Giới thiệu";
 }
 
 <h2>Giới thiệu về King Smart</h2>
 
-<p>Đang cập nhật</p>
+<p>@Html.Raw(systemAbout.HtmlContent)</p>
+
+
+
