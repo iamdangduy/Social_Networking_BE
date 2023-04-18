@@ -4,6 +4,7 @@ namespace GiveAndReceive.Models
     {
         public string QueueGiveQuestId { get; set; }
         public string QueueGiveId { get; set; }
+        public string Code { get; set; }
         public string QueueReceiveId { get; set; }
         public long AmountGive { get; set; }
         public string Status { get; set; }
