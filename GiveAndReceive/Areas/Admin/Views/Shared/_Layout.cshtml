@@ -78,6 +78,12 @@
                                 <span>Tổng quan</span>
                             </a>
                         </li>
+                        <li class="sidebar-item  @(ViewBag.Menu == "system-about" ? "active":"")">
+                            <a href="/admin/systemabout" class='sidebar-link'>
+                                <i class="fa-solid fa-comments"></i>
+                                <span>Quản lý Trang giới thiệu</span>
+                            </a>
+                        </li>
                         <li class="sidebar-item  @(ViewBag.Menu == "product" ? "active":"")">
                             <a href="/admin/product" class='sidebar-link'>
                                 <i class="fa-solid fa-grip"></i>
