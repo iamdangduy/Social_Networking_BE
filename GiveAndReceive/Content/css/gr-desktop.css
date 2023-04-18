@@ -180,16 +180,18 @@ a {
 
     .home-page .confirm-give-list {
         margin-top: 20px;
-        padding:20px;
+        padding: 20px;
         border-radius: 10px;
         border: 0.5px solid #eee;
         background-color: white;
         width: 70%;
         min-width: 700px;
     }
-    .home-page .confirm-give-list .filter{
-        width:50%;
-    }
+
+        .home-page .confirm-give-list .filter {
+            width: 50%;
+        }
+
         .home-page .confirm-give-list .confirm-give-label {
             font-weight: bold;
             padding: 10px 0 20px;
@@ -200,11 +202,13 @@ a {
             align-items: center;
             gap: 10px;
         }
+
             .home-page .confirm-give-list .paging .go-to-page {
                 display: flex;
                 align-items: center;
                 gap: 10px;
             }
+
         .home-page .confirm-give-list .list-give {
             padding: 15px 0;
         }
@@ -533,3 +537,18 @@ a {
 
 
 /*EndBankPage*/
+
+/*AboutPage*/
+
+.about-page {
+    flex-direction: column;
+}
+
+    .about-page .card {
+        padding: 20px;
+    }
+
+        .about-page .card .content {
+            padding: 20px;
+        }
+/*EndAboutPage*/
