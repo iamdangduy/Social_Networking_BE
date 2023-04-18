@@ -3,10 +3,16 @@
     SystemAbout systemAbout = (SystemAbout)ViewBag.SystemAbout;
     ViewBag.Title = "Giới thiệu";
 }
+<section class="about-page">
+    <div class="card">
+        <h2>Giới thiệu về King Smart</h2>
 
-<h2>Giới thiệu về King Smart</h2>
+        <div class="content">@Html.Raw(systemAbout.HtmlContent)</div>
+    </div>
+</section>
 
-<p>@Html.Raw(systemAbout.HtmlContent)</p>
+
+
 
 
 
