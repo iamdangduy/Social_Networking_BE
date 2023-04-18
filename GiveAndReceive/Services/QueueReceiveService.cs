@@ -27,7 +27,7 @@ namespace GiveAndReceive.Services
 
 
         public List<QueueReceive> GetListAvaiableQueueReceive(IDbTransaction transaction = null) {
-            string query = " select top 2 * from  queue_receive where TotalExpectReceiveAmount < (select cast(Value as bigint) from system_config where SystemConfigId='LIMIT_RECEIVE') order by CreateTime asc";
+            string query = " select top 2 * from  queue_receive where Status <> 'BOT' and TotalExpectReceiveAmount < (select cast(Value as bigint) from system_config where SystemConfigId='LIMIT_RECEIVE') order by CreateTime asc";
             return this._connection.Query<QueueReceive>(query, null, transaction).ToList();
         }
 

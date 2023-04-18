@@ -339,12 +339,11 @@
                 if (rs.message !== '' && rs.message !== null) alert(rs.message);
                 let html = '';
                 for (let index = 0; index < rs.data.length; index++) {
-                    html += `<div class="history-detail"><div class="content">${rs.data[index].Note} </div>`;
-                    html += `<div class="time">${DateStringFormat({ stringDate: new Date(rs.data[index].CreateTime), newFormat: 'dd/mm/yyyy hh:mi:ss' })}</div></div>`;
+                    html += `<div class="history-detail"><div class="content">${ rs.data[index].Note} </div>`;
+                    html += `<div class="time">${DateStringFormat({ stringDate: new Date(GetObjectProperty(rs.data[index],'CreateTime')), newFormat: 'dd/mm/yyyy hh:mi:ss' })}</div></div>`;
                 }
                 $('#history-balance').append(html);
 
-                console.log(rs);
             }
         }
 
@@ -360,8 +359,8 @@
             if (rs.status === 'error') if (rs.message !== '' && rs.message !== null) alert(rs.message);
             if (rs.status === 'success') {
                 if (rs.message !== '' && rs.message !== null) alert(rs.message);
-                $('#wallet-balance').append(`${NumberFormat(rs.data.Balance)} VNĐ`);
-                $('#wallet-pin').append(`${NumberFormat(rs.data.Pin)} Vé`);
+                $('#wallet-balance').append(`${NumberFormat(GetObjectProperty(rs.data,'Balance'))} VNĐ`);
+                $('#wallet-pin').append(`${NumberFormat(GetObjectProperty(rs.data,'Pin'))} Vé`);
             }
         }
 
