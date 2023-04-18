@@ -165,6 +165,7 @@ namespace GiveAndReceive.ApiControllers
                                     kt = true;
                                     break;
                                 }
+                                if (string.IsNullOrEmpty(user1.ParentCode)) break;
                                 user1 = userService.GetUserByShareCode(user1.ParentCode, transaction);
                             }
                         }
@@ -178,6 +179,7 @@ namespace GiveAndReceive.ApiControllers
                                     kt = true;
                                     break;
                                 }
+                                if (string.IsNullOrEmpty(user1.ParentCode)) break;
                                 user1 = userService.GetUserByShareCode(user1.ParentCode, transaction);
                             }
                         }
