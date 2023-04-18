@@ -604,3 +604,18 @@ a {
 
 
 /*EndBankPage*/
+
+/*AboutPage*/
+
+.about-page {
+    flex-direction: column;
+}
+
+    .about-page .card {
+        padding: 10px;
+    }
+
+        .about-page .card .content {
+            padding: 10px;
+        }
+/*EndAboutPage*/
