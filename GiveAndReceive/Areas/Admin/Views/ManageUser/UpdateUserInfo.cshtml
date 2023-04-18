@@ -489,9 +489,13 @@
 
             if (AdminCheckErrorResponse(rs) === false) return;
             if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
-                if (rs.data.IdentificationApprove !== true) {
+                if (rs.data.Status === 'PENDING') {
                     $('.accuracy').html('');
                     $('.accuracy').append('<a class="btn btn-outline-dark" onclick="openModal()">Xác thực</a>');
+                }
+                if (rs.data.Status === 'CANCEL') {
+                    $('.accuracy').css('color','red');
+                    $('.accuracy').html('Tài khoản chưa xác thực');
                 }
 
                 $('#Thumbnail1').siblings('.preview').css('background-image', `url(${rs.data.CitizenIdentificationImageFront})`);

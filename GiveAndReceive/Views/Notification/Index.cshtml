@@ -36,14 +36,14 @@
             let rs = await rq.json();
             if (CheckErrorResponse(rs) === false) return;
             if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
-                $('.list-noti').html('');
                 if (rs.data.length <= 0) {
                     $('.see-more-notification').remove();
+                    return;
                 }
                 if (rs.data.length <= 0 && page == 1) {
                     $('.list-noti').append(`
                         <div class="notNoti">Bạn không có thông báo nào</div> 
-                    `)
+                    `);
                     return;
                 }
                 for (let i = 0; i < rs.data.length; i++) {
@@ -59,7 +59,7 @@
                         $('.list-noti').append(html);
                     }
                     if (item.IsRead === false) {
-                        let html = `<div class="noti-detail" onclick="SeeNotification(${item.NotificationId})">
+                        let html = `<div class="noti-detail" data-id="${item.NotificationId}" onclick="SeeNotification(this);">
                                         <div class="unread"><i class="fa-solid fa-circle" style="color: #5896ff;font-size:10px"></i></div>
                                         <div class="content">
                                             <div class="message" style="color:black">${item.Message}</div>
@@ -78,7 +78,7 @@
         }
 
         const SeeNotification = async function (el) {
-            let id = el;
+            let id = $(el).data('id');
             let rq = await fetch('/api/Notification/UpdateNotificationRead?id=' + id, {
                 method: 'get',
                 headers: Enum.OptionHeaderDefault
@@ -86,7 +86,7 @@
             let rs = await rq.json();
             if (CheckErrorResponse(rs) === false) return;
             if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
-                InitPage();
+                window.location.reload();
             }
         }
 
