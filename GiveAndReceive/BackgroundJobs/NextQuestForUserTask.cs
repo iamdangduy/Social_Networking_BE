@@ -101,11 +101,11 @@ namespace GiveAndReceive.BackgroundJobs
             QueueReceive randomBot = queueReceiveService.GetRandomBot(transaction);
 
             SystemConfigService systemConfigService = new SystemConfigService(connection);
-            SystemConfig limitGive = systemConfigService.GetSystemConfig(SystemConfig.EnumSystemConfigId.LIMIT_GIVE);
+            SystemConfig limitGive = systemConfigService.GetSystemConfig(SystemConfig.EnumSystemConfigId.LIMIT_GIVE,transaction);
             if (limitGive == null) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
             long amountNeedGiveLeft = long.Parse(limitGive.Value);
 
-            SystemConfig limitReceive = systemConfigService.GetSystemConfig(SystemConfig.EnumSystemConfigId.LIMIT_RECEIVE);
+            SystemConfig limitReceive = systemConfigService.GetSystemConfig(SystemConfig.EnumSystemConfigId.LIMIT_RECEIVE,transaction);
             if (limitReceive == null) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
             long limitReceiveTotal = long.Parse(limitReceive.Value);
 
