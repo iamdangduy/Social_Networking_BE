@@ -360,8 +360,8 @@
             if (rs.status === 'error') if (rs.message !== '' && rs.message !== null) alert(rs.message);
             if (rs.status === 'success') {
                 if (rs.message !== '' && rs.message !== null) alert(rs.message);
-                $('#wallet-balance').append(`${rs.data.Balance} VNĐ`);
-                $('#wallet-pin').append(`${rs.data.Pin} Vé`);
+                $('#wallet-balance').append(`${NumberFormat(rs.data.Balance)} VNĐ`);
+                $('#wallet-pin').append(`${NumberFormat(rs.data.Pin)} Vé`);
             }
         }
 
