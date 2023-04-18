@@ -1,8 +1,167 @@
 ﻿
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Nhiệm vụ";
     ViewBag.Menu = "user-quest";
 }
 
-<h2>Index</h2>
+@section styles {
+    <style>
+        section {
+            flex-direction: column;
+        }
+
+        .wallet-page ul li {
+            width: 50%;
+            text-align: center;
+        }
+
+        .card .card-body {
+            padding: 1rem;
+        }
+
+        @@keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-200px);
+            }
+
+            to {
+                transform: translateY(0px);
+                opacity: 1;
+            }
+        }
+    </style>
+}
+
+<section class="wallet-page">
+    <div class="section-header">Nhiệm vụ</div>
+    <div class="card">
+        <div class="card-body">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link active" id="balance-tab" data-bs-toggle="tab" href="#balance"
+                       role="tab" aria-controls="balance" aria-selected="true">Nhiệm vụ cần làm</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" id="pin-tab" data-bs-toggle="tab" href="#pin"
+                       role="tab" aria-controls="profile" aria-selected="false">Danh sách người gửi cho bạn</a>
+                </li>
+            </ul>
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="balance" role="tabpanel"
+                     aria-labelledby="balance-tab">                    
+                    <div class="history" id="list-user-queue-give">
+                        <div class="history-detail">
+                            <div class="content">
+                                <span class="bg-light-primary">Chờ duyệt</span>
+                                <span class="name-receive">Phương Thảo</span>
+                            </div>
+                            <div class="time"> 10/04/2023 16:22:00 </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="pin" role="tabpanel"
+                     aria-labelledby="pin-tab">                    
+                    <div class="history" id="list-user-queue-receive">
+                        <div class="history-detail">
+                            <div class="content">
+                                <span class="bg-light-primary">Chờ duyệt</span>
+                                <span class="name-receive">Phương Thảo</span>
+                                <button class="btn btn-sm btn-primary">Xác nhận</button>
+                            </div>
+                            <div class="time"> 10/04/2023 16:22:00 </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section scripts{
+    <script>
+        const getListUserQueueGive = async function () {
+            $('#list-user-queue-give').html('');
+
+            const rp = await fetch('/api/UserQuest/GetListUserQueueGive', {
+                method: 'get',
+                headers: Enum.OptionHeaderDefault
+            });
+            let rs = await rp.json();
+            if (CheckErrorResponse(rs) === false) return;
+            if (rs.status === 'error') if (rs.message !== '' && rs.message !== null) alert(rs.message);
+            if (rs.status === 'success') {
+                if (rs.message !== '' && rs.message !== null) alert(rs.message);
+                let html = '';
+                for (let index = 0; index < rs.data.length; index++) {
+                    switch (rs.data[index].Status) {
+                        case 'PENDING':
+                            html += `<div class="history-detail"><div class="content"><span class="badge bg-light-warning">Chưa gửi</span>`;
+                            break;
+                        case 'SENT':
+                            html += `<div class="history-detail"><div class="content"><span class="badge bg-light-primary">Đã gửi</span>`;
+                            break;
+                        case 'DONE':
+                            html += `<div class="history-detail"><div class="content"><span class="badge bg-light-success">Hoàn thành</span>`;
+                            break;
+                    }
+                    html += `<span class="name-receive">${rs.data[index].Name}</span></div>`;
+                    html += `<div class="time"> ${DateStringFormat({ stringDate: new Date(rs.data[index].CreateTime), newFormat: 'dd/mm/yyyy hh:mi:ss' })} </div></div>`;
+                }
+                $('#list-user-queue-give').append(html);
+
+                console.log(rs);
+            }
+        }
+
+        const getListUserQueueReceive = async function () {
+            $('#list-user-queue-receive').html('');
+
+            const rp = await fetch('/api/UserQuest/GetListUserQueueReceive', {
+                method: 'get',
+                headers: Enum.OptionHeaderDefault
+            });
+            let rs = await rp.json();
+            if (CheckErrorResponse(rs) === false) return;
+            if (rs.status === 'error') if (rs.message !== '' && rs.message !== null) alert(rs.message);
+            if (rs.status === 'success') {
+                if (rs.message !== '' && rs.message !== null) alert(rs.message);
+                let html = '';
+                for (let index = 0; index < rs.data.length; index++) {
+                    switch (rs.data[index].Status) {
+                        case 'PENDING':
+                            html += `<div class="history-detail"><div class="content"><span class="badge bg-light-warning">Chưa gửi</span>`;
+                            break;
+                        case 'SENT':
+                            html += `<div class="history-detail"><div class="content"><span class="badge bg-light-primary">Đã gửi</span>`;
+                            break;
+                        case 'DONE':
+                            html += `<div class="history-detail"><div class="content"><span class="badge bg-light-success">Hoàn thành</span>`;
+                            break;
+                    }
+                    html += `<span class="name-receive">${rs.data[index].Name}</span></div>`;
+                    if (rs.data[index].Status === 'SENT') {
+                        html += `<button class="btn btn-sm btn-primary" data-id="${rs.data[index].QueueGiveQuestId}" onclick="ConfirmReceive(this);">Xác nhận</button>`;
+                    }
+                    html += `<div class="time"> ${DateStringFormat({ stringDate: new Date(rs.data[index].CreateTime), newFormat: 'dd/mm/yyyy hh:mi:ss' })} </div></div>`;
+                }
+                $('#list-user-queue-receive').append(html);
+
+                console.log(rs);
+            }
+        }
+
+        const ConfirmReceive = async function (el) {
+            var id = $(el).data('id');
+            
+        }
+
+        const InitPage = async function () {
+            await getListUserQueueGive();
+            await getListUserQueueReceive();
+        }
+        InitPage();
+    </script>
+}
+
 
