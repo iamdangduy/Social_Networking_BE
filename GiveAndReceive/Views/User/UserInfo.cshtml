@@ -21,14 +21,7 @@
             background: none;
             border: none;
         }
-        .timeCount {
-            display: none;
-            width: 50px;
-            align-items: center;
-            padding: 6px 6px 6px 8px;
-            background-color: #e6eef5;
-            border: 1px solid #dce7f1;
-        }
+        
     </style>
 }
 
@@ -48,6 +41,16 @@
             </div>
 
             <div class="form-group">
+                <label for="fullName">Họ và tên</label>
+                <input type="text" class="form-control" id="fullName" placeholder="Họ và tên">
+            </div>
+
+            <div class="form-group">
+                <label for="address">Địa chỉ</label>
+                <input type="text" class="form-control" id="address" placeholder="Địa chỉ">
+            </div>
+
+            <div class="form-group">
                 <label for="Email">Email</label>
                 <div class="input-group mb-3" id="emailCode">
                     <input type="text" class="form-control" id="Email" placeholder="Email">
@@ -64,16 +67,16 @@
             </div>
 
             <div class="form-group">
-                <label for="Phone1">Số điện thoại chính</label>
+                <label for="Phone">Số điện thoại chính</label>
                 <div class="input-group mb-3">
-                    <input type="text" class="form-control" id="Phone1" placeholder="Số điện thoại">
+                    <input type="text" class="form-control" id="Phone" placeholder="Số điện thoại chính">
                     @*<button class="input-group-text" onclick="GetPhoneCode();" id="Code">Nhận mã <br> xác thực</button>*@
                 </div>
             </div>
             <div class="form-group">
                 <label for="Phone2">Số điện thoại phụ</label>
                 <div class="input-group mb-3">
-                    <input type="text" class="form-control" id="Phone2" placeholder="Số điện thoại">
+                    <input type="text" class="form-control" id="Phone2" placeholder="Số điện thoại phụ">
                     @*<button class="input-group-text" onclick="GetPhoneCode();" id="Code">Nhận mã <br> xác thực</button>*@
                 </div>
             </div>
