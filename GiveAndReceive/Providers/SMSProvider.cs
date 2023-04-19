@@ -42,7 +42,7 @@ namespace GiveAndReceive.Providers
                 mailDetails.From = new MailAddress("info@swayvn.com");
                 mailDetails.To.Add(email);
                 mailDetails.Subject = "[KingSmart] " + title;
-                mailDetails.IsBodyHtml = false;
+                mailDetails.IsBodyHtml = true;
                 mailDetails.Body = message + " " + code;
                 clientDetails.Send(mailDetails);
                 return true;
