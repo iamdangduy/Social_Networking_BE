@@ -409,7 +409,11 @@
                 $('#Name').val(rs.data.Name);
                 $('#Account').val(rs.data.Account);
                 $('#Email').val(rs.data.Email);
-                $('#phoneNum').val('******'+rs.data.Phone.substr(rs.data.Phone.length-4,4));
+                let phoneNum = GetObjectProperty(rs.data, 'Phone');
+                if (phoneNum.length > 5) {
+                    $('#phoneNum').val('******' + rs.data.Phone.substr(rs.data.Phone.length - 4, 4));
+                }
+                else $('#phoneNum').val('');
                 $('#shareCode').val(rs.data.ShareCode);
 
                 let html2 = '<div class="tab-function">';
