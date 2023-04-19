@@ -141,18 +141,20 @@ namespace GiveAndReceive.ApiControllers
                     {
                        
                         CodeConfirmService codeConfirmService = new CodeConfirmService(connect);
-
+                        DateTime now = DateTime.Now;
                         Random rnd = new Random();  
                         int code = rnd.Next(100000, 999999);
                         CodeConfirm codeConfirm = new CodeConfirm();
                         codeConfirm.CodeConfirmId = Guid.NewGuid().ToString();
                         codeConfirm.Email = email;
+                        codeConfirm.CreateTime = HelperProvider.GetSeconds();
+                        codeConfirm.ExpiryTime = HelperProvider.GetSeconds(now.AddMinutes(5));
                         codeConfirm.Code = code.ToString();
                         codeConfirmService.InsertCodeConfirm(codeConfirm, transaction);
 
                         if (!SMSProvider.SendOTPViaEmail(email, codeConfirm.Code, "Mã xác nhận","" )) return Error("Quá trình gửi gặp lỗi. Vui lòng thử lại sau");
                         transaction.Commit();
-                        return Success(codeConfirm.Code);
+                        return Success(new { codeConfirm.Code, codeConfirm.ExpiryTime });
                     }
                 }
             }
