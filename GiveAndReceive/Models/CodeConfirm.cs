@@ -8,10 +8,9 @@ namespace GiveAndReceive.Models
     public class CodeConfirm
     {
         public string CodeConfirmId { get; set; }
-        public string Phone { get; set; }
         public string Email { get; set; }
         public string Code { get; set; }
-        public DateTime ExpiryTime { get; set; }
-        public DateTime CreateTime { get; set; }
+        public long ExpiryTime { get; set; }
+        public long CreateTime { get; set; }
     }
 }
