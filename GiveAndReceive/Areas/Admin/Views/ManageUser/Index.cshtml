@@ -148,7 +148,7 @@
         const getListUser = async function (page = 1) {
             _currentPage = page;
             let keyword = $('#keyword').val();
-            if (keyword != '') keyword = RemoveVietnameseTones(keyword);
+            
             let status = $('#status').val();
 
             //gọi api ở admin
