@@ -316,8 +316,8 @@
             let model = {
                 RankId:id,
                 Name: $('#rankName').val(),
-                CommissionPercent: $('#maxPin').val(),
-                MaximumPinLimit: $('#comPercent').val(),
+                CommissionPercent: $('#comPercent').val(),
+                MaximumPinLimit: $('#maxPin').val(),
             }
             if (model.Name === '' || model.CommissionPercent === '' || model.MaximumPinLimit === '') {
                 Swal.fire({
