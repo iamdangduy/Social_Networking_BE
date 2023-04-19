@@ -192,7 +192,6 @@ namespace GiveAndReceive.ApiControllers
             }
         }
 
-
         [HttpGet]
         [AllowAnonymous]
         public JsonResult GetVerifyCode(string phone)
