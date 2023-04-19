@@ -157,12 +157,6 @@ namespace GiveAndReceive.Services
             if (status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
         }
 
-        public User GetUserInfo(string userId, IDbTransaction transaction = null)
-        {
-            string query = "select Name, Avatar, Account, Email, Phone, ShareCode, ParentCode from [user] where UserId=@userId";
-            return this._connection.Query<User>(query, new { userId = userId }, transaction).FirstOrDefault();
-        }
-
         public List<User> GetListUserByShareCode(string code, IDbTransaction transaction = null)
         {
             string query = "select Name, Account, Avatar, Phone, Email, Phone2, Address from [user] where ParentCode=@code";
