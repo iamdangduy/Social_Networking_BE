@@ -351,39 +351,6 @@ namespace GiveAndReceive.ApiControllers
        
         [HttpGet]
         [AllowAnonymous]
-        public JsonResult CheckOTPCode(string phone, string code)
-        {
-            if (string.IsNullOrEmpty(code)) return Error("Mã xác nhận không được để trống.");
-            if (string.IsNullOrEmpty(phone)) return Error("Số điện thoại không được để trống.");
-            try
-            {
-                using (var connect = BaseService.Connect())
-                {
-                    connect.Open();
-                    using (var transaction = connect.BeginTransaction())
-                    {
-                        long now = HelperProvider.GetSeconds();
-                        CodeConfirmService codeConfirmService = new CodeConfirmService(connect);
-                        UserService userService = new UserService(connect);
-
-                        User user = userService.GetUserByPhone(phone, transaction);
-                        if (user == null) return Error("Số điện thoại không tồn tại trên hệ thống.");
-
-                        CodeConfirm codeConfirm = codeConfirmService.GetCodeConfirmByPhone(phone, transaction);
-                        if (codeConfirm == null) return Error("Mã xác nhận không tồn tại.");
-                        if (!codeConfirm.Code.Equals(code)) return Error("Mã xác nhận không chính xác.");
-                        if (codeConfirm.ExpiryTime < now) return Error("Mã xác nhận đã hết hạn.");
-                        return Success();
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                return Error(ex.Message);
-            }
-        }
-        [HttpGet]
-        [AllowAnonymous]
         public JsonResult ForgotPassword(string phone, string code, string newPassword)
         {
             if (string.IsNullOrEmpty(code)) return Error("Mã xác nhận không được để trống.");
