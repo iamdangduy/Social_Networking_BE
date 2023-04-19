@@ -21,6 +21,14 @@
             background: none;
             border: none;
         }
+        .timeCount {
+            display: none;
+            width: 50px;
+            align-items: center;
+            padding: 6px 6px 6px 8px;
+            background-color: #e6eef5;
+            border: 1px solid #dce7f1;
+        }
     </style>
 }
 
@@ -41,9 +49,10 @@
 
             <div class="form-group">
                 <label for="Email">Email</label>
-                <div class="input-group mb-3">
+                <div class="input-group mb-3" id="emailCode">
                     <input type="text" class="form-control" id="Email" placeholder="Email">
                     <button class="input-group-text" onclick="GetEmailCode();" id="Code">Nhận mã <br> xác thực</button>
+                    <div class="timeCount"> <span id="minute"></span> : <span id="second"></span> </div>
                 </div>
             </div>
             <div class="form-group">
@@ -55,21 +64,29 @@
             </div>
 
             <div class="form-group">
-                <label for="Phone">Điện thoại</label>
+                <label for="Phone1">Số điện thoại chính</label>
                 <div class="input-group mb-3">
-                    <input type="text" class="form-control" id="Phone" placeholder="Số điện thoại">
-                    <button class="input-group-text" onclick="GetPhoneCode();" id="Code">Nhận mã <br> xác thực</button>
+                    <input type="text" class="form-control" id="Phone1" placeholder="Số điện thoại">
+                    @*<button class="input-group-text" onclick="GetPhoneCode();" id="Code">Nhận mã <br> xác thực</button>*@
                 </div>
             </div>
             <div class="form-group">
-                <div class="d-flex">
-                    <input type="text" style="width:50%;" class="form-control" id="PhoneCode" placeholder="Mã xác thực">
-                    <button class="input-group-text verify-phone-code" style="margin-left: 10px;" onclick="VerifyPhoneCode();" id="Code">Xác minh</button>
+                <label for="Phone2">Số điện thoại phụ</label>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" id="Phone2" placeholder="Số điện thoại">
+                    @*<button class="input-group-text" onclick="GetPhoneCode();" id="Code">Nhận mã <br> xác thực</button>*@
                 </div>
-                <span id='message-phone' style="font-size:12px;"></span>
             </div>
+            @*<div class="form-group">
+            <div class="d-flex">
+                <input type="text" style="width:50%;" class="form-control" id="PhoneCode" placeholder="Mã xác thực">
+                <button class="input-group-text verify-phone-code" style="margin-left: 10px;" onclick="VerifyPhoneCode();" id="Code">Xác minh</button>
+            </div>
+            <span id='message-phone' style="font-size:12px;"></span>
+        </div>*@
 
             <div class="confirm-button" style="text-align:right;margin-top:20px;">
+                <a class="btn btn-info btn-sm" href="/nguoi-dung/xac-thuc-tai-khoan"> Xác thực thông tin </a>
                 <button class="btn btn-primary btn-sm" onclick="updateInfoUser();">Cập nhật</button>
             </div>
         </div>
@@ -162,8 +179,68 @@
             if (CheckErrorResponse(rs) === false) return;
             if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
                 NotificationShow('Hệ thống đã gửi mã xác thực về email ' + email + ' của bạn', 'success');
+
+                SetCookie('ExpiryTime', rs.data.ExpiryTime);
+                SetCookie('Email', email);
                 verifyEmail = false;
+
+                countTime();
             }
+        }
+
+        var minutes = null;
+        var seconds = null;
+        var timeout = null;
+
+        function countTime() {
+
+            if (minutes == null) {
+                let ExpiryTime = GetCookie('ExpiryTime');
+
+                if (ExpiryTime === '') return;
+
+                let now = new Date();
+                ExpiryTime = parseInt(ExpiryTime);
+
+                if (ExpiryTime < now.getTime()) return;
+
+                let Email = GetCookie('Email');
+                $('#Email').val(Email);
+
+                if (ExpiryTime != '') {
+                    $('#Code').css('display', 'none');
+                    $('.timeCount').css('display', 'flex');            
+                }
+                
+                let countTime = ExpiryTime - now.getTime();
+
+                minutes = Math.floor(countTime / 60000);
+                seconds = ((countTime % 60000) / 1000).toFixed(0);
+            }
+
+            if (seconds === -1) {
+                minutes -= 1;
+                seconds = 59;
+            }
+
+            if (minutes == -1) {
+                clearTimeout(timeout);
+                $('#Code').css('display', 'block');
+                $('.timeCount').css('display', 'none');
+                return false;
+            }
+
+            if (seconds < 10) {
+                seconds = '0' + seconds;
+            }
+
+            $('#minute').text(minutes)
+            $('#second').text(seconds)
+
+            timeout = setTimeout(function () {
+                seconds--;
+                countTime();
+            }, 1000);
         }
 
         const VerifyEmailCode = async function () {
@@ -268,7 +345,7 @@
             if (verifyEmail === false || verifyPhone === false) {
                 Swal.fire({
                     icon: "error",
-                    title: "Bạn cần xác thực email hoặc số điện thoại.",
+                    title: "Bạn cần xác thực email.",
                 });
                 return;
             }
@@ -345,8 +422,9 @@
         }
 
 
-        const initPage = function () {
-            getUserInfo();
+        const initPage = async function () {
+            await getUserInfo();
+            countTime();
         }
         initPage();
     </script>
