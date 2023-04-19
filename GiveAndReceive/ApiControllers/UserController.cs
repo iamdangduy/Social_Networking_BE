@@ -188,6 +188,8 @@ namespace GiveAndReceive.ApiControllers
                         codeConfirm.CodeConfirmId = Guid.NewGuid().ToString();
                         codeConfirm.Email = email;
                         codeConfirm.Code = code.ToString();
+                        codeConfirm.CreateTime = HelperProvider.GetSeconds();
+                        codeConfirm.ExpiryTime = HelperProvider.GetSeconds(DateTime.Now.AddMinutes(5));
                         codeConfirmService.InsertCodeConfirm(codeConfirm, transaction);
 
                         if (!SMSProvider.SendOTPViaEmail(email, codeConfirm.Code, "Mã xác nhận", "")) return Error("Quá trình gửi gặp lỗi. Vui lòng thử lại sau");
@@ -223,7 +225,7 @@ namespace GiveAndReceive.ApiControllers
                         CodeConfirm codeConfirm = codeConfirmService.GetCodeConfirmByEmail(email, transaction);
                         if (codeConfirm == null) return Error("Mã xác nhận không chính xác.");
                         if (!codeConfirm.Code.Equals(code)) return Error("Mã xác nhận không chính xác.");
-                        if (codeConfirm.ExpiryTime < DateTime.Now) return Error("Mã xác nhận đã hết hạn.");
+                        if (codeConfirm.ExpiryTime < HelperProvider.GetSeconds(DateTime.Now)) return Error("Mã xác nhận đã hết hạn.");
                         transaction.Commit();
                         return Success();
                     }
