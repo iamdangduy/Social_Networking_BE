@@ -154,7 +154,7 @@ namespace GiveAndReceive.ApiControllers
 
                         if (!SMSProvider.SendOTPViaEmail(email, codeConfirm.Code, "Mã xác nhận","" )) return Error("Quá trình gửi gặp lỗi. Vui lòng thử lại sau");
                         transaction.Commit();
-                        return Success(new { codeConfirm.Code, codeConfirm.ExpiryTime });
+                        return Success(new { codeConfirm.ExpiryTime });
                     }
                 }
             }
