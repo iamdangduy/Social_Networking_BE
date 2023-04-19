@@ -343,7 +343,6 @@
             }
         }
 
-
         const deleteBankAccount = async function (el) {
             const id = $(el).data('id');
             Swal.fire({
@@ -356,6 +355,7 @@
                         headers: Enum.OptionAdminHeaderDefault
                     });
                     let rs = await rq.json();
+
                     if (AdminCheckErrorResponse(rs) === false) return;
                     if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
                         Swal.fire({
@@ -369,6 +369,7 @@
                     return;
                 }
             })
+
         }
 
         const initPage = async function () {
@@ -381,3 +382,8 @@
         initPage();
     </script>
 }
+
+
+
+
+
