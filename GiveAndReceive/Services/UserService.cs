@@ -32,6 +32,11 @@ namespace GiveAndReceive.Services
             string query = "select * from [user] where Phone = @Phone";
             return this._connection.Query<User>(query, new { Phone = phone }, transaction).FirstOrDefault();
         }
+        public User GetUserByEmail(string email, IDbTransaction transaction = null)
+        {
+            string query = "select * from [user] where Email = @email";
+            return this._connection.Query<User>(query, new { email }, transaction).FirstOrDefault();
+        }
 
         public User GetUserByToken(string Token, IDbTransaction transaction = null)
         {
