@@ -27,7 +27,7 @@ namespace GiveAndReceive.Areas.Admin.Services
             if (!string.IsNullOrEmpty(keyword))
             {
                 keyword = "%" + keyword.Replace(' ', '%') + "%";
-                query += " and (u.Phone like @keyword or u.Email like @keyword)";
+                query += " and (uwo.Code like @keyword)";
             }
 
             int totalRow = _connection.Query<int>(queryCount + query, new { keyword = keyword }, transaction).FirstOrDefault();
