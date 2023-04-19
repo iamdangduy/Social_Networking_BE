@@ -75,5 +75,32 @@ namespace GiveAndReceive.Services
             List<object> listData = this._connection.Query<object>(querySelect + query, new { userId, status }, transaction).ToList();
             return new { totalPage, listData };
         }
+
+
+        public object GetListUserQueueGive(string userId, IDbTransaction transaction = null)
+        {
+            string query = "select qgq.*, ug.UserId, ug.Name";
+            query += " from [queue_give_quest] qgq left join [queue_give] qg on qgq.QueueGiveId = qg.QueueGiveId";
+            query += " left join [queue_receive] qr on qgq.QueueReceiveId = qr.QueueReceiveId";
+            query += " left join [user] ug on qr.UserId = ug.UserId";
+            query += " where qg.UserId = @userId order by qgq.CreateTime desc";
+
+            List<object> listData = this._connection.Query<object>(query, new { userId }, transaction ).ToList();
+            return listData;
+        }
+
+        public object GetListUserQueueReceive(string userId, IDbTransaction transaction = null)
+        {
+            string query = "select qgq.*, ug.UserId, ug.Name";
+            query += " from [queue_give_quest] qgq left join [queue_receive] qr on qgq.QueueReceiveId = qr.QueueReceiveId";
+            query += " left join [queue_give] qg on qgq.QueueGiveId = qg.QueueGiveId";
+            query += " left join [user] ug on qg.UserId = ug.UserId";
+            query += " where qr.UserId = @userId order by qgq.CreateTime desc";
+
+
+            List<object> listData = this._connection.Query<object>(query, new { userId }, transaction).ToList();
+            return listData;
+        }
+
     }
 }

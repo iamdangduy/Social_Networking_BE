@@ -211,5 +211,40 @@ namespace GiveAndReceive.ApiControllers
                 return Error(ex.Message);
             }
         }
+
+
+        [HttpGet]
+        public JsonResult GetListUserQueueGive()
+        {
+            try
+            {
+                User user = UserProvider.GetUserFromRequestHeader(Request);
+
+                QueueGiveQuestService queueGiveQuestService = new QueueGiveQuestService();
+
+                return Success(queueGiveQuestService.GetListUserQueueGive(user.UserId));
+            }
+            catch (Exception ex)
+            {
+                return Error(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        public JsonResult GetListUserQueueReceive()
+        {
+            try
+            {
+                User user = UserProvider.GetUserFromRequestHeader(Request);
+
+                QueueGiveQuestService queueGiveQuestService = new QueueGiveQuestService();
+
+                return Success(queueGiveQuestService.GetListUserQueueReceive(user.UserId));
+            }
+            catch (Exception ex)
+            {
+                return Error(ex.Message);
+            }
+        }
     }
 }

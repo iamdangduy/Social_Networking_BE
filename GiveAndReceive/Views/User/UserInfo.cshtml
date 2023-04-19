@@ -6,11 +6,11 @@
 
 @section styles{
     <style>
-        section{
-            flex-direction:column;
+        section {
+            flex-direction: column;
         }
 
-        .verify-email-code i{
+        .verify-email-code i {
             color: green;
             background: none;
             border: none;
@@ -21,7 +21,6 @@
             background: none;
             border: none;
         }
-
     </style>
 }
 
@@ -129,8 +128,7 @@
             if (CheckErrorResponse(rs) === false) return;
 
             if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
-                console.log(rs.data);
-                rs.data.Phone = '0' + rs.data.Phone.substring(4);
+                if (GetObjectProperty(rs.data, 'Phone') !== '') rs.data.Phone = '0' + rs.data.Phone.substring(4);
                 $('.preview').css('background-image', `url(${rs.data.Avatar})`)
                 $('#Account').val(rs.data.Account);
                 $('#Email').val(rs.data.Email);
@@ -153,7 +151,7 @@
                     title: "Email không đúng định dạng",
                 })
                 return;
-            }           
+            }
             let rq = await fetch('/api/user/GetVerifyCodeEmail?email=' + email, {
                 method: 'get',
                 headers: {
@@ -163,6 +161,7 @@
             let rs = await rq.json();
             if (CheckErrorResponse(rs) === false) return;
             if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                NotificationShow('Hệ thống đã gửi mã xác thực về email ' + email + ' của bạn', 'success');
                 verifyEmail = false;
             }
         }
@@ -197,7 +196,7 @@
                 $('#message-email').html('Xác nhận thành công.').css('color', 'green');
                 verifyEmail = true;
             }
-        } 
+        }
 
         const GetPhoneCode = async function () {
             let phone = $('#Phone').val();
@@ -226,6 +225,7 @@
             let rs = await rq.json();
             if (CheckErrorResponse(rs) === false) return;
             if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                NotificationShow('Hệ thống đã gửi mã xác thực về số điện thoại của bạn', 'success');
                 verifyPhone = false;
             }
         }

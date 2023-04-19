@@ -120,7 +120,7 @@ namespace GiveAndReceive.BackgroundJobs
                 queueGiveQuest.QueueGiveQuestId = Guid.NewGuid().ToString();
                 queueGiveQuest.Status = QueueGiveQuest.EnumStatus.PENDING;
                 queueGiveQuest.Code = HelperProvider.MakeCode();
-                if (item.TotalExpectReceiveAmount == 0)
+                if (item.TotalExpectReceiveAmount == 0 && amountNeedGiveLeft == long.Parse(limitGive.Value))
                 {
                     queueGiveQuest.QueueReceiveId = randomBot.QueueReceiveId;
                     queueGiveQuest.AmountGive = 300000;
