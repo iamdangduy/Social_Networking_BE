@@ -18,7 +18,7 @@ namespace GiveAndReceive.Areas.Admin.ApiControllers
     public class AdminUserController : ApiAdminBaseController
     {
         [HttpGet]
-        public JsonResult GetListUser(int PageIndex = 1, string Keyword = "")
+        public JsonResult GetListUser(int PageIndex = 1, string Keyword = "", string Status = "")
         {
             try
             {
@@ -26,7 +26,7 @@ namespace GiveAndReceive.Areas.Admin.ApiControllers
                 if (userAdmin == null) return Unauthorized();
 
                 AdminUserService adminUserService = new AdminUserService();
-                return Success(adminUserService.GetListUser(PageIndex, Keyword), "Lấy dữ liệu thành công!");
+                return Success(adminUserService.GetListUser(PageIndex, Keyword, Status), "Lấy dữ liệu thành công!");
             }
             catch (Exception ex)
             {

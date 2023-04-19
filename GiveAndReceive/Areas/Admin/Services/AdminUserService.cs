@@ -14,17 +14,22 @@ namespace GiveAndReceive.Areas.Admin.Services
         public AdminUserService() : base() { }
         public AdminUserService(IDbConnection db) : base(db) { }
 
-        public object GetListUser(int PageIndex = 1, string Keyword = "")
+        public object GetListUser(int PageIndex = 1, string Keyword = "", string Status = "")
         {
             string queryCount = "select COUNT(*) ";
-            string querySelect = "select UserId, Name, Avatar, Email, Account ";
-            string queryWhere = "from [user] where 1=1";
+            string querySelect = "select u.UserId, u.Name, u.Avatar, u.Email, u.Account, up.IdentificationApprove, up.Status ";
+            string queryWhere = "from [user] u left join [user_properties] up on up.UserId = u.UserId where 1=1";
             if (!string.IsNullOrEmpty(Keyword))
             {
                 Keyword = "%" + Keyword.Replace(" ", "%") + "%";
                 queryWhere += "and Name like @Keyword ";
             }
-            int TotalRow = this._connection.Query<int>(queryCount + queryWhere, new { Keyword }).FirstOrDefault();
+
+            if (!string.IsNullOrEmpty(Status))
+            {
+                queryWhere += "and Status = @Status";
+            }
+            int TotalRow = this._connection.Query<int>(queryCount + queryWhere, new { Keyword, Status }).FirstOrDefault();
             int TotalPage = 0;
             if (TotalRow > 0)
             {
@@ -32,7 +37,7 @@ namespace GiveAndReceive.Areas.Admin.Services
             }
             int skip = (PageIndex - 1) * Constant.NUMBER.PAGE_SIZE;
             queryWhere += " order by CreateTime desc offset " + skip + " rows fetch next " + Constant.NUMBER.PAGE_SIZE + " rows only";
-            List<object> ListData = this._connection.Query<object>(querySelect + queryWhere, new { PageIndex, Keyword }).ToList();
+            List<object> ListData = this._connection.Query<object>(querySelect + queryWhere, new { PageIndex, Keyword, Status }).ToList();
             return new
             {
                 TotalPage,
