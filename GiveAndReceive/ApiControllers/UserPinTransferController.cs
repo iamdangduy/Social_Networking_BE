@@ -140,7 +140,7 @@ namespace GiveAndReceive.ApiControllers
                         UserWalletService userWalletService = new UserWalletService(connect);
                         UserPinTransferService userPinTransferService = new UserPinTransferService(connect);
 
-                        if (string.IsNullOrEmpty(model.Phone)) throw new Exception("Số điện thoại không được để trống.");
+                        if (string.IsNullOrEmpty(model.UserId)) throw new Exception("Bạn chưa chọn người dùng.");
                         if (model.Pin == null || model.Pin == 0) throw new Exception("Số pin phải lớn hơn 0 và không được để trống.");
 
                         // Kiểm tra pin trong ví người dùng
@@ -148,7 +148,7 @@ namespace GiveAndReceive.ApiControllers
                         if (userWallet.Pin < model.Pin) throw new Exception("Bạn không đủ pin để chuyển.");
 
                         // Kiểm tra người nhận có tồn tại không
-                        User userReceive = userService.GetUserByPhone(model.Phone, transaction);
+                        User userReceive = userService.GetUserById(model.UserId, transaction);
                         if (userReceive == null) throw new Exception("Người nhận không tồn tại.");
 
                         if (user.Depth == userReceive.Depth) throw new Exception("Bạn không thể chuyển vé cho người này.");
@@ -158,7 +158,7 @@ namespace GiveAndReceive.ApiControllers
                         if(user.Depth > userReceive.Depth)
                         {
                             user1 = userService.GetUserByShareCode(user.ParentCode, transaction);
-                            while (user1.Depth >= userReceive.Depth)
+                            while (user1 != null || user1.Depth >= userReceive.Depth)
                             {                                
                                 if(string.Compare(user1.UserId, userReceive.UserId) == 0)
                                 {
@@ -172,7 +172,7 @@ namespace GiveAndReceive.ApiControllers
                         else if(userReceive.Depth > user.Depth)
                         {
                             user1 = userService.GetUserByShareCode(userReceive.ParentCode, transaction);
-                            while (user1.Depth >= user.Depth)
+                            while (user1 != null || user1.Depth >= user.Depth)
                             {
                                 if (string.Compare(user1.UserId, user.UserId) == 0)
                                 {

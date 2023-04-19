@@ -358,8 +358,8 @@
                 Account: $('#Account').val(),
                 Email: $('#Email').val(),
                 EmailCode: $('#EmailCode').val(),
-                Phone: $('#Phone').val(),
-                PhoneCode: $('#PhoneCode').val()
+                Phone: $('#Phone1').val(),
+                Phone2: $('#Phone2').val(),
             }
 
             let accountProcess = RemoveVietnameseTones(model.Account);
@@ -373,6 +373,7 @@
             }
 
             model.Phone = '+84 ' + model.Phone.substr(1, 9);
+            model.Phone2 = '+84 ' + model.Phone2.substr(1, 9);
 
             let rq = await fetch(Enum.ApiUrl + '/api/User/UpdateInfoUser', {
                 method: 'post',

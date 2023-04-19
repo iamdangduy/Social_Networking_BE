@@ -123,6 +123,35 @@
                 opacity: 1;
             }
         }
+
+        .modal-body ul {
+            position: absolute;
+            background-color: #fff;
+            border: 0.5px solid #2222;
+            width: 100%;
+            max-height: 150px;
+            overflow: auto;
+            display: none;
+        }
+
+        .modal-body ul li{
+            text-align: left;
+            width: 100%;
+            padding: 5px 10px;
+        }
+
+        .modal-body ul li:hover{
+            background-color: #ccc;            
+        }
+
+        .modal-body ul li .user-receive{
+            font-size: 15px;
+
+        }
+
+        .modal-body ul li .user-content{
+            font-size: 12px;
+        }
     </style>
 }
 
@@ -245,10 +274,25 @@
     <div id="transferPinModal" class="modal" onclick="closeTransferPinModal()">
         <div class="modal-container">
             <div class="modal-header">Chuyển</div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label class="font-weight-semibold" for="withDraw">Số điện thoại</label>
-                    <input type="text" class="form-control" id="PhoneTransfer" placeholder="Số điện thoại">
+            <div class="modal-body">                
+                <div class="form-group" style="display:block;position: relative;">
+                    <input id="UserReceiveId" hidden />
+                    <label class="font-weight-semibold" for="withDraw">Người nhận</label>
+                    <input type="text" class="form-control" id="searchUser" placeholder="Tìm kiếm theo tài khoản hoặc email" onfocus="getListUser();" onkeyup="getListUser();" onfocusout="searchUser_focusOut();">
+                    <ul id="list-user-receive">
+                        <li>
+                            <div class="user-receive">
+                                <div><span>Bui Mai Linh</span></div>
+                                <span class="user-content">Mai Linh - builinh@gmail.com</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="user-receive">
+                                <div><span>Bui Mai Linh</span></div>
+                                <span class="user-content">Mai Linh - builinh@gmail.com</span>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
                 <div class="form-group">
                     <label class="font-weight-semibold" for="withDraw">Số vé</label>
@@ -471,18 +515,18 @@
             $('#transferPinModal').css('display', 'none'); 
             $('#PhoneTransfer').val('');
             $('#PinTransfer').val('');
+            $('#list-user-receive').css('display', 'none');
         }
 
         const TransferPinModal = async function () {
             let model = {
-                Phone: $('#PhoneTransfer').val(),
+                UserId: $('#UserReceiveId').val(),
                 Pin: $('#PinTransfer').val()
             };
 
-            if (GetObjectProperty(model, 'Phone') === '') { alert('Số điện thoại không được để trống'); return; }
-            if (GetObjectProperty(model, 'Pin') === '') { alert('Số pin không được để trống'); return; }
+            if (GetObjectProperty(model, 'UserId') === '') { alert('Bạn chưa chọn người nhận.'); return; }
+            if (GetObjectProperty(model, 'Pin') === '') { alert('Số pin không được để trống.'); return; }
 
-            model.Phone = '+84 ' + model.Phone.substr(1, 9);
 
             console.log(model);
 
@@ -499,6 +543,46 @@
             if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
                 window.location.reload();
             }
+        }
+
+
+        const getListUser = async function () {
+            $('#list-user-receive').css('display', 'block');
+            $('#list-user-receive').html('');
+            var keyword = $('#searchUser').val();
+            let rq = await fetch('/api/User/GetListUser?keyword=' + keyword, {
+                method: 'get',
+                headers: Enum.OptionHeaderDefault
+            })
+            let rs = await rq.json();
+            if (CheckErrorResponse(rs) === false) {
+                return;
+            }
+            if (GetObjectProperty(rs, 'status') === Enum.ResponseStatus.SUCCESS) {
+                let html = '';
+                for (let index = 0; index < rs.data.length; index++) {
+                    html += `<li data-id="${rs.data[index].UserId}" data-name="${rs.data[index].Name}" onclick="getUser_onClick(this);"><div class="user-receive">`;
+                    
+                    html += `<div><span>${rs.data[index].Name} </span></div>`;
+                    if (GetObjectProperty(rs.data[index], 'Account') || GetObjectProperty(rs.data[index], 'Email')) {
+                        html += `<span class="user-content">${GetObjectProperty(rs.data[index], 'Account')}`;
+                        if (GetObjectProperty(rs.data[index], 'Email'))
+                        html += ` - ${GetObjectProperty(rs.data[index], 'Email')} </span>`;
+                    }
+                    html += `</div></li>`;
+                    
+                }
+                $('#list-user-receive').append(html);
+            }
+        }
+
+        const getUser_onClick = function (el) {
+            var name = $(el).data('name');
+            $('#searchUser').val(name);
+            var id = $(el).data('id');
+            $('#UserReceiveId').val(id);
+            console.log(name);
+            $('#list-user-receive').css('display', 'none');
         }
 
         const InitPage = async function () {

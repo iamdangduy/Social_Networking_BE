@@ -13,6 +13,8 @@ namespace GiveAndReceive.Models
         public string ShareCode { get; set; }
         public string ParentCode { get; set; }
         public int Depth { get; set; }
+        public string Phone2 { get; set; }
+        public string Address { get; set; }
     }
     public class UserLoginPost
     {
@@ -33,8 +35,9 @@ namespace GiveAndReceive.Models
         public string Account { get; set; }
         public string Phone { get; set; }
         public string Email { get; set; }
-        public string PhoneCode { get; set; }
         public string EmailCode { get; set; }
+        public string Phone2 { get; set; }
+        public string Address { get; set; }
     }
 
 }

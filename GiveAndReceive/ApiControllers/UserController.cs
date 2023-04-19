@@ -88,6 +88,8 @@ namespace GiveAndReceive.ApiControllers
                             userService.CheckAccountExist(user.Account, user.UserId, transaction);
                         }
 
+                        user.Name = model.Name;
+
                         if (!string.IsNullOrEmpty(model.Email))
                         {
                             userService.CheckEmailExist(model.Email, user.UserId, transaction);
@@ -99,18 +101,12 @@ namespace GiveAndReceive.ApiControllers
                             }
                             user.Email = model.Email.Trim();
                         }
-                        if (!string.IsNullOrEmpty(model.Phone))
-                        {
-                            userService.CheckUserPhoneExist(model.Phone, user.UserId, transaction);
-                            if (model.Phone != user.Phone)
-                            {
-                                if (string.IsNullOrEmpty(model.PhoneCode)) throw new Exception("Bạn chưa nhập mã xác thực số điện thoại");
-                                CodeConfirm phoneCode = codeConfirmService.GetCodeConfirmByPhone(model.Phone, transaction);
-                                if (phoneCode.Code != model.PhoneCode) throw new Exception("Mã xác thực không chính xác");
-                            }
+                        
+                        user.Phone = model.Phone.Trim();
 
-                            user.Phone = model.Phone.Trim();
-                        }
+                        user.Phone2 = model.Phone2.Trim();
+
+                        user.Address = model.Address;
 
                         userService.UpdateUser(user, transaction);
 
@@ -154,7 +150,7 @@ namespace GiveAndReceive.ApiControllers
 
                         if (!SMSProvider.SendOTPViaEmail(email, codeConfirm.Code, "Mã xác nhận","" )) return Error("Quá trình gửi gặp lỗi. Vui lòng thử lại sau");
                         transaction.Commit();
-                        return Success(new { codeConfirm.Code, codeConfirm.ExpiryTime });
+                        return Success(new { codeConfirm.ExpiryTime });
                     }
                 }
             }
@@ -190,6 +186,8 @@ namespace GiveAndReceive.ApiControllers
                         codeConfirm.CodeConfirmId = Guid.NewGuid().ToString();
                         codeConfirm.Email = email;
                         codeConfirm.Code = code.ToString();
+                        codeConfirm.CreateTime = HelperProvider.GetSeconds();
+                        codeConfirm.ExpiryTime = HelperProvider.GetSeconds(DateTime.Now.AddMinutes(5));
                         codeConfirmService.InsertCodeConfirm(codeConfirm, transaction);
 
                         if (!SMSProvider.SendOTPViaEmail(email, codeConfirm.Code, "Mã xác nhận", "")) return Error("Quá trình gửi gặp lỗi. Vui lòng thử lại sau");
@@ -225,7 +223,7 @@ namespace GiveAndReceive.ApiControllers
                         CodeConfirm codeConfirm = codeConfirmService.GetCodeConfirmByEmail(email, transaction);
                         if (codeConfirm == null) return Error("Mã xác nhận không chính xác.");
                         if (!codeConfirm.Code.Equals(code)) return Error("Mã xác nhận không chính xác.");
-                        /*if (codeConfirm.ExpiryTime < DateTime.Now) return Error("Mã xác nhận đã hết hạn.");*/
+                        if (codeConfirm.ExpiryTime < HelperProvider.GetSeconds(DateTime.Now)) return Error("Mã xác nhận đã hết hạn.");
                         transaction.Commit();
                         return Success();
                     }
@@ -538,6 +536,19 @@ namespace GiveAndReceive.ApiControllers
             }
         }
 
-        
+        [HttpGet]
+        public JsonResult GetListUser(string keyword)
+        {
+            try
+            {
+                UserService userService = new UserService();
+                return Success(userService.GetListUserTransferPin(keyword));
+            }
+            catch(Exception ex)
+            {
+                return Error(ex.Message);
+            }
+        }
+
     }
 }

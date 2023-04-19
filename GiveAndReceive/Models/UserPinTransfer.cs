@@ -17,7 +17,7 @@ namespace GiveAndReceive.Models
 
     public class TransferPin
     {
-        public string Phone { get; set; }
+        public string UserId { get; set; }
         public int Pin { get; set; }
     }
 }
