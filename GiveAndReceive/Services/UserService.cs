@@ -175,5 +175,16 @@ namespace GiveAndReceive.Services
             int status = this._connection.Execute(query, user, transaction);
             if (status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
         }
+
+        public List<User> GetListUserTransferPin(string keyword, IDbTransaction transaction = null)
+        {
+            string query = "select UserId, Name, Account, Phone, Email from [user] where 1=1 and ShareCode <> ''";
+            if(!string.IsNullOrEmpty(keyword))
+            {
+                keyword = "%" + keyword.Replace(" ","%") + "%";
+                query += " and (Account like @keyword or Email like @keyword)";
+            }
+            return this._connection.Query<User>(query, new { keyword }, transaction).ToList();
+        }
     }
 }

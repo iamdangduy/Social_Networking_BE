@@ -540,6 +540,19 @@ namespace GiveAndReceive.ApiControllers
             }
         }
 
-        
+        [HttpGet]
+        public JsonResult GetListUser(string keyword)
+        {
+            try
+            {
+                UserService userService = new UserService();
+                return Success(userService.GetListUserTransferPin(keyword));
+            }
+            catch(Exception ex)
+            {
+                return Error(ex.Message);
+            }
+        }
+
     }
 }
