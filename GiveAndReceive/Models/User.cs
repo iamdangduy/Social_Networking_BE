@@ -13,6 +13,8 @@ namespace GiveAndReceive.Models
         public string ShareCode { get; set; }
         public string ParentCode { get; set; }
         public int Depth { get; set; }
+        public string Phone2 { get; set; }
+        public string Address { get; set; }
     }
     public class UserLoginPost
     {
