@@ -186,8 +186,6 @@ namespace GiveAndReceive.ApiControllers
                         codeConfirm.CodeConfirmId = Guid.NewGuid().ToString();
                         codeConfirm.Email = email;
                         codeConfirm.Code = code.ToString();
-                        codeConfirm.CreateTime = HelperProvider.GetSeconds();
-                        codeConfirm.ExpiryTime = HelperProvider.GetSeconds(DateTime.Now.AddMinutes(5));
                         codeConfirmService.InsertCodeConfirm(codeConfirm, transaction);
 
                         if (!SMSProvider.SendOTPViaEmail(email, codeConfirm.Code, "Mã xác nhận", "")) return Error("Quá trình gửi gặp lỗi. Vui lòng thử lại sau");
@@ -223,7 +221,7 @@ namespace GiveAndReceive.ApiControllers
                         CodeConfirm codeConfirm = codeConfirmService.GetCodeConfirmByEmail(email, transaction);
                         if (codeConfirm == null) return Error("Mã xác nhận không chính xác.");
                         if (!codeConfirm.Code.Equals(code)) return Error("Mã xác nhận không chính xác.");
-                        if (codeConfirm.ExpiryTime < HelperProvider.GetSeconds(DateTime.Now)) return Error("Mã xác nhận đã hết hạn.");
+                        /*if (codeConfirm.ExpiryTime < DateTime.Now) return Error("Mã xác nhận đã hết hạn.");*/
                         transaction.Commit();
                         return Success();
                     }
@@ -471,9 +469,8 @@ namespace GiveAndReceive.ApiControllers
                 UserService userService = new UserService();
                 User user = userService.GetUserByToken(token);
                 if (user == null) return Unauthorized();
-
-                User userInfor = userService.GetUserInfo(user.UserId);
-                return Success(userInfor);
+                user.Password = "";
+                return Success(user);
             }
             catch (Exception ex)
             {
@@ -536,19 +533,6 @@ namespace GiveAndReceive.ApiControllers
             }
         }
 
-        [HttpGet]
-        public JsonResult GetListUser(string keyword)
-        {
-            try
-            {
-                UserService userService = new UserService();
-                return Success(userService.GetListUserTransferPin(keyword));
-            }
-            catch(Exception ex)
-            {
-                return Error(ex.Message);
-            }
-        }
-
+        
     }
 }
