@@ -26,7 +26,7 @@ namespace GiveAndReceive.Services
         }
         public int CountCodeConfirmOfEOPIn24Hours(string phone, IDbTransaction transaction = null)
         {
-            string query = "select count(*) from code_confirm where Phone = @phone and CreateTime between DATEADD(hh,-24,GETDATE()) and GETDATE()";
+            string query = "select count(*) from code_confirm where Phone = @phone and CreateTime between (DATEADD(hh,-24,GETDATE()) and GETDATE())";
             return this._connection.Query<int>(query, new { phone = phone }, transaction).FirstOrDefault();
         }
 
