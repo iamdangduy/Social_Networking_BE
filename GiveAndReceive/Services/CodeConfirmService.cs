@@ -15,7 +15,7 @@ namespace GiveAndReceive.Services
         public CodeConfirmService(IDbConnection db) : base(db) { }
         public void InsertCodeConfirm(CodeConfirm codeConfirm, IDbTransaction transaction = null)
         {
-            string insert = "INSERT INTO [dbo].[code_confirm] ([CodeConfirmId],[Email],[Code],[ExpiryTime],[CreateTime]) VALUES (@CodeConfirmId,@Email,@Code,DATEADD(mi,5,GETDATE()),@CreateTime)";
+            string insert = "INSERT INTO [dbo].[code_confirm] ([CodeConfirmId],[Email],[Code],[ExpiryTime],[CreateTime]) VALUES (@CodeConfirmId,@Email,@Code,@ExpiryTime,@CreateTime)";
             int status = this._connection.Execute(insert, codeConfirm, transaction);
             if (status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
         }
