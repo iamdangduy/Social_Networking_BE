@@ -88,14 +88,16 @@
                                     <option value="5">Phó giám đốc</option>
                                     <option value="6">Giám đốc</option>
                                 </select>
-                            </div>
-
-                            <div class="search-active">
-                                <select id="isEnable" class="form-control" onchange="getListUser()">
-                                    <option value="true">Đang kích hoạt</option>
-                                    <option value="false">Chưa kích hoạt</option>
-                                </select>
                             </div>*@
+
+                            <div class="search-active" style="width:200px">
+                                <select id="status" class="form-control" onchange="getListUser()">
+                                    <option value="">Tất cả</option>
+                                    <option value="DONE">Đã xác minh</option>
+                                    <option value="CANCEL">Chưa xác minh</option>
+                                    <option value="PENDING">Đã gửi thông tin</option>
+                                </select>
+                            </div>
                         </div>
                         <div class="table-responsive" style="padding:15px;">
                             <table class="table table-hover">
@@ -147,9 +149,10 @@
             _currentPage = page;
             let keyword = $('#keyword').val();
             if (keyword != '') keyword = RemoveVietnameseTones(keyword);
+            let status = $('#status').val();
 
             //gọi api ở admin
-            let rq = await fetch(Enum.ApiUrl + '/api/AdminUser/GetListUser?PageIndex=' + page +'&Keyword=' + keyword, {
+            let rq = await fetch(Enum.ApiUrl + '/api/AdminUser/GetListUser?PageIndex=' + page +'&Keyword=' + keyword + '&Status=' + status, {
                 method: 'get',
                 headers: Enum.OptionAdminHeaderDefault
             });
