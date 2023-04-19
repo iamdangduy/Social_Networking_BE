@@ -88,6 +88,8 @@ namespace GiveAndReceive.ApiControllers
                             userService.CheckAccountExist(user.Account, user.UserId, transaction);
                         }
 
+                        user.Name = model.Name;
+
                         if (!string.IsNullOrEmpty(model.Email))
                         {
                             userService.CheckEmailExist(model.Email, user.UserId, transaction);
@@ -99,18 +101,12 @@ namespace GiveAndReceive.ApiControllers
                             }
                             user.Email = model.Email.Trim();
                         }
-                        if (!string.IsNullOrEmpty(model.Phone))
-                        {
-                            userService.CheckUserPhoneExist(model.Phone, user.UserId, transaction);
-                            if (model.Phone != user.Phone)
-                            {
-                                if (string.IsNullOrEmpty(model.PhoneCode)) throw new Exception("Bạn chưa nhập mã xác thực số điện thoại");
-                                CodeConfirm phoneCode = codeConfirmService.GetCodeConfirmByPhone(model.Phone, transaction);
-                                if (phoneCode.Code != model.PhoneCode) throw new Exception("Mã xác thực không chính xác");
-                            }
+                        
+                        user.Phone = model.Phone.Trim();
 
-                            user.Phone = model.Phone.Trim();
-                        }
+                        user.Phone2 = model.Phone2.Trim();
+
+                        user.Address = model.Address;
 
                         userService.UpdateUser(user, transaction);
 

@@ -66,7 +66,7 @@ namespace GiveAndReceive.Services
 
         public void UpdateUser(User model, IDbTransaction transaction = null)
         {
-            string query = "UPDATE [dbo].[user] SET [Name]=@Name,[Avatar]=@Avatar,[Account]=@Account,[Phone]=@Phone,[Email]=@Email WHERE [UserId]=@UserId";
+            string query = "UPDATE [dbo].[user] SET [Name]=@Name,[Avatar]=@Avatar,[Account]=@Account,[Phone]=@Phone,[Email]=@Email,[Phone2]=@Phone2,[Address]=@Address WHERE [UserId]=@UserId";
             int status = this._connection.Execute(query, model, transaction);
             if (status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
         }
@@ -165,7 +165,7 @@ namespace GiveAndReceive.Services
 
         public List<User> GetListUserByShareCode(string code, IDbTransaction transaction = null)
         {
-            string query = "select * from [user] where ParentCode=@code";
+            string query = "select Name, Account, Avatar, Phone, Email, Phone2, Address from [user] where ParentCode=@code";
             return this._connection.Query<User>(query, new { code = code }, transaction).ToList();
         }
 

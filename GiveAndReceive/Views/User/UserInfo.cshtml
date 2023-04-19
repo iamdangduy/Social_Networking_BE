@@ -370,6 +370,7 @@
             }
 
             model.Phone = '+84 ' + model.Phone.substr(1, 9);
+            model.Phone2 = '+84 ' + model.Phone2.substr(1, 9);
 
             let rq = await fetch(Enum.ApiUrl + '/api/User/UpdateInfoUser', {
                 method: 'post',
