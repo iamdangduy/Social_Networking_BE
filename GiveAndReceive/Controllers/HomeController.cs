@@ -36,9 +36,6 @@ namespace GiveAndReceive.Controllers
         [Route("gioi-thieu")]
         public ActionResult AboutUs()
         {
-            SystemAboutService systemAboutService = new SystemAboutService();
-            SystemAbout systemAbout = systemAboutService.GetSystemAbout();
-            ViewBag.SystemAbout = systemAbout;
             return View();
         }
 

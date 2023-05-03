@@ -101,10 +101,9 @@ namespace GiveAndReceive.ApiControllers
                             }
                             user.Email = model.Email.Trim();
                         }
-                        
+
                         user.Phone = model.Phone.Trim();
 
-                        user.Phone2 = model.Phone2.Trim();
 
                         user.Address = model.Address;
 
@@ -135,10 +134,10 @@ namespace GiveAndReceive.ApiControllers
                     connect.Open();
                     using (var transaction = connect.BeginTransaction())
                     {
-                       
+
                         CodeConfirmService codeConfirmService = new CodeConfirmService(connect);
                         DateTime now = DateTime.Now;
-                        Random rnd = new Random();  
+                        Random rnd = new Random();
                         int code = rnd.Next(100000, 999999);
                         CodeConfirm codeConfirm = new CodeConfirm();
                         codeConfirm.CodeConfirmId = Guid.NewGuid().ToString();
@@ -148,7 +147,7 @@ namespace GiveAndReceive.ApiControllers
                         codeConfirm.Code = code.ToString();
                         codeConfirmService.InsertCodeConfirm(codeConfirm, transaction);
 
-                        if (!SMSProvider.SendOTPViaEmail(email, codeConfirm.Code, "Mã xác nhận","" )) return Error("Quá trình gửi gặp lỗi. Vui lòng thử lại sau");
+                        if (!SMSProvider.SendOTPViaEmail(email, codeConfirm.Code, "Mã xác nhận", "")) return Error("Quá trình gửi gặp lỗi. Vui lòng thử lại sau");
                         transaction.Commit();
                         return Success(new { codeConfirm.ExpiryTime });
                     }
@@ -264,7 +263,7 @@ namespace GiveAndReceive.ApiControllers
             }
         }
 
-        
+
 
         [HttpGet]
         [AllowAnonymous]
@@ -312,10 +311,10 @@ namespace GiveAndReceive.ApiControllers
                         UserService userService = new UserService(connect);
                         UserWalletService userWalletService = new UserWalletService(connect);
                         UserPropertiesService userPropertiesService = new UserPropertiesService(connect);
-                        if (string.IsNullOrEmpty(userRequest.Account)) return Error("Tên tài khoản không được để trống.");
                         if (string.IsNullOrEmpty(userRequest.Name)) return Error("Họ và tên không được để trống.");
+                        if (string.IsNullOrEmpty(userRequest.Email)) return Error("Email không được để trống.");
                         if (string.IsNullOrEmpty(userRequest.Password)) return Error("Mật khẩu không được để trống.");
-
+                
                         User checkAccount = userService.GetUserByAccount(userRequest.Account, transaction);
                         if (checkAccount != null) throw new Exception("Tên tài khoản đã có người sử dụng");
 
@@ -323,32 +322,14 @@ namespace GiveAndReceive.ApiControllers
                         user.UserId = Guid.NewGuid().ToString();
                         user.Password = SecurityProvider.EncodePassword(user.UserId, userRequest.Password);
                         user.Name = userRequest.Name.Trim();
+                        user.Email = userRequest.Email.Trim();
+                        //user.DateOfBirth = HelperProvider.GetSeconds(userRequest.DateOfBirth);
+
                         user.CreateTime = HelperProvider.GetSeconds();
                         user.Account = userRequest.Account;
-                        if (!string.IsNullOrEmpty(userRequest.ParentCode))
-                        {
-                            User parent = userService.GetUserByShareCode(userRequest.ParentCode, transaction);
-                            if (parent == null) throw new Exception("Mã giới thiệu không hợp lệ");
-                            user.ParentCode = userRequest.ParentCode;
-                            user.ShareCode = HelperProvider.MakeCode();
-                        }
-                       
+
                         userService.InsertUser(user, transaction);
 
-                        UserProperties userProperties = new UserProperties();
-                        userProperties.UserId = user.UserId;
-                        userProperties.RankId = 0;
-                        userProperties.IdentificationApprove = false;
-                        userProperties.TotalAmountGive = 0;
-                        userProperties.TotalAmountReceive = 0;
-                        userProperties.Status = UserProperties.EnumStatus.CANCEL;
-                        userPropertiesService.CreateUserProperties(userProperties, transaction);
-
-                        UserWallet userWallet = new UserWallet();
-                        userWallet.UserId = user.UserId;
-                        userWallet.Balance = 0;
-                        userWallet.Pin = 0;
-                        userWalletService.InsertUserWallet(userWallet, transaction);
 
                         transaction.Commit();
                         return Success();
@@ -387,7 +368,7 @@ namespace GiveAndReceive.ApiControllers
                         DateTime now = DateTime.Now;
                         UserToken userToken = new UserToken();
                         userToken.CreateTime = HelperProvider.GetSeconds(now);
-                        userToken.ExpireTime=HelperProvider.GetSeconds(now.AddDays(7));
+                        userToken.ExpireTime = HelperProvider.GetSeconds(now.AddDays(7));
                         userToken.Token = token;
                         userToken.UserId = userLogin.UserId;
                         userToken.UserTokenId = Guid.NewGuid().ToString();
@@ -419,7 +400,7 @@ namespace GiveAndReceive.ApiControllers
             }
         }
 
-       
+
         [HttpGet]
         [AllowAnonymous]
         public JsonResult ForgotPassword(string email, string code, string newPassword)
@@ -478,61 +459,7 @@ namespace GiveAndReceive.ApiControllers
             }
         }
 
-        [HttpGet]
-        public JsonResult GetListConnectMember()
-        {
-            try
-            {
-                string token = Request.Headers.Authorization.ToString();
-                UserService userService = new UserService();
-                User user = userService.GetUserByToken(token);
-                if (user == null) return Unauthorized();
 
-                if (user.ShareCode == null) throw new Exception("Người dùng này không có mã giới thiệu");
 
-                return Success(userService.GetListUserByShareCode(user.ShareCode));
-            }
-            catch(Exception ex)
-            {
-                return Error(ex.Message);
-            }
-        }
-
-        [HttpGet]
-        public JsonResult ConnectMember(string code)
-        {
-            try
-            {
-                using(var connect = BaseService.Connect())
-                {
-                    connect.Open();
-                    using(var transaction = connect.BeginTransaction())
-                    {
-                        string token = Request.Headers.Authorization.ToString();
-                        UserService userService = new UserService(connect);
-                        User user = userService.GetUserByToken(token, transaction);
-                        if (user == null) return Unauthorized();
-
-                        user.ShareCode = HelperProvider.MakeCode();
-                        user.ParentCode = code;
-                        User user1 = userService.GetUserByShareCode(user.ParentCode, transaction);
-                        if (user1 == null) throw new Exception("Mã giới thiệu không đúng.");
-                        user.Depth = user1.Depth + 1;
-
-                        userService.UpdateUserCode(user, transaction);
-
-                        transaction.Commit();
-                        return Success();
-                    }
-                }
-                
-            }
-            catch (Exception ex)
-            {
-                return Error(ex.Message);
-            }
-        }
-
-        
     }
 }

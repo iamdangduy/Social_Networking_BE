@@ -108,8 +108,8 @@ namespace GiveAndReceive.Services
 
         public void InsertUser(User user, IDbTransaction transaction = null)
         {
-            string query = "INSERT INTO [dbo].[user] ([UserId],[Name],[Avatar],[Account],[Email],[Phone],[Password],[ShareCode],[ParentCode],[CreateTime])" +
-                " VALUES (@UserId, @Name, @Avatar, @Account, @Email, @Phone, @Password, @ShareCode, @ParentCode, @CreateTime)";
+            string query = "INSERT INTO [dbo].[user] ([UserId],[Name],[Avatar],[Account],[Email],[Phone],[Password],[CreateTime])" +
+                " VALUES (@UserId, @Name, @Avatar, @Account, @Email, @Phone, @Password, @CreateTime)";
             int status = this._connection.Execute(query, user, transaction);
             if (status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
         }

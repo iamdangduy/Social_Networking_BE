@@ -6,10 +6,12 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Cors;
 
 namespace GiveAndReceive.ApiControllers
 {
     [ApiTokenRequire]
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class ApiBaseController : ApiController
     {
         [HttpGet]
@@ -20,7 +22,7 @@ namespace GiveAndReceive.ApiControllers
 
 
         [HttpGet]
-        
+
         public JsonResult Error(string message = "")
         {
             return new JsonResult { status = JsonResult.Status.ERROR, data = null, message = message };
@@ -28,14 +30,14 @@ namespace GiveAndReceive.ApiControllers
 
 
         [HttpGet]
-        
+
         public JsonResult Unauthorized()
         {
             return new JsonResult { status = JsonResult.Status.UNAUTHORIZED, data = null, message = JsonResult.Message.NO_PERMISSION };
         }
 
         [HttpGet]
-        
+
         public JsonResult Unauthenticated()
         {
             return new JsonResult { status = JsonResult.Status.UNAUTHENTICATED, data = null, message = JsonResult.Message.TOKEN_EXPIRED };

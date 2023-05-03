@@ -14,7 +14,6 @@ using System.Web.Razor.Tokenizer.Symbols;
 
 namespace GiveAndReceive.Areas.Admin.ApiControllers
 {
-    [ApiAdminTokenRequire]
     public class AdminUserController : ApiAdminBaseController
     {
         [HttpGet]
@@ -52,19 +51,18 @@ namespace GiveAndReceive.Areas.Admin.ApiControllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public JsonResult GetTotalUser()
         {
             try
             {
-                UserAdmin userAdmin = SecurityProvider.GetUserAdminByToken(Request);
-                if (userAdmin == null) return Unauthorized();
-
                 AdminUserService adminUserService = new AdminUserService();
                 return Success(adminUserService.GetTotalUser(), "Lấy dữ liệu thành công!");
             }
             catch (Exception ex)
             {
-                return Error(ex.Message);            }
+                return Error(ex.Message);
+            }
         }
     }
 }

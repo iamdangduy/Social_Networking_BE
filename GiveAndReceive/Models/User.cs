@@ -9,11 +9,9 @@ namespace GiveAndReceive.Models
         public string Phone { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
+        public long DateOfBirth { get; set; }
+        public string Gender { get; set; }
         public long CreateTime { get; set; }
-        public string ShareCode { get; set; }
-        public string ParentCode { get; set; }
-        public int Depth { get; set; }
-        public string Phone2 { get; set; }
         public string Address { get; set; }
     }
     public class UserLoginPost
