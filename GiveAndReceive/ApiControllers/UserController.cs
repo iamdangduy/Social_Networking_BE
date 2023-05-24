@@ -102,7 +102,7 @@ namespace GiveAndReceive.ApiControllers
                             user.Email = model.Email.Trim();
                         }
 
-                        user.Phone = model.Phone.Trim();
+                        //user.Phone = model.Phone.Trim();
 
 
                         user.Address = model.Address;
@@ -263,8 +263,6 @@ namespace GiveAndReceive.ApiControllers
             }
         }
 
-
-
         [HttpGet]
         [AllowAnonymous]
         public JsonResult ConfirmCode(string phone, string code)
@@ -314,19 +312,22 @@ namespace GiveAndReceive.ApiControllers
                         if (string.IsNullOrEmpty(userRequest.Name)) return Error("Họ và tên không được để trống.");
                         if (string.IsNullOrEmpty(userRequest.Email)) return Error("Email không được để trống.");
                         if (string.IsNullOrEmpty(userRequest.Password)) return Error("Mật khẩu không được để trống.");
-                
-                        User checkAccount = userService.GetUserByAccount(userRequest.Account, transaction);
+
+                        User checkAccount = userService.GetUserByAccount(userRequest.Email, transaction);
                         if (checkAccount != null) throw new Exception("Tên tài khoản đã có người sử dụng");
 
                         User user = new User();
                         user.UserId = Guid.NewGuid().ToString();
                         user.Password = SecurityProvider.EncodePassword(user.UserId, userRequest.Password);
+                        user.DateOfBirth = userRequest.DateOfBirth;
+                        user.Gender = userRequest.Gender;
                         user.Name = userRequest.Name.Trim();
                         user.Email = userRequest.Email.Trim();
+                        user.Account = userRequest.Email.Trim();
                         //user.DateOfBirth = HelperProvider.GetSeconds(userRequest.DateOfBirth);
 
                         user.CreateTime = HelperProvider.GetSeconds();
-                        user.Account = userRequest.Account;
+                        user.Account = userRequest.Email;
 
                         userService.InsertUser(user, transaction);
 
@@ -353,10 +354,10 @@ namespace GiveAndReceive.ApiControllers
                     connect.Open();
                     using (var transaction = connect.BeginTransaction())
                     {
-                        if (string.IsNullOrEmpty(model.Account) || string.IsNullOrEmpty(model.Password)) return Error(JsonResult.Message.LOGIN_ACCOUNT_OR_PASSWORD_EMPTY);
+                        if (string.IsNullOrEmpty(model.Email) || string.IsNullOrEmpty(model.Password)) return Error(JsonResult.Message.LOGIN_ACCOUNT_OR_PASSWORD_EMPTY);
                         UserService userService = new UserService(connect);
 
-                        User userLogin = userService.GetUserByEmailOrPhoneOrAccount(model.Account, transaction);
+                        User userLogin = userService.GetUserByEmailOrPhoneOrAccount(model.Email, transaction);
                         if (userLogin == null) throw new Exception(JsonResult.Message.LOGIN_ACCOUNT_OR_PASSWORD_INCORRECT);
 
                         string password = SecurityProvider.EncodePassword(userLogin.UserId, model.Password);
@@ -400,7 +401,6 @@ namespace GiveAndReceive.ApiControllers
             }
         }
 
-
         [HttpGet]
         [AllowAnonymous]
         public JsonResult ForgotPassword(string email, string code, string newPassword)
@@ -442,6 +442,7 @@ namespace GiveAndReceive.ApiControllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public JsonResult GetInforUser()
         {
             try
@@ -459,7 +460,20 @@ namespace GiveAndReceive.ApiControllers
             }
         }
 
-
+        [HttpGet]
+        [AllowAnonymous]
+        public JsonResult GetListUserByName(string UserName)
+        {
+            try
+            {
+                UserService userService = new UserService();
+                return Success(userService.GetListUserByName(UserName), "Lấy dữ liệu thành công!");
+            }
+            catch (Exception ex)
+            {
+                return Error(ex.Message);
+            }
+        }
 
     }
 }

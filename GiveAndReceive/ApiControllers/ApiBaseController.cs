@@ -20,28 +20,24 @@ namespace GiveAndReceive.ApiControllers
             return new JsonResult { status = JsonResult.Status.SUCCESS, data = data, message = message };
         }
 
-
         [HttpGet]
-
         public JsonResult Error(string message = "")
         {
             return new JsonResult { status = JsonResult.Status.ERROR, data = null, message = message };
         }
 
-
         [HttpGet]
-
         public JsonResult Unauthorized()
         {
             return new JsonResult { status = JsonResult.Status.UNAUTHORIZED, data = null, message = JsonResult.Message.NO_PERMISSION };
         }
 
         [HttpGet]
-
         public JsonResult Unauthenticated()
         {
             return new JsonResult { status = JsonResult.Status.UNAUTHENTICATED, data = null, message = JsonResult.Message.TOKEN_EXPIRED };
         }
+
 
     }
 }

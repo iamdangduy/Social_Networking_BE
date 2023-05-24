@@ -20,12 +20,12 @@ namespace GiveAndReceive.Areas.Admin.ApiControllers
         {
             try
             {
-                if (string.IsNullOrEmpty(model.Account)) return Error("Tài khoản không được để trống.");
+                if (string.IsNullOrEmpty(model.Email)) return Error("Tài khoản không được để trống.");
                 if (string.IsNullOrEmpty(model.Password)) return Error("Mật khẩu không được để trống.");
 
                 UserAdminService adminService = new UserAdminService();
 
-                UserAdmin admin = adminService.GetUserAdminByAccount(model.Account);
+                UserAdmin admin = adminService.GetUserAdminByAccount(model.Email);
                 if (admin == null) return Error("Sai tài khoản hoặc mật khẩu.");
 
                 string password = SecurityProvider.EncodePassword(admin.UserAdminId, model.Password);

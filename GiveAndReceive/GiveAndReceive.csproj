@@ -4193,8 +4193,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApiControllers\ApiBaseController.cs" />
+    <Compile Include="ApiControllers\CommentController.cs" />
+    <Compile Include="ApiControllers\FriendShipController.cs" />
     <Compile Include="ApiControllers\HomeController.cs" />
     <Compile Include="ApiControllers\NotificationController.cs" />
+    <Compile Include="ApiControllers\PostController.cs" />
     <Compile Include="ApiControllers\ProductController.cs" />
     <Compile Include="ApiControllers\UserBankInfoController.cs" />
     <Compile Include="ApiControllers\UserController.cs" />
@@ -4266,7 +4269,10 @@
     </Compile>
     <Compile Include="Models\BaseModel.cs" />
     <Compile Include="Models\CodeConfirm.cs" />
+    <Compile Include="Models\Comment.cs" />
+    <Compile Include="Models\FriendShip.cs" />
     <Compile Include="Models\Notification.cs" />
+    <Compile Include="Models\Post.cs" />
     <Compile Include="Models\Product.cs" />
     <Compile Include="Models\QueueGive.cs" />
     <Compile Include="Models\QueueGiveQuest.cs" />
@@ -4300,7 +4306,10 @@
     <Compile Include="Providers\UserProvider.cs" />
     <Compile Include="Services\BaseService.cs" />
     <Compile Include="Services\CodeConfirmService.cs" />
+    <Compile Include="Services\CommentService.cs" />
+    <Compile Include="Services\FriendShipService.cs" />
     <Compile Include="Services\NotificationService.cs" />
+    <Compile Include="Services\PostService.cs" />
     <Compile Include="Services\ProductService.cs" />
     <Compile Include="Services\QueueGiveQuestService.cs" />
     <Compile Include="Services\QueueGiveService.cs" />
@@ -4321,7 +4330,6 @@
     <Content Include="Views\web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Content\assets\js\bootstrap.min.js.map" />
     <Content Include="Content\assets\vendors\apexcharts\locales\ca.json" />
     <Content Include="Content\assets\vendors\apexcharts\locales\cs.json" />
@@ -4464,9 +4472,6 @@
     <Content Include="Content\ckeditor\samples\toolbarconfigurator\lib\codemirror\LICENSE" />
     <Content Include="Content\ckeditor\skins\moono-lisa\readme.md" />
     <None Include="packages.config" />
-    <Content Include="Views\Home\Login.cshtml" />
-    <Content Include="Views\Home\Register.cshtml" />
-    <Content Include="Views\Home\ForgotPassword.cshtml" />
     <Content Include="Views\Shared\_LayoutAuth.cshtml" />
     <Content Include="Views\Notification\Index.cshtml" />
     <Content Include="Views\User\UserWalletInfo.cshtml" />
@@ -4488,6 +4493,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Admin\Data\" />
+    <Folder Include="Views\Post\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />

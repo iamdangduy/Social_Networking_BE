@@ -16,7 +16,7 @@ namespace GiveAndReceive.Models
     }
     public class UserLoginPost
     {
-        public string Account { get; set; }
+        public string Email { get; set; }
         public string Password { get; set; }
     }
     public class UserRequest

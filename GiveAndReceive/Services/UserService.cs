@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Data;
 using System.Diagnostics.Eventing.Reader;
+using System.Drawing;
 using System.Linq;
 using System.Web;
+using System.Web.Razor.Tokenizer.Symbols;
 using Dapper;
 using GiveAndReceive.Models;
 
@@ -19,6 +21,17 @@ namespace GiveAndReceive.Services
         {
             string query = "select * from [user] where UserId = @id";
             return this._connection.Query<User>(query, new { id }, transaction).FirstOrDefault();
+        }
+
+        public List<User> GetListUserByName(string UserName)
+        {
+            string query = "select TOP(5) u.[UserId], u.[Name], u.[Avatar], u.[Account], u.[Phone], u.[Email], u.[DateOfBirth], u.[Gender] from [user] u where 1=1 ";
+            if (!string.IsNullOrEmpty(UserName))
+            {
+                UserName = "%" + UserName.Replace(" ", "%") + "%";
+                query += " and u.Name like @UserName ";
+            }
+            return this._connection.Query<User>(query, new { UserName }).ToList();
         }
 
         public User GetUserByAccount(string account, IDbTransaction transaction = null)
@@ -66,7 +79,7 @@ namespace GiveAndReceive.Services
 
         public void UpdateUser(User model, IDbTransaction transaction = null)
         {
-            string query = "UPDATE [dbo].[user] SET [Name]=@Name,[Avatar]=@Avatar,[Account]=@Account,[Phone]=@Phone,[Email]=@Email,[Phone2]=@Phone2,[Address]=@Address WHERE [UserId]=@UserId";
+            string query = "UPDATE [dbo].[user] SET [Name]=@Name,[Avatar]=@Avatar,[Account]=@Account,[Phone]=@Phone,[Email]=@Email WHERE [UserId]=@UserId";
             int status = this._connection.Execute(query, model, transaction);
             if (status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
         }
@@ -108,8 +121,8 @@ namespace GiveAndReceive.Services
 
         public void InsertUser(User user, IDbTransaction transaction = null)
         {
-            string query = "INSERT INTO [dbo].[user] ([UserId],[Name],[Avatar],[Account],[Email],[Phone],[Password],[CreateTime])" +
-                " VALUES (@UserId, @Name, @Avatar, @Account, @Email, @Phone, @Password, @CreateTime)";
+            string query = "INSERT INTO [dbo].[user] ([UserId], [Name], [Account], [Email], [Phone], [Password], [DateOfBirth], [Gender], [CreateTime])" +
+                " VALUES (@UserId, @Name, @Account, @Email, @Phone, @Password, @DateOfBirth, @Gender, @CreateTime)";
             int status = this._connection.Execute(query, user, transaction);
             if (status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
         }
@@ -173,9 +186,9 @@ namespace GiveAndReceive.Services
         public List<User> GetListUserTransferPin(string keyword, IDbTransaction transaction = null)
         {
             string query = "select UserId, Name, Account, Phone, Email from [user] where 1=1 and ShareCode <> ''";
-            if(!string.IsNullOrEmpty(keyword))
+            if (!string.IsNullOrEmpty(keyword))
             {
-                keyword = "%" + keyword.Replace(" ","%") + "%";
+                keyword = "%" + keyword.Replace(" ", "%") + "%";
                 query += " and (Account like @keyword or Email like @keyword)";
             }
             return this._connection.Query<User>(query, new { keyword }, transaction).ToList();

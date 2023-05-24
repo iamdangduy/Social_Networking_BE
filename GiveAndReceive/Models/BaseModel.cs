@@ -58,6 +58,9 @@ namespace GiveAndReceive.Models
             public const string AVATAR_USER_URL = "/files/avatar/";
             public const string AVATAR_USER_PATH = "~/files/avatar/";
 
+            public const string POST_IMAGE_URL = "/files/posts/";
+            public const string POST_IMAGE_PATH = "~/files/posts/";
+
             public const string QUEUE_GIVE_QUEST_TRANSACTION_IMAGE_URL = "/files/trasaction/{0}/";//{0} : userId
         }
         
