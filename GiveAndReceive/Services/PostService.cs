@@ -13,10 +13,12 @@ namespace GiveAndReceive.Services
         public PostService() : base() { }
         public PostService(IDbConnection db) : base(db) { }
 
-        public List<object> GetListPost()
+        public List<object> GetListPost(string UserId)
         {
-            string query = "select p.*, u.Name, u.Avatar from [post] p left join [user] u on u.UserId = p.UserId order by p.CreateTime desc";
-            return this._connection.Query<object>(query).ToList();
+            string query = "select p.PostId, p.Title, p.Image, p.Love, p.Comment, p.CreateTime, u.Name, u.Avatar, COUNT( CASE when l.UserId = @UserId then 1 end) as Loved " +
+                "from [post] p left join [user] u on u.UserId = p.UserId left join [love] l on l.PostId = p.PostId " +
+                "group by p.PostId, p.Title, p.Image, p.Love, p.Comment, p.CreateTime, u.Name, u.Avatar order by CreateTime desc";
+            return this._connection.Query<object>(query, new { UserId }).ToList();
         }
 
         public List<object> GetListPostByUserId(string UserId)

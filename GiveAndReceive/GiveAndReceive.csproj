@@ -4196,6 +4196,7 @@
     <Compile Include="ApiControllers\CommentController.cs" />
     <Compile Include="ApiControllers\FriendShipController.cs" />
     <Compile Include="ApiControllers\HomeController.cs" />
+    <Compile Include="ApiControllers\LoveController.cs" />
     <Compile Include="ApiControllers\NotificationController.cs" />
     <Compile Include="ApiControllers\PostController.cs" />
     <Compile Include="ApiControllers\ProductController.cs" />
@@ -4271,6 +4272,7 @@
     <Compile Include="Models\CodeConfirm.cs" />
     <Compile Include="Models\Comment.cs" />
     <Compile Include="Models\FriendShip.cs" />
+    <Compile Include="Models\Love.cs" />
     <Compile Include="Models\Notification.cs" />
     <Compile Include="Models\Post.cs" />
     <Compile Include="Models\Product.cs" />
@@ -4308,6 +4310,7 @@
     <Compile Include="Services\CodeConfirmService.cs" />
     <Compile Include="Services\CommentService.cs" />
     <Compile Include="Services\FriendShipService.cs" />
+    <Compile Include="Services\LoveService.cs" />
     <Compile Include="Services\NotificationService.cs" />
     <Compile Include="Services\PostService.cs" />
     <Compile Include="Services\ProductService.cs" />
