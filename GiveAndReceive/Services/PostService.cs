@@ -21,6 +21,20 @@ namespace GiveAndReceive.Services
             return this._connection.Query<object>(query, new { UserId }).ToList();
         }
 
+        public object GetPostByPostId(string PostId)
+        {
+            string queryPost = "select p.*, u.Name, u.Avatar from [post] p left join [user] u on u.UserId = p.UserId where p.PostId = @PostId";
+            string queryComment = "select c.CommentId, c.CommentContent, c.CreateTime, u.Name, u.Avatar from [comment] c left join [user] u on u.UserId = c.UserId where c.PostId = @PostId order by c.CreateTime desc";
+            var Post = this._connection.Query<object>(queryPost, new { PostId }).FirstOrDefault();
+            var Comments = this._connection.Query<object>(queryComment, new { PostId }).ToList();
+
+            return new
+            {
+                Post,
+                Comments,
+            };
+        }
+
         public List<object> GetListPostByUserId(string UserId)
         {
             string query = "select p.*, u.Name, u.Avatar from [post] p left join [user] u on u.UserId = p.UserId where p.UserId = @UserId order by p.CreateTime desc";
@@ -29,7 +43,28 @@ namespace GiveAndReceive.Services
 
         public void PlusNumberCommentPost(string PostId)
         {
+            string query = "update [post] set Comment = Comment + 1 where PostId = @PostId";
+            var status = this._connection.Execute(query, new { PostId });
+            if (status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
+        }
+
+        public void MinusNumberCommentPost(string PostId)
+        {
             string query = "update [post] set Comment = Comment - 1 where PostId = @PostId";
+            var status = this._connection.Execute(query, new { PostId });
+            if (status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
+        }
+
+        public void PlusNumberLovePost(string PostId)
+        {
+            string query = "update [post] set Love = Love + 1 where PostId = @PostId";
+            var status = this._connection.Execute(query, new { PostId });
+            if (status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
+        }
+
+        public void MinusNumberLovePost(string PostId)
+        {
+            string query = "update [post] set Love = Love - 1 where PostId = @PostId";
             var status = this._connection.Execute(query, new { PostId });
             if (status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
         }

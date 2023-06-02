@@ -14,7 +14,7 @@ namespace GiveAndReceive.ApiControllers
     public class NotificationController : ApiBaseController
     {
         [HttpGet]
-        public JsonResult GetListNotification(int page)
+        public JsonResult GetListNotification()
         {
             try
             {
@@ -22,19 +22,19 @@ namespace GiveAndReceive.ApiControllers
                 string token = Request.Headers.Authorization.ToString();
                 User user = userService.GetUserByToken(token);
                 if (user == null) return Unauthorized();
+
                 NotificationService notificationService = new NotificationService();
-                if (page <= 0) page = 1;
-                return Success(notificationService.GetListNotification(user.UserId, page));
+                return Success(notificationService.GetListNotification(user.UserId), "Lấy dữ liệu thành công!");
 
             }
             catch (Exception ex)
             {
-                return Error();
+                return Error(ex.Message);
             }
         }
 
         [HttpGet]
-        public JsonResult UpdateNotificationRead(string id)
+        public JsonResult UpdateNotificationRead(string NotificationId)
         {
             try
             {
@@ -47,8 +47,9 @@ namespace GiveAndReceive.ApiControllers
                         UserService userService = new UserService(connect);
                         User user = userService.GetUserByToken(token, transaction);
                         if (user == null) return Unauthorized();
+
                         NotificationService notificationService = new NotificationService(connect);
-                        Notification notification = notificationService.GetNotificationById(id, transaction);
+                        Notification notification = notificationService.GetNotificationById(NotificationId, transaction);
                         notification.IsRead = true;
                         notificationService.UpdateNotificationRead(notification, transaction);
                         transaction.Commit();
@@ -59,8 +60,28 @@ namespace GiveAndReceive.ApiControllers
             }
             catch (Exception ex)
             {
-                return Error();
+                return Error(ex.Message);
             }
         }
+
+        [HttpGet]
+        public JsonResult GetNotificationIsNotRead()
+        {
+            try
+            {
+                string token = Request.Headers.Authorization.ToString();
+                UserService userService = new UserService();
+                User user = userService.GetUserByToken(token);
+                if (user == null) return Unauthorized();
+
+                NotificationService notificationService = new NotificationService();
+                return Success(notificationService.GetNotificationIsNotRead(user.UserId), "Lấy dữ liệu thành công!");
+            }
+            catch (Exception ex)
+            {
+                return Error(ex.Message);
+            }
+        }
+
     }
 }

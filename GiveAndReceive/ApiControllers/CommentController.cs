@@ -23,6 +23,8 @@ namespace GiveAndReceive.ApiControllers
                 User user = userService.GetUserByToken(token);
                 if (user == null) return Unauthorized();
 
+                if (string.IsNullOrEmpty(model.CommentContent)) return Error("Comment không được để trống"); 
+
                 Comment comment = new Comment();
                 comment.CommentId = Guid.NewGuid().ToString();
                 comment.CommentContent = model.CommentContent;

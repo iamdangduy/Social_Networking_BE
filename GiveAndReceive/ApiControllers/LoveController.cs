@@ -31,9 +31,17 @@ namespace GiveAndReceive.ApiControllers
 
                 LoveService loveService = new LoveService();
                 PostService postService = new PostService();
-                postService.PlusNumberCommentPost(love.PostId);
-                loveService.InsertLove(love);
-
+                var ExistLove = loveService.GetExistLove(model.PostId, user.UserId);
+                if (ExistLove != null)
+                {
+                    loveService.DeleteLoveInPost(model.PostId);
+                    postService.MinusNumberLovePost(model.PostId);
+                }
+                else
+                {
+                    postService.PlusNumberLovePost(love.PostId);
+                    loveService.InsertLove(love);
+                }
                 return Success();
             }
             catch (Exception ex)

@@ -82,6 +82,15 @@ namespace GiveAndReceive.ApiControllers
                             user.Avatar = Constant.PATH.AVATAR_USER_URL + filename;
                         }
 
+                        if (!string.IsNullOrEmpty(model.CoverPhoto))
+                        {
+                            string filename = Guid.NewGuid().ToString() + ".jpg";
+                            var path = System.Web.HttpContext.Current.Server.MapPath(Constant.PATH.COVERPHOTO_USER_PATH + filename);
+                            HelperProvider.Base64ToImage(model.CoverPhoto, path);
+                            if (!HelperProvider.DeleteFile(user.CoverPhoto)) return Error();
+                            user.CoverPhoto = Constant.PATH.COVERPHOTO_USER_URL + filename;
+                        }
+
                         if (!string.IsNullOrEmpty(model.Account))
                         {
                             user.Account = model.Account.Trim();
@@ -101,12 +110,8 @@ namespace GiveAndReceive.ApiControllers
                             }
                             user.Email = model.Email.Trim();
                         }
-
                         //user.Phone = model.Phone.Trim();
-
-
                         user.Address = model.Address;
-
                         userService.UpdateUser(user, transaction);
 
                         transaction.Commit();

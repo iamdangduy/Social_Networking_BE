@@ -45,6 +45,7 @@ namespace GiveAndReceive.Services
             string query = "select * from [user] where Phone = @Phone";
             return this._connection.Query<User>(query, new { Phone = phone }, transaction).FirstOrDefault();
         }
+
         public User GetUserByEmail(string email, IDbTransaction transaction = null)
         {
             string query = "select * from [user] where Email = @email";
@@ -79,7 +80,7 @@ namespace GiveAndReceive.Services
 
         public void UpdateUser(User model, IDbTransaction transaction = null)
         {
-            string query = "UPDATE [dbo].[user] SET [Name]=@Name,[Avatar]=@Avatar,[Account]=@Account,[Phone]=@Phone,[Email]=@Email WHERE [UserId]=@UserId";
+            string query = "UPDATE [dbo].[user] SET [Name] = @Name, [Avatar] = @Avatar, [CoverPhoto] = CoverPhoto, [Account] = @Account, [Phone] = @Phone, [Email] = @Email WHERE [UserId] = @UserId";
             int status = this._connection.Execute(query, model, transaction);
             if (status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
         }

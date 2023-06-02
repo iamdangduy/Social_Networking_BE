@@ -34,6 +34,25 @@ namespace GiveAndReceive.ApiControllers
         }
 
         [HttpGet]
+        public JsonResult GetPostByPostId(string PostId)
+        {
+            try
+            {
+                UserService userService = new UserService();
+                string token = Request.Headers.Authorization.ToString();
+                User user = userService.GetUserByToken(token);
+                if (user == null) return Unauthorized();
+
+                PostService postService = new PostService();
+                return Success(postService.GetPostByPostId(PostId), "Lấy dữ liệu thành công!");
+            }
+            catch (Exception ex)
+            {
+                return Error(ex.Message);
+            }
+        }
+
+        [HttpGet]
         public JsonResult GetListPostByUserId(string UserId)
         {
             try
@@ -54,6 +73,21 @@ namespace GiveAndReceive.ApiControllers
             {
                 PostService postService = new PostService();
                 postService.PlusNumberCommentPost(PostId);
+                return Success();
+            }
+            catch (Exception ex)
+            {
+                return Error(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        public JsonResult PlusNumberLovePost(string PostId)
+        {
+            try
+            {
+                PostService postService = new PostService();
+                postService.PlusNumberLovePost(PostId);
                 return Success();
             }
             catch (Exception ex)
@@ -87,8 +121,23 @@ namespace GiveAndReceive.ApiControllers
                 post.Love = 0;
                 post.Comment = 0;
                 post.CreateTime = HelperProvider.GetSeconds();
-
                 postService.InsertPost(post);
+
+                FriendShipService friendShipService = new FriendShipService();
+                NotificationService notificationService = new NotificationService();
+                var ListFriend = friendShipService.GetListFriendByUserId(user.UserId);
+                foreach(var Friend in ListFriend)
+                {
+                    Notification notification = new Notification();
+                    notification.NotificationId = Guid.NewGuid().ToString();
+                    notification.UserId = Friend;
+                    notification.Message = $"{user.Name} vừa đăng tải một trạng thái mới!";
+                    notification.IsRead = false;
+                    notification.CreateTime = HelperProvider.GetSeconds();
+                    notification.MessageShort = $"{user.Name} vừa đăng tải một trạng thái mới!";
+
+                    notificationService.CreateNotification(notification);
+                }
                 return Success();
             }
             catch (Exception ex)
@@ -109,6 +158,10 @@ namespace GiveAndReceive.ApiControllers
 
                 PostService postService = new PostService();
                 postService.DeletePost(PostId, user.UserId);
+                LoveService loveService = new LoveService();
+                loveService.DeleteLoveInPost(PostId);
+                CommentService commentService = new CommentService();
+                commentService.DeleteComment(PostId);
                 return Success(null, "Xoá dữ liệu thành công!");
             }
             catch (Exception ex)

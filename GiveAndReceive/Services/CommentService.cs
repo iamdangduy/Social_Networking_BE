@@ -25,5 +25,12 @@ namespace GiveAndReceive.Services
             int status = this._connection.Execute(query, model);
             if (status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
         }
+
+        public void DeleteComment(string PostId)
+        {
+            string query = "delete from [comment] where PostId = @PostId";
+            int status = this._connection.Execute(query, new {PostId});
+            if (status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
+        }
     }
 }
