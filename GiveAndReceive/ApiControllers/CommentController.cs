@@ -33,7 +33,7 @@ namespace GiveAndReceive.ApiControllers
                 comment.CreateTime = HelperProvider.GetSeconds();
                 CommentService commentService = new CommentService();
                 commentService.InsertComment(comment);
-
+    
                 PostService postService = new PostService();
                 postService.PlusNumberCommentPost(model.PostId);
 

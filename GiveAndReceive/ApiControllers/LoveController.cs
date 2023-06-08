@@ -31,7 +31,11 @@ namespace GiveAndReceive.ApiControllers
 
                 LoveService loveService = new LoveService();
                 PostService postService = new PostService();
+
+                Post post = postService.GetPostById(model.PostId);
                 var ExistLove = loveService.GetExistLove(model.PostId, user.UserId);
+
+
                 if (ExistLove != null)
                 {
                     loveService.DeleteLoveInPost(model.PostId);
@@ -41,6 +45,20 @@ namespace GiveAndReceive.ApiControllers
                 {
                     postService.PlusNumberLovePost(love.PostId);
                     loveService.InsertLove(love);
+                    if (user.UserId != post.UserId)
+                    {
+                        NotificationService notificationService = new NotificationService();
+
+                        Notification notification = new Notification();
+                        notification.NotificationId = Guid.NewGuid().ToString();
+                        notification.UserId = post.UserId;
+                        notification.Message = user.Name + " vừa yêu thích ảnh của bạn.";
+                        notification.IsRead = false;
+                        notification.CreateTime = HelperProvider.GetSeconds();
+                        notification.MessageShort = user.Name + " vừa yêu thích ảnh của bạn.";
+
+                        notificationService.CreateNotification(notification);
+                    }
                 }
                 return Success();
             }

@@ -139,5 +139,24 @@ namespace GiveAndReceive.ApiControllers
                 return Error(ex.Message);
             }
         }
+
+        [HttpGet]
+        public JsonResult CheckFriendShipExist(string FriendId)
+        {
+            try
+            {
+                UserService userService = new UserService();
+                string token = Request.Headers.Authorization.ToString();
+                User user = userService.GetUserByToken(token);
+                if (user == null) return Unauthorized();
+
+                FriendShipService friendShipService = new FriendShipService();
+                return Success(friendShipService.CheckFriendShipExist(user.UserId, FriendId), "");
+            }
+            catch (Exception ex)
+            {
+                return Error(ex.Message);
+            }
+        }
     }
 }

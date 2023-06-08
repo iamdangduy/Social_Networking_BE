@@ -65,5 +65,11 @@ namespace GiveAndReceive.Services
             string query = "select * from FriendShip where FriendShipId = @FriendShipId";
             return this._connection.Query<FriendShip>(query, new { FriendShipId }).FirstOrDefault();
         }
+
+        public FriendShip CheckFriendShipExist(string UserId, string FriendId)
+        {
+            string query = $"select * from FriendShip where UserId = @UserId and FriendId = @FriendId and Status = '{FriendShip.EnumStatus.ACCEPTED}'";
+            return this._connection.Query<FriendShip>(query, new { UserId, FriendId }).FirstOrDefault();
+        }
     }
 }

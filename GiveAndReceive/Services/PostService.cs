@@ -35,10 +35,18 @@ namespace GiveAndReceive.Services
             };
         }
 
-        public List<object> GetListPostByUserId(string UserId)
+        public Post GetPostById(string PostId)
         {
-            string query = "select p.*, u.Name, u.Avatar from [post] p left join [user] u on u.UserId = p.UserId where p.UserId = @UserId order by p.CreateTime desc";
-            return this._connection.Query<object>(query, new { UserId }).ToList();
+            string query = "select * from Post where PostId = @PostId";
+            return this._connection.Query<Post>(query, new { PostId }).FirstOrDefault();
+        }
+
+        public List<object> GetListPostByUserId(string UserId, string FriendId)
+        {
+            string query = "select p.PostId, p.Title, p.Image, p.Love, p.Comment, p.CreateTime, u.Name, u.Avatar, COUNT( CASE when l.UserId = @FriendId then 1 end) as Loved " +
+                "from [post] p left join [user] u on u.UserId = p.UserId left join [love] l on l.PostId = p.PostId where p.UserId = @UserId " +
+                "group by p.PostId, p.Title, p.Image, p.Love, p.Comment, p.CreateTime, u.Name, u.Avatar order by p.CreateTime desc";
+            return this._connection.Query<object>(query, new { UserId, FriendId }).ToList();
         }
 
         public void PlusNumberCommentPost(string PostId)

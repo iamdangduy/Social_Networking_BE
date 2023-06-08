@@ -57,8 +57,13 @@ namespace GiveAndReceive.ApiControllers
         {
             try
             {
+                UserService userService = new UserService();
+                string token = Request.Headers.Authorization.ToString();
+                User user = userService.GetUserByToken(token);
+                if (user == null) return Unauthorized();
+
                 PostService postService = new PostService();
-                return Success(postService.GetListPostByUserId(UserId), "Lấy dữ liệu thành công!");
+                return Success(postService.GetListPostByUserId(UserId, user.UserId), "Lấy dữ liệu thành công!");
             }
             catch (Exception ex)
             {
