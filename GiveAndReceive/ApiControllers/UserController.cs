@@ -110,7 +110,7 @@ namespace GiveAndReceive.ApiControllers
                             }
                             user.Email = model.Email.Trim();
                         }
-                        //user.Phone = model.Phone.Trim();
+                        user.Phone = model.Phone.Trim();
                         user.Address = model.Address;
                         userService.UpdateUser(user, transaction);
 

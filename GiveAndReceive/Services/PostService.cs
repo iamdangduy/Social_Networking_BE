@@ -84,6 +84,13 @@ namespace GiveAndReceive.Services
             if (status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
         }
 
+        public void EditPost(Post model)
+        {
+            string query = "update [post] set Title = @Title, Image = @Image where PostId = @PostId";
+            var status = this._connection.Execute(query, model);
+            if (status <= 0) throw new Exception(JsonResult.Message.ERROR_SYSTEM);
+        }
+
         public void DeletePost(string PostId, string UserId)
         {
             string query = "delete from [post] where PostId = @PostId and UserId = @UserId";

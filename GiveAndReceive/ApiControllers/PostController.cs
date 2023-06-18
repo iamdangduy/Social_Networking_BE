@@ -34,6 +34,32 @@ namespace GiveAndReceive.ApiControllers
         }
 
         [HttpGet]
+        public JsonResult GetPostById(string PostId)
+        {
+            try
+            {
+                UserService userService = new UserService();
+                string token = Request.Headers.Authorization.ToString();
+                User user = userService.GetUserByToken(token);
+
+                if (user == null) return Unauthorized();
+                PostService postService = new PostService();
+                if (postService.GetPostById(PostId).UserId == user.UserId)
+                {
+                    return Success(postService.GetPostById(PostId), "");
+                }
+                else
+                {
+                    return Error();
+                }
+            }
+            catch (Exception ex)
+            {
+                return Error(ex.Message);
+            }
+        }
+
+        [HttpGet]
         public JsonResult GetPostByPostId(string PostId)
         {
             try
@@ -131,7 +157,7 @@ namespace GiveAndReceive.ApiControllers
                 FriendShipService friendShipService = new FriendShipService();
                 NotificationService notificationService = new NotificationService();
                 var ListFriend = friendShipService.GetListFriendByUserId(user.UserId);
-                foreach(var Friend in ListFriend)
+                foreach (var Friend in ListFriend)
                 {
                     Notification notification = new Notification();
                     notification.NotificationId = Guid.NewGuid().ToString();
@@ -143,6 +169,39 @@ namespace GiveAndReceive.ApiControllers
 
                     notificationService.CreateNotification(notification);
                 }
+                return Success();
+            }
+            catch (Exception ex)
+            {
+                return Error(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public JsonResult EditPost(Post model)
+        {
+            try
+            {
+                UserService userService = new UserService();
+                string token = Request.Headers.Authorization.ToString();
+                User user = userService.GetUserByToken(token);
+                if (user == null) return Unauthorized();
+
+                PostService postService = new PostService();
+                Post post = postService.GetPostById(model.PostId);
+
+                post.Title = model.Title;
+
+                if (!string.IsNullOrEmpty(model.Image))
+                {
+                    string filename = Guid.NewGuid().ToString() + ".jpg";
+                    var path = System.Web.HttpContext.Current.Server.MapPath(Constant.PATH.POST_IMAGE_PATH + filename);
+                    HelperProvider.Base64ToImage(model.Image, path);
+                    if (!HelperProvider.DeleteFile(post.Image)) return Error();
+                    post.Image = Constant.PATH.POST_IMAGE_URL + filename;
+                }
+
+                postService.EditPost(post);
                 return Success();
             }
             catch (Exception ex)
